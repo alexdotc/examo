@@ -1,16 +1,32 @@
 #LoginForm {
-	border: 5px double solid green;
-	margin: 0 auto;
-}
-
-input.spec1 {
 	display: block;
-	margin: 0 auto;
-	padding: 10px;
+	position: fixed;
+	top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
 }
 
-input.spec2 { 
+.LoginHeader {
+	text-align: center;
+}
+
+.LoginItems{
+	margin: 0 auto;
+	display: block;
+}
+
+input.LoginBox {
+	padding: 5px;
+}
+
+input.LoginSubmit {
 	color: red;
+}
+
+label.LoginLabel {
+	text-align: center;
+	padding-bottom: 5px;
+	padding-top: 5px;
 }
 
 #Resp {

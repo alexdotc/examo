@@ -6,11 +6,11 @@ function login(e){
 	
 	const SERVER = 'frontEndCS490.php';
 
-	let user = document.getElementById("user").value;
+	let ucid = document.getElementById("ucid").value;
 	let pass = document.getElementById("pass").value;
 	
 	let json = new Object();
-	json.user = user;
+	json.ucid = ucid;
 	json.pass = pass;
 
 	let post_params = JSON.stringify(json);
@@ -22,7 +22,7 @@ function login(e){
 	xhr.onload = function(){
 		if (xhr.status == 200){
 			// TODO: Parse response from mid
-			let elem = document.getElementById("Resp");
+			let elem = document.getElementById("response");
 			console.log(this.responseText);
 			elem.innerHTML = this.responseText;
 		}

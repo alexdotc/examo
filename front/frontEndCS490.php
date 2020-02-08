@@ -1,12 +1,10 @@
 <?php
 	// TODO: change to real mid url
-	$URL = 'http://localhost/back/test.php';
+	$URL = 'http://localhost/test/test.php';
 
 	$req = login(file_get_contents('php://input'), $URL);
 	echo $req;
 
-	// TODO: Process JSON response appropriately
-	
 	function login($json, $URL){
 		$post_params = $json;
 		$ch = curl_init();
