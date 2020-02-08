@@ -1,0 +1,21 @@
+#LoginForm {
+	border: 5px double solid green;
+	margin: 0 auto;
+}
+
+input.spec1 {
+	display: block;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+input.spec2 { 
+	color: red;
+}
+
+#Resp {
+	text-align: center;
+	color: blue;
+	margin: 0 auto;
+	padding: 20px top;
+}
