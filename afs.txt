@@ -1,2 +1,1 @@
-https://web.njit.edu/~yav3/
-https://web.njit.edu/~alc26/
+https://web.njit.edu/~yav3/backEndCS490.php
