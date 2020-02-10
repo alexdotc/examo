@@ -13,7 +13,7 @@
 		die("Connection failed: " . $cnx->connect_error);
 
 	$query = $cnx->prepare("SELECT type FROM " . $DB_TYPE . " WHERE user = ? AND pass = ?");
-	$query->bind_param('ss', $_POST['ucid'], $_POST['pass']);
+	$query->bind_param('ss', $_POST['ucid'], $_POST['password']);
 	$query->execute();
 	$query->bind_result($result);
 	$query->fetch();

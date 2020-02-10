@@ -11,7 +11,7 @@ function login(e){
 	
 	let json = new Object();
 	json.ucid = ucid;
-	json.pass = pass;
+	json.password = pass;
 
 	let post_params = JSON.stringify(json);
 	
