@@ -5,7 +5,7 @@
 	$DB_PASS = '';
 	$DB_TYPE = 'users';
 	
-	$json = json_decode($_POST['json'], true)
+	$_POST = json_decode(file_get_contents('php://input'), true);
 
 	$cnx = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_TYPE);
 
@@ -13,15 +13,17 @@
 		die("Connection failed: " . $cnx->connect_error);
 
 	$query = $cnx->prepare("SELECT type FROM " . $DB_TYPE . " WHERE user = ? AND pass = ?");
-	$query->bind_param('ss', $json['user'], $json['pass']);
+	$query->bind_param('ss', $_POST['ucid'], $_POST['pass']);
 	$query->execute();
 	$query->bind_result($result);
 	$query->fetch();
 
 	if($result)
-            $json = json_encode(array('back' => 'yes'))
+            $json = json_encode(array('back' => 'yes'));
 	else
-            $json = json_encode(array('back' => 'no'))
+            $json = json_encode(array('back' => 'no'));
+
+	echo $json;
 
 	$query->close();
 	$mysqli->close();
