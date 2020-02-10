@@ -26,7 +26,6 @@ function login(e){
 			let resp = JSON.parse(this.responseText);
 			elem.innerHTML = `Back says ${resp.back} and NJIT says`
 			console.log(this.responseText);
-			elem.innerHTML = this.responseText;
 		}
 	}
 
