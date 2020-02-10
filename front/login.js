@@ -23,6 +23,8 @@ function login(e){
 		if (xhr.status == 200){
 			// TODO: Parse response from mid
 			let elem = document.getElementById("response");
+			let resp = JSON.parse(this.responseText);
+			elem.innerHTML = `Back says ${resp.back} and NJIT says`
 			console.log(this.responseText);
 			elem.innerHTML = this.responseText;
 		}
