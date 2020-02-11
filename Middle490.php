@@ -57,8 +57,14 @@ curl_exec($ch);
 if(curl_errno($ch)){
     throw new Exception(curl_error($ch));
 }
+//If curl returns correct then the ucid and password were accepted, else one or both are incorrect
+if(curl_exec($ch)){
+        echo "UCID and Password are accepted\n";
+}
+else{
+        echo "UCID or Password is incorrect\n";
+}
 
-return curl_exec($ch);
 
 curl_close($ch);
 unset($ch);
