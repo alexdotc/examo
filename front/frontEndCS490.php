@@ -13,7 +13,7 @@
 				 array('Content-type:application/x-www-form-urlencoded'),
 				 CURLOPT_RETURNTRANSFER => TRUE,
 				 CURLOPT_POST => TRUE,
-				 CURLOPT_POSTFIELDS => $sendstr);
+				 CURLOPT_POSTFIELDS => $post_params);
 		curl_setopt_array($ch, $options);
 		$result = curl_exec($ch);
 		curl_close($ch);
