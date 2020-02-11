@@ -1,7 +1,7 @@
 <?php
 
-$ucid = "np595"; //Must remove when working
-$password = "salohciN0522";
+$ucid = ; //Must remove when working
+$password = ;
 $url = "https://webauth.njit.edu/idp/profile/SAML2/Redirect/SSO?execution=e1s1";
 $USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like
 Gecko) Chrome/35.0.2309.372 Safari/537.36";
