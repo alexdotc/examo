@@ -2,7 +2,7 @@
 
 - PHP request/curl points:  
 https://web.njit.edu/~yav3/backEndCS490.php  
-https://web.njit.edu/~alc26/front/frontEndCS490.php
+https://web.njit.edu/~alc26/front/frontEndCS490.php .  
 https://web.njit.edu/~np595/CS490Work/middle.php
 
 - Credentials:  
