@@ -1,0 +1,7 @@
+What has been completed:
+Implemented login credentials and check with authenticator of the Housing login
+No errors found and program proceeds as such without issue when ucid and password has been implemented
+
+What is still needed:
+Pathing of JSON and POST through the file for the front and back to communicated with one another through the middle
+Return/ output to detect the completion of the login, will be trying to check if the exec is true or completes to return that it has been achieved, else it has not worked with the system
