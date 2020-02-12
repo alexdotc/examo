@@ -1,7 +1,7 @@
 What has been completed:
 Implemented login credentials and check with authenticator of the Housing login
-No errors found and program proceeds as such without issue when ucid and password has been implemented (Have been cleaning up any new errors that appear so no errors are detected)
-Output has been found but returns incorrect for a ucid and password that is correct, meaning there is a disconnection between the input process of the php and browser to input the detected ucid and password. More work will be required to put the ucid and password in and return a proper response.
+No errors found and program proceeds as such without issue when ucid and password has been implemented
+Output repaired to connect to the webpage and return a good or bad request with input ucid into the system
 
 What is still needed:
 Pathing of JSON and POST through the file for the front and back to communicated with one another through the middle (Is being halted until the connection of the php and browser is solved)
