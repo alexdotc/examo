@@ -1,16 +1,17 @@
 <?php
 
-$ucid = ; //Must remove when working
-$password = ;
-$url = "https://webauth.njit.edu/idp/profile/SAML2/Redirect/SSO?execution=e1s1";
+$ucid; //Must remove when working
+$password;
+$url = "http://myhub.njit.edu/vrs/"; 
+//Authentication wasn't working, this does and returns a bad request since my ucid doesn't work for some reason
 $USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like
 Gecko) Chrome/35.0.2309.372 Safari/537.36";
+$backURL = "https://web.njit.edu/~yav3/backEndCS490.php";
+$frontURL = "https://web.njit.edu/~alc26/front/frontEndCS490.php";
 //Enables php to realize its connecting through Chrome or Safari
 
 //Cookies are required to access the website
 $cookie = "/cookie.txt";
-
-$post = "UCID=".$ucid."&password".$password;
 
 //Place the Post input here to read out and take over the ucid and password for
 //the login check
@@ -32,6 +33,8 @@ else if($ucid == "back" && $password == "back"){
 //putting it in an else since both prior if statments either exit while
 //returning that there is no ucid or password or sending the JSON to the front
 
+$post = "user_name=".$ucid."&passwd=".$password;
+
 //From here and below with curl is for communication between the website and
 //PHP to determine log in credentials within the housing login, in this case
 //its the normal school's login
@@ -42,13 +45,11 @@ curl_setopt($ch, CURLOPT_NOBODY, false);
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
-
 curl_setopt($ch, CURLOPT_USERAGENT, $USER_AGENT);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_REFERER, $url);
+curl_setopt($ch, CURLOPT_REFERER, isset($_SERVER['REQUEST_URI']));
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-curl_setopt($ch, CURLOPT_USERAGENT, isset($_SERVER['HTTP_USER_AGENT']));
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
@@ -57,16 +58,11 @@ curl_exec($ch);
 if(curl_errno($ch)){
     throw new Exception(curl_error($ch));
 }
-//If curl returns correct then the ucid and password were accepted, else one or both are incorrect
-if(curl_exec($ch)){
-        echo "UCID and Password are accepted\n";
-}
-else{
-        echo "UCID or Password is incorrect\n";
-}
 
+$result = curl_exec($ch);
 
 curl_close($ch);
-unset($ch);
+echo $result;
+return;
 
 ?>
