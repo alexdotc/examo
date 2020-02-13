@@ -2,7 +2,7 @@ What has been completed:
 Implemented login credentials and check with authenticator of the Housing login
 No errors found and program proceeds as such without issue when ucid and password has been implemented
 Output repaired to connect to the webpage and return a good or bad request with input ucid into the system
-JSON path made to frontend and recieve of POST data has been established
+JSON path made to frontend and POST path forged to backend
 
 What is still needed:
-Must send POST data containing ucid and password to backend
+Any repairs needed to allow the input to flow through to the back and back to the front
