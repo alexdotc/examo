@@ -41,16 +41,25 @@ $ucid = $_POST['ucid'];
 $password = $_POST['password'];
 
 //Send POST data to back
+$req = login($_POST['ucid'], $_POST['password'], $backURL);
 
+function login($ucid, $pass, $URL){
+        $post_params = "ucid=$ucid&password=$pass";
+        $curl2 = curl_init();
 
+        curl_setopt($curl2, CURLOPT_URL, $URL);
+        curl_setopt($curl2, CURLOPT_HTTPHEADER, array('Content-type:application/x-www-form-urlencoded'));
+        curl_setopt($curl2, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl2, CURLOPT_POST, TRUE);
+        curl_setopt($curl2, CURLOPT_POSTFIELDS, $post_params);
+
+        $result = curl_exec($curl2);
+        curl_close($curl2);
+        return $result;
+}
 
 //Cookies are required to access the website
 $cookie = "/cookie.txt";
-
-//Place the Post input here to read out and take over the ucid and password for
-//the login check
-
-
 
 //If the return from back is true then skip over the login check seeing as the
 //Login return will no longer be the ucid or password, seeing as they are
