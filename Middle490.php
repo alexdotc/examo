@@ -1,14 +1,48 @@
 <?php
 
-$ucid; //Must remove when working
+$ucid;
 $password;
-$url = "http://myhub.njit.edu/vrs/"; 
-//Authentication wasn't working, this does and returns a bad request since my ucid doesn't work for some reason
+$project;
+$url = "http://myhub.njit.edu/vrs/";
 $USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like
 Gecko) Chrome/35.0.2309.372 Safari/537.36";
 $backURL = "https://web.njit.edu/~yav3/backEndCS490.php";
 $frontURL = "https://web.njit.edu/~alc26/front/frontEndCS490.php";
 //Enables php to realize its connecting through Chrome or Safari
+
+//Connects to the incoming POST and JSON responses to then place either POST in
+//UCID spot and Password locations before continuing to send them forward to
+//to the back end
+//JSON is ignored and is sent directly to the front URL
+
+//else check for JSON
+$curl = curl_init($frontURL);
+$json = file_get_contents($backURL);
+
+if(json_decode($json, true)){ //Checks if true and if true then runs
+        $json = json_encode($json);
+        //Sends the data to the front through the url
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($curl);
+        curl_close($curl);
+        exit; //Exits since the program doesn't need to check for the input
+        //twice
+}
+//Else check for POST
+$db = mysqli_connect($frontURL, $ucid, $password, $project);
+if(mysqli_connect_errno($db)){
+        echo "No request from the front, checking back";
+}
+
+$ucid = $_POST['ucid'];
+$password = $_POST['password'];
+
+//Send POST data to back
+
+
 
 //Cookies are required to access the website
 $cookie = "/cookie.txt";
@@ -45,11 +79,13 @@ curl_setopt($ch, CURLOPT_NOBODY, false);
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+
 curl_setopt($ch, CURLOPT_USERAGENT, $USER_AGENT);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_REFERER, isset($_SERVER['REQUEST_URI']));
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
