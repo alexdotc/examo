@@ -1,12 +1,23 @@
+body {
+	background-color: #F53C13;
+}
+
 #LoginForm {
+	background-color: #F0F0F0;
+	border: black 5px dotted;
 	display: block;
 	position: fixed;
+	padding-bottom: 20px;
 	top: 40%;
         left: 50%;
         transform: translate(-50%, -50%);
 }
 
 .LoginHeader {
+	font-size: 32px;
+	font-family: "Book Antiqua", Palatino, serif;
+	padding-left: 28px;
+	padding-right: 28px;
 	text-align: center;
 }
 
@@ -16,11 +27,14 @@
 }
 
 input.LoginBox {
+	border: 2px solid black;
 	padding: 5px;
 }
 
 input.LoginSubmit {
-	color: red;
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 15px 20px;
 }
 
 label.LoginLabel {
@@ -29,7 +43,10 @@ label.LoginLabel {
 	padding-top: 5px;
 }
 
-#Resp {
+#response {
+	display: block;
+	background-color: #F0F0F0;
+	font-size: 30px;
 	text-align: center;
 	color: blue;
 	margin: 0 auto;
