@@ -44,7 +44,6 @@ label.LoginLabel {
 }
 
 #response {
-	font-family: "Book Antiqua", Palatino, serif;
 	background-color: #F0F0F0;
 	border-color: black;
 	border-style: groove;
@@ -52,10 +51,9 @@ label.LoginLabel {
 	position: fixed;
 	font-size: 30px;
 	text-align: center;
-	padding-top: 10px;
 	padding-left: 10px;
 	padding-right: 10px;
 	top: 20%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -20%);
 }
