@@ -50,9 +50,9 @@ else{
         $response = "NJITno";
 }
 
-        $decoded_json = json_decode($resultB, true);
-        $decoded_json['respNJIT'] = $response;
-        $finalJSON = json_encode($decoded_json, JSON_PRETTY_PRINT);             
-        echo $finalJSON;
+$decoded_json = json_decode($resultB, true);
+$decoded_json['respNJIT'] = $response;
+$finalJSON = json_encode($decoded_json, JSON_PRETTY_PRINT);             
+echo $finalJSON;
 
 ?>
