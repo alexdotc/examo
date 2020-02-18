@@ -7,45 +7,25 @@ $backurl = 'https://web.njit.edu/~yav3/backEndCS490.php';
 $username = '';
 $password = '';
 
-$json = file_get_contents($backurl);
-if(json_decode($json) != NULL){ //Probably overthinking this part and returns
-//when calling the urls for the POST data
-        $chfront = curl_init();
+$ucid1 = $_POST['ucid'];
+$pass1 = $_POST['password'];
+$username = $ucid1;
+$password = $pass1;
 
-        curl_setopt($chfront, CURLOPT_URL, $fronturl);
-        curl_setopt($chfront, CURLOPT_POST, 1);
-        curl_setopt($chfront, CURLOPT_POSTFIELDS, $json);
-        curl_setopt($chfront, CURLOPT_HTTPHEADER,
-        array('Content-Type:application/json'));
+$post = "ucid=$ucid1&password=$pass1";
 
-        $resultF = curl_exec($chfront);
-        curl_close($chfront);
-        exit;
-}
-
-if(isset($_POST['ucid']) && isset($_POST['password'])){
-        $ucid1 = $_POST['ucid'];
-        $pass1 = $_POST['password'];
-        //$username = $_GET[''];
-        //$password = $_GET[''];
-
-        $post = "ucid=$ucid1&password=$pass1";
-
-        $chBack = curl_init();
-        curl_setopt($chBack, CURLOPT_URL, $backurl);
-        curl_setopt($chBack, CURLOPT_HTTPHEADER,
-        array('Content-type:application/x-ww-form-urlencoded'));
-        curl_setopt($chBack, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($chBack, CURLOPT_POST, true);
-        curl_setopt($chBack, CURLOPT_POSTFIELDS, $post);
-        $resultB = curl_exec($chBack);
-        curl_close($chBack);
-
-}
+$chBack = curl_init();
+curl_setopt($chBack, CURLOPT_URL, $backurl);
+curl_setopt($chBack, CURLOPT_HTTPHEADER,
+array('Content-type:application/x-ww-form-urlencoded'));
+curl_setopt($chBack, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($chBack, CURLOPT_POST, true);
+curl_setopt($chBack, CURLOPT_POSTFIELDS, $post);
+$resultB = curl_exec($chBack);
+curl_close($chBack);
 
 $post = "user_name=$username&passwd=$password";
 
-$fields = urlencode($post);
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -55,7 +35,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
 curl_setopt ($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
 curl_setopt ($ch, CURLOPT_REFERER, $url);
 curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 
 $result = curl_exec($ch);
 
@@ -63,8 +43,16 @@ curl_close($ch);
 
 if($result){
         echo "System has logged in\n";
+        $response = "NJITyes";
 }
 else{
         echo "System has not logged in, bad ucid or password\n";
+        $response = "NJITno";
 }
+
+        $decoded_json = json_decode($resultB, true);
+        $decoded_json['respNJIT'] = $response;
+        $finalJSON = json_encode($decoded_json, JSON_PRETTY_PRINT);             
+        echo $finalJSON;
+
 ?>
