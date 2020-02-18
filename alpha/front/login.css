@@ -53,7 +53,7 @@ label.LoginLabel {
 	text-align: center;
 	padding-left: 10px;
 	padding-right: 10px;
-	top: 20%;
+	top: 15%;
         left: 50%;
-        transform: translate(-50%, -20%);
+        transform: translate(-50%, -15%);
 }
