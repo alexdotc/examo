@@ -41,6 +41,7 @@ curl_close($ch);
 
 if($result){
         $response = "NJITyes";
+        header("Location: https://myhub.njit.edu/vrs/Step1handler?UCID=adfasadfadfasdf");
 }
 else{
         $response = "NJITno";
