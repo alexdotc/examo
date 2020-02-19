@@ -10,8 +10,7 @@ $post = "user_name=$username&passwd=$password";
 
 $chBack = curl_init();
 curl_setopt($chBack, CURLOPT_URL, $backurl);
-curl_setopt($chBack, CURLOPT_HTTPHEADER,
-array('Content-type:application/x-ww-form-urlencoded'));
+curl_setopt($chBack, CURLOPT_HTTPHEADER, array('Content-type:application/x-ww-form-urlencoded'));
 curl_setopt($chBack, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($chBack, CURLOPT_POST, 1);
 curl_setopt($chBack, CURLOPT_POSTFIELDS, $post);
