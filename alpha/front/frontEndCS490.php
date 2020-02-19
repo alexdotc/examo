@@ -1,6 +1,5 @@
 <?php
-	// TODO: change to real mid url
-	$URL = 'https://web.njit.edu/~yav3/middleEndCS490.php';
+	$URL = 'https://web.njit.edu/~np595/CS490Work/middleAlt.php';
 
 	$req = login($_POST['ucid'], $_POST['password'], $URL);
 	echo $req;
