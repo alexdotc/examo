@@ -28,7 +28,6 @@ $post = "user_name=$username&passwd=$password";
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt ($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
