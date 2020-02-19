@@ -1,6 +1,6 @@
 <?php
 
-$url = 'https://myhub.njit.edu/vrs/';
+$url = 'https://myhub.njit.edu/vrs/ldapAuthenticateServlet';
 $fronturl = 'https://web.njit.edu/~alc26/front/frontEndCS490.php';
 $backurl = 'https://web.njit.edu/~yav3/backEndCS490.php';
 $username = '';
@@ -8,10 +8,8 @@ $password = '';
 
 $ucid1 = $_POST['ucid'];
 $pass1 = $_POST['password'];
-$username = $ucid1;
-$password = $pass1;
 
-$post = "ucid=$ucid1&password=$pass1";
+$post = "user_name=$ucid1&passwd=$pass1";
 
 $chBack = curl_init();
 curl_setopt($chBack, CURLOPT_URL, $backurl);
@@ -23,14 +21,10 @@ curl_setopt($chBack, CURLOPT_POSTFIELDS, $post);
 $resultB = curl_exec($chBack);
 curl_close($chBack);
 
-$post = "user_name=$username&passwd=$password";
-
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt ($ch, CURLOPT_REFERER, $url);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 
