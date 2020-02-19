@@ -3,13 +3,10 @@
 $url = 'https://myhub.njit.edu/vrs/ldapAuthenticateServlet';
 $fronturl = 'https://web.njit.edu/~alc26/front/frontEndCS490.php';
 $backurl = 'https://web.njit.edu/~yav3/backEndCS490.php';
-$username = '';
-$password = '';
+$username = $_POST['ucid'];
+$password = $_POST['password'];
 
-$ucid1 = $_POST['ucid'];
-$pass1 = $_POST['password'];
-
-$post = "user_name=$ucid1&passwd=$pass1";
+$post = "user_name=$username&passwd=$password";
 
 $chBack = curl_init();
 curl_setopt($chBack, CURLOPT_URL, $backurl);
@@ -32,7 +29,7 @@ $result = curl_exec($ch);
 
 curl_close($ch);
 
-if($result){ //If true then we want to response back and show the authentication works. Otherwise if the login location also returns then just simply comment out header
+if(strpos($result, "Invalid UCID")==false){ //If true then we want to response back and show the authentication works. Otherwise if the login location also returns then just simply comment out header
         $response = "NJITyes";
         //header("Location: https://myhub.njit.edu/vrs/Step1handler?UCID=adfasadfadfasdf");
 }
