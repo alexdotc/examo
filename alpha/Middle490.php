@@ -17,8 +17,8 @@ $chBack = curl_init();
 curl_setopt($chBack, CURLOPT_URL, $backurl);
 curl_setopt($chBack, CURLOPT_HTTPHEADER,
 array('Content-type:application/x-ww-form-urlencoded'));
-curl_setopt($chBack, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($chBack, CURLOPT_POST, true);
+curl_setopt($chBack, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($chBack, CURLOPT_POST, 1);
 curl_setopt($chBack, CURLOPT_POSTFIELDS, $post);
 $resultB = curl_exec($chBack);
 curl_close($chBack);
@@ -30,7 +30,6 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt ($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
 curl_setopt ($ch, CURLOPT_REFERER, $url);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
