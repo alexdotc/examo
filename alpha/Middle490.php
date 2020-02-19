@@ -39,7 +39,7 @@ $result = curl_exec($ch);
 
 curl_close($ch);
 
-if($result){
+if($result){ //If true then we want to response back and show the authentication works. Otherwise if the login location also returns then just simply comment out header
         $response = "NJITyes";
         header("Location: https://myhub.njit.edu/vrs/Step1handler?UCID=adfasadfadfasdf");
 }
