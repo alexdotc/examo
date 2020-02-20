@@ -17,7 +17,6 @@ function login(e){
 
 	xhr.onload = function(){
 		if (xhr.status == 200){
-			// TODO: Parse response from mid
 			let elem = document.getElementById("response");
 			let resp = JSON.parse(this.responseText);
 
