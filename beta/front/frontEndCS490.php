@@ -1,7 +1,7 @@
 <?php
 
 	define('MAGICNUMBER', true);
-	include 'unlocked.php';
+	include 'unlock.php';
 
 	$URL = 'https://web.njit.edu/~np595/CS490Work/middleAlt.php';
 

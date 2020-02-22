@@ -1,6 +1,6 @@
 <?php
 	define('MAGICNUMBER', true);
-	include 'unlocked.php';
+	include 'unlock.php';
 ?>
 <!DOCTYPE html>
 <html>
