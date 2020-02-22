@@ -12,19 +12,18 @@
 		die("No direct access.");
 	}
 
-	if (!session_id())
-		session_start();
+	session_start();
 	
 	if (!$_SESSION['logon']){
 		header("Location:" . $LOGIN_PATH);
-		die();
+		die("Restricted");
 	}
 	else if((in_array(basename($_SERVER['SCRIPT_FILENAME']), $TEACHER_PAGES)) && !$_SESSION['teacher']){
 		header("Location:" . $STUDENT_PATH);
-		die();
+		die("Restricted");
 	}
 	else if((basename($_SERVER['SCRIPT_FILENAME']) == 'student.php') && !$_SESSION['student']){
 		header("Location:" . $TEACHER_PATH);
-		die();
+		die("Restricted");
 	}
 ?>

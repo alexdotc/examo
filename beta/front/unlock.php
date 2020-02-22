@@ -10,7 +10,7 @@
 
 	session_start();
 
-        if(session_id() and $_SESSION['logon']){
+        if($_SESSION['logon']){
 		if($_SESSION['student'])
 	                header("Location:" . $STUDENT_PATH);
                 else if($_SESSION['teacher'])
