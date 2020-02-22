@@ -1,4 +1,5 @@
-<?php 
+<?php
+	define('MAGICNUMBER', true);
 	include 'unlocked.php';
 ?>
 <!DOCTYPE html>

@@ -9,11 +9,17 @@
 
 	$loginRespJSON = json_decode($req, true);
 
+	//TODO: $_SESSION keys based on real JSON responses from back/mid
+
 	if($loginRespJSON['resp'] == 'backYes'){
 		$_SESSION['logon'] = true;
 		$_SESSION['teacher'] = true;
-		//TODO: $_SESSION keys for student/teacher based on db response
 	}
+	else if($loginRespJSON['respNJIT'] == 'NJITyes'){
+		$_SESSION['logon'] = true;
+		$_SESSION['student'] = true;
+	}
+
 	echo json_encode($loginRespJSON);
 
 	function login($ucid, $pass, $URL){
