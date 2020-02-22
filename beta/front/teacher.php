@@ -1,8 +1,8 @@
-<!DOCTYPE html>
 <?php
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 ?>
+<!DOCTYPE html>
 <html>
 <head>
         <link rel="stylesheet" type="text/css" href="teacher.css">

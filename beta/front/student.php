@@ -1,8 +1,8 @@
-<!DOCTYPE html>
 <?php
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 ?>
+<!DOCTYPE html>
 <head>
         <link rel="stylesheet" type="text/css" href="student.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
