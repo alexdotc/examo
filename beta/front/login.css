@@ -1,0 +1,59 @@
+body {
+	background-color: #F53C13;
+}
+
+#LoginForm {
+	background-color: #F0F0F0;
+	border: black 5px groove;
+	display: block;
+	position: fixed;
+	padding-bottom: 20px;
+	top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
+
+.LoginHeader {
+	font-size: 32px;
+	font-family: "Book Antiqua", Palatino, serif;
+	padding-left: 28px;
+	padding-right: 28px;
+	text-align: center;
+}
+
+.LoginItems{
+	margin: 0 auto;
+	display: block;
+}
+
+input.LoginBox {
+	border: 2px solid black;
+	padding: 5px;
+}
+
+input.LoginSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 15px 20px;
+}
+
+label.LoginLabel {
+	text-align: center;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+#response {
+	background-color: #F0F0F0;
+	border-color: black;
+	border-style: groove;
+	display: block;
+	position: fixed;
+	font-size: 30px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	top: 15%;
+        left: 50%;
+        transform: translate(-50%, -15%);
+}
