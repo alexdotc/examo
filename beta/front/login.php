@@ -10,8 +10,9 @@
 	<title>Login Page</title>
 </head>
 <body>
-	<div id="LoginForm">
-		<h2 class="LoginHeader">CS490 Alpha Login -- Group 4</h2>
+	<div id="LoginBox">
+		<h2 class="LoginHeader">CS490 Beta Login -- Group 4</h2>
+		<div id="LoginForm">
 		<form id="Login">
 			<label for="UCID" class="LoginLabel LoginItems">UCID: </label>
 			<input type="text" name="UCID" id="ucid" class="LoginBox LoginItems"/>
@@ -20,8 +21,8 @@
 			<br/>
 			<input type="submit" value="LOGIN" class="LoginSubmit LoginItems"/>
 		</form>
-	</div>
-	<div id="response">
+		</div>
+                <h2 id="response" class="LoginResponse"></h2>
 	</div>
 <script src="login.js"></script>
 </body>
