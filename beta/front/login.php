@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<?php
-	define('MAGICNUMBER', true);
+<?php 
 	include 'unlocked.php';
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="login.css">
