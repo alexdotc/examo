@@ -21,5 +21,7 @@
 	<div id="main">
         </div>
 <script src="teacher.js"></script>
+<div id="subscript">
+</div>
 </body>
 </html>

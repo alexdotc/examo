@@ -6,9 +6,9 @@ function hashevent(){
 
 	console.log(location.hash);
 	let hash = (location.hash).substr(1);
-	let hashes = { home: 'teacherHome.php',
-		       question: 'teacherQuestion.php',
-		       exam: 'teacherExam.php' };
+	let hashes = { home: 'teacherHome',
+		       question: 'teacherQuestion',
+		       exam: 'teacherExam' };
 
 	if(!hash)
 		hash = 'home';
@@ -23,20 +23,29 @@ function ajaxGet(page, callback){
 	let resp;
 	let xhr = new XMLHttpRequest();
 
-	xhr.open("GET", page, true);
+	xhr.open("GET", page + '.php', true);
 
 	xhr.onload = function(){
 		if(xhr.status == 200){
 			resp = this.responseText;
-			callback(resp);
+			callback(resp, page + '.js');
 		}
 	}
 
 	xhr.send(null);
 }
 
-function morph(content){
+function morph(content, script){
 	const divMain = document.getElementById("main");
+        const divSubscript = document.getElementById("subscript");
+
+        while (divSubscript.firstChild)
+            divSubscript.removeChild(divSubscript.lastChild);
 
 	divMain.innerHTML = content;
+        
+        subscript = document.createElement('script');
+        subscript.setAttribute('src', script);
+        divSubscript.appendChild(subscript);
+        
 }
