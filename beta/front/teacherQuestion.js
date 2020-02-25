@@ -9,8 +9,12 @@ function ajaxSubmit(e){
 	let difficulty = document.getElementById("difficulty").value;
 	let topic = document.getElementById("topic").value;
 	let vquestion = document.getElementById("VQuestion").value;
+        let tc1 = document.getElementById("testcase1").value;
+        let tc2 = document.getElementById("testcase2").value;
+
+        let tcs = [tc1,tc2];
  
-        let post_params = "RequestType=CreateQuestion" + "&Topic=" + topic + "&Difficulty=" + difficulty + "&QuestionText=" + vquestion;
+        let post_params = "RequestType=CreateQuestion" + "&Topic=" + topic + "&Difficulty=" + difficulty + "&QuestionText=" + vquestion + "&TestCases=" + tcs;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);

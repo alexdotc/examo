@@ -11,6 +11,8 @@
         <input type="text" name="Difficulty" id="difficulty" class="QuestionText QuestionItems" />
         <label for="VQuestion" class="QuestionLabel QuestionItems">Question: </label>
         <textarea id="VQuestion" form="Question" class="VQuestion QuestionItems" cols="100" rows="10" wrap="soft" placeholder="Enter Your Question Here"></textarea>
+        <textarea id="testcase1" form="Question" class="TestCase QuestionItems" cols="100" rows="3" wrap="soft" placeholder="Enter A Test Case Here"></textarea>
+        <textarea id="testcase2" form="Question" class="TestCase QuestionItems" cols="100" rows="3" wrap="soft" placeholder="Enter A Test Case Here"></textarea>
         <br />
         <input type="submit" value="Create Question" class="QuestionSubmit QuestionItems" />
     </form>

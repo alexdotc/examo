@@ -13,9 +13,11 @@
 			$topic = $_POST['Topic'];
 			$difficulty = $_POST['Difficulty'];
 			$questiontext = $_POST['QuestionText'];
-			$post_params = $post_params . "&Topic=$topic&Difficulty=$difficulty&QuestionText=$questiontext";
+                        $testcases = $_POST['TestCases'];
+			$post_params = $post_params . "&Topic=$topic&Difficulty=$difficulty&QuestionText=$questiontext&TestCases=$testcases";
 			break;
 		default:
+                        //GetQuestions
 			break;			
 	}
 
