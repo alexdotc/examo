@@ -3,27 +3,25 @@
 	define('MAGICNUMBER', true);
 	include 'unlock.php';
 
-	$URL = 'https://web.njit.edu/~np595/CS490Work/middleAlt.php';
+	$URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
 	$req = login($_POST['ucid'], $_POST['password'], $URL);
 
 	$loginRespJSON = json_decode($req, true);
 
-	//TODO: $_SESSION keys based on real JSON responses from back/mid
-
-	if($loginRespJSON['resp'] == 'backYes'){
+	if($loginRespJSON['resp'] == 'P'){
 		$_SESSION['logon'] = true;
 		$_SESSION['teacher'] = true;
 	}
-	else if($loginRespJSON['respNJIT'] == 'NJITyes'){
+	else if($loginRespJSON['resp'] == 'S'){
 		$_SESSION['logon'] = true;
 		$_SESSION['student'] = true;
 	}
 
-	echo json_encode($loginRespJSON);
+	echo $req;
 
 	function login($ucid, $pass, $URL){
-		$post_params = "ucid=$ucid&password=$pass";
+		$post_params = http_build_query(array('RequestType' => 'login', 'data' => array('ucid' => $ucid, 'password' => $pass)));
 		$ch = curl_init();
 		$options = array(CURLOPT_URL => $URL,
 			         CURLOPT_HTTPHEADER =>

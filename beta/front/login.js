@@ -22,17 +22,15 @@ function login(e){
 			let elem = document.getElementById("response");
 			let resp = JSON.parse(this.responseText);
 
-			if(resp.resp == 'backYes')
+			if(resp == "P")
 				window.location.replace(TEACHER_PAGE);
 			
-			// TODO: Replace with real check for student page, testing backdoor for now
-			else if (resp.respNJIT == 'NJITyes')
+			else if (resp == "S")
 				window.location.replace(STUDENT_PAGE);
 
-			else
+			else if (resp == "backNoexist" || resp == "backNo")
 				elem.innerHTML = "Login Failed...";
 
-			console.log(this.responseText);
 		}
 	}
 

@@ -17,6 +17,7 @@ function ajaxList(callback){
         }
         
         xhr.send(post_params);
+}
 
 function handle(json){
         console.log("Received question list");

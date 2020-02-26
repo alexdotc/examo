@@ -6,7 +6,7 @@
 
 	$reqtype = $_POST['RequestType'];
 
-	$post_params = array('RequestType' => $reqtype);
+	$post_params = http_build_query(array('RequestType' => $reqtype, data => ''));
 
 	switch($reqtype){
 		case 'CreateQuestion':
