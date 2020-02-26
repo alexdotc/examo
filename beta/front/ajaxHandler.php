@@ -2,20 +2,19 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
-        $URL = 'https://web.njit.edu/~np595/CS490Work/middleAlt.php';
+        $URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
 	$reqtype = $_POST['RequestType'];
 
-	$post_params = "RequestType=$reqtype";
+	$post_params = array('RequestType' => $reqtype);
 
 	switch($reqtype){
 		case 'CreateQuestion':
 			$topic = $_POST['topic'];
 			$difficulty = $_POST['difficulty'];
 			$questiontext = $_POST['questiontext'];
-			$testcase1 = $_POST['testcase1'];
-			$testcase2 = $_POST['testcase2'];
-			$post_params = $post_params . "&data%5Btopic%5D=$topic&data%5Bdifficulty%5D=$difficulty&data%5Bquestiontext%5D=$questiontext&data%5Btestcases%5D=$testcase1$testcase2";
+			$testcases = $_POST['testcase1'] . $_POST['testcase2'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases)));
 			break;
 		default:
                         //GetQuestions

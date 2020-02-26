@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WEBROOT=/var/www/html
+WEBROOT=$HOME/public_html
 
 for f in *; do
     diff $PWD/$f $WEBROOT/$(basename $PWD)/$f
