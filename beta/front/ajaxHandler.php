@@ -10,11 +10,12 @@
 
 	switch($reqtype){
 		case 'CreateQuestion':
-			$topic = $_POST['Topic'];
-			$difficulty = $_POST['Difficulty'];
-			$questiontext = $_POST['QuestionText'];
-                        $testcases = $_POST['TestCases'];
-			$post_params = $post_params . "&Topic=$topic&Difficulty=$difficulty&QuestionText=$questiontext&TestCases=$testcases";
+			$topic = $_POST['topic'];
+			$difficulty = $_POST['difficulty'];
+			$questiontext = $_POST['questiontext'];
+			$testcase1 = $_POST['testcase1'];
+			$testcase2 = $_POST['testcase2'];
+			$post_params = $post_params . "&data%5Btopic%5D=$topic&data%5Bdifficulty%5D=$difficulty&data%5Bquestiontext%5D=$questiontext&data%5Btestcases%5D=$testcase1$testcase2";
 			break;
 		default:
                         //GetQuestions

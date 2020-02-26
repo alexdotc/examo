@@ -11,10 +11,8 @@ function ajaxSubmit(e){
 	let vquestion = document.getElementById("VQuestion").value;
         let tc1 = document.getElementById("testcase1").value;
         let tc2 = document.getElementById("testcase2").value;
-
-        let tcs = [tc1,tc2];
  
-        let post_params = "RequestType=CreateQuestion" + "&Topic=" + topic + "&Difficulty=" + difficulty + "&QuestionText=" + vquestion + "&TestCases=" + tcs;
+        let post_params = "RequestType=CreateQuestion" + "&topic=" + topic + "&difficulty=" + difficulty + "&questiontext=" + vquestion + "&testcase1=" + tc1 + "&testcase2=" + tc2;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);
