@@ -1,5 +1,6 @@
 <?php
-
+//Checked with the test and works with sending data from front to back and registers questions and exams, while bringing info of exams
+//and questions back to front.
 $url = 'https://myhub.njit.edu/vrs/ldapAuthenticateServlet';
 $backurl = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
