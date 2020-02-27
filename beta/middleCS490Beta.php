@@ -8,11 +8,12 @@ $data = $_POST['data'];
 //Due to no connection of post being sent to back, the back would need the data
 //To call $data['RequestType'] to get the request type
 
-if($requestID = 'login'){
-        $username = $_POST['ucid'];
-        $password = $_POST['password'];
+if ($requestID == 'login'){
+        $username = $data['ucid'];
+        $password = $data['password'];
 
-        $post = "user_name=$username&passwd=$password";
+        $post = http_build_query(array('RequestType' => $requestID, 'ucid' =>
+        $username, 'password' => $password));
 
         $chBack = curl_init();
         curl_setopt($chBack, CURLOPT_URL, $backurl);
@@ -23,7 +24,7 @@ if($requestID = 'login'){
         curl_close($chBack);
 
         $ch = curl_init();
-  
+
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
@@ -46,68 +47,108 @@ if($requestID = 'login'){
 
 }
 
-elseif($requestID == 'CreateQuestion'){
+if ($requestID == 'CreateQuestion'){
 //Creates the question then sends data to back to store in database
+
+        $topic = $data['topic'];
+        $difficulty = $data['difficulty'];
+        $questiontext = $data['questiontext'];
+        $testcases = $data['testcases'];
+
+        $sendData = array('topic' => $topic, 'difficulty' => $difficulty,
+        'questiontext' => $questiontext, 'testcases' => $testcases);
+
+        $datas = http_build_query(array('RequestType' => $requestID, data =>
+        $sendData));
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $backurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
         $result = curl_exec($ch);
+        echo $result;
         curl_close($ch);
 
 }
 
-elseif($requestID == 'GetQuestions'){//Send the request data forward for the
+if ($requestID == 'GetQuestions'){//Send the request data forward for the
 //back to retreive the question data from the database to then send to front
 //Data will be holding the request type for back to determine which to send
+        $sendData = http_build_query(array('RequestType' => $requestID, data =>
+        ''));
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $backurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $sendData);
 
         $result = curl_exec($ch);
+        echo $result;
         curl_close($ch);
 
 }
 
-elseif($requestID == 'createExam'){
+if ($requestID == 'createExam'){
 //Data will be holding the exam created to save in database
+        $examName = $data['exaName'];
+        $questID = $data['questionsid'];
+        $questPoint = $data['questPoint'];
+
+        $sendData = array('exaName' => $examName, 'questionsid' => $questID,
+        'questPoint' => $questPoint);
+
+        $datas = http_build_query(array('RequestType' => $requestID, data =>
+        $sendData));
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $backurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
         $result = curl_exec($ch);
+        echo $result;
         curl_close($ch);
 
 }
 
-elseif($requestID == 'listExams'){
+if ($requestID == 'listExams'){
 //Data will be sending the list of exams created to the front
+        $sendData = http_build_query(array('RequestType' => $requestID, data =>
+        ''));
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $backurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $sendData);
 
         $result = curl_exec($ch);
+        echo $result;
         curl_close($ch);
 
 }
 
-elseif($requestID == 'showExam'){
+if($requestID == 'showExam'){
 //Data will be sending the exam chosen to the front to display
+        $examName = $data['exaName'];
+
+        $sendData = array('exaName' => $examName);
+
+        $datas = http_build_query(array('RequestType' => $requestID, data =>
+        $sendData));
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $backurl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
         $result = curl_exec($ch);
+        echo $result;
         curl_close($ch);
 
 }
