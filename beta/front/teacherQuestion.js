@@ -28,5 +28,5 @@ function ajaxSubmit(e){
 }
 
 function acknowledge(question){
-	console.log(`Question Submitted: {question}`);
+	console.log(`Question Submitted: ${question}`);
 }

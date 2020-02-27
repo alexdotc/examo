@@ -44,7 +44,7 @@ function morph(content, script){
 
 	divMain.innerHTML = content;
         
-        subscript = document.createElement('script');
+        let subscript = document.createElement('script');
         subscript.setAttribute('src', script);
         divSubscript.appendChild(subscript);
         

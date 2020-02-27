@@ -1,6 +1,6 @@
 ajaxList(handle);
 
-document.getElementById("main").addEventListener("click", function(e){
+document.getElementById("QuestionList").addEventListener("click", function(e){
 	let clickedButton = document.getElementById(e.target.id);
 
 	if (clickedButton && clickedButton.id.substr(0,9) == 'addButton')
@@ -55,7 +55,7 @@ function handle(questions){
 	}
 }
 
-let selections = new Set();
+selections = new Set();
 
 function addQuestion(clickedButton){
 
