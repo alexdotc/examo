@@ -1,4 +1,4 @@
-ajaxList(handle);
+ajaxList(listQuestions);
 
 document.getElementById("QuestionList").addEventListener("click", function(e){
 	let clickedButton = document.getElementById(e.target.id);
@@ -30,7 +30,7 @@ function ajaxList(callback){
         xhr.send(post_params);
 }
 
-function handle(questions){
+function listQuestions(questions){
 	const divList = document.getElementById("QuestionList");
 
 	for(let question in questions){
