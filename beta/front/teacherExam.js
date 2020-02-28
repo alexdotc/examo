@@ -10,6 +10,8 @@ document.getElementById("QuestionList").addEventListener("click", function(e){
 		removeQuestion(clickedButton);
 });
 
+document.getElementById("SubmitExamForm").addEventListener("submit", ajaxCreateExam);
+
 function ajaxList(callback){
 
         const SERVER = 'ajaxHandler.php';
@@ -71,4 +73,29 @@ function removeQuestion(clickedButton){
 	clickedButton.setAttribute("value", "Add Question");
 	clickedButton.setAttribute("id", 'addButton' + clickedButton.name);
 	console.log("Removed " + clickedButton.name);
+}
+
+function ajaxCreateExam(e){
+	e.preventDefault();
+
+	const SERVER = 'ajaxHandler.php';
+
+	let examname = document.getElementById("examname").value;
+	
+	let post_params = 'RequstType=createExam&examname=' + examname + '&questionsid=' + selections.values();
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", SERVER, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhr.onload = function(){
+		if (xhr.status == 200){
+			let elem = document.getElementById("response");
+			let resp = JSON.parse(this.responseText);
+
+			elem.innerHTML = resp;
+		}
+	}
+
+	xhr.send(post_params);
 }
