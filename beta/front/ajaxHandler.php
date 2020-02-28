@@ -16,9 +16,15 @@
 			$testcases = $_POST['testcase1'] . $_POST['testcase2'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases)));
 			break;
+		case 'createExam':
+			$name = $_POST['examname'];
+			$ids = $_POST['ids'];
+			$points = $_POST['points'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'questionsid' => explode(",",$ids), 'questPoint' => explode(",",$points))));
+			break;
 		default:
                         //GetQuestions
-			break;			
+			break;
 	}
 
 	$resp = handoff($post_params, $URL);

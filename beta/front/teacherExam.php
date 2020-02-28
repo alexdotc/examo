@@ -11,5 +11,5 @@
 		<input type="text" name="Exam Name" id="examname" class="ExamItems ExamInput"/>
 		<input type="submit" value="Create Exam" class="ExamSubmit ExamItems"/>
 	</form>
-	<h5 id="response" class="ExamCreateResponse"></h5>
+	<h3 id="response" class="ExamCreateResponse"></h3>
 </div>

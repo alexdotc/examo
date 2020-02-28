@@ -36,12 +36,19 @@ function handle(questions){
 	for(let question in questions){
 		let li = document.createElement("div");
 		let button = document.createElement("input");
+                let pointsBox = document.createElement("input");
 		
 		button.setAttribute('type', 'button');
 		button.setAttribute('class', 'QuestionItems QuestionAddButton');
 		button.setAttribute('id', 'addButton' + questions[question]['questID']);
 		button.setAttribute('name', questions[question]['questID']);
-		button.setAttribute('value', 'Add Question');
+		button.setAttribute('value', "Add Question");
+
+                pointsBox.setAttribute('type', 'text');
+                pointsBox.setAttribute('class', 'QuestionItems QuestionPointsBox');
+                pointsBox.setAttribute('id', 'pointsBox' + questions[question]['questID']);
+                pointsBox.setAttribute('name', questions[question]['questID']);
+                pointsBox.setAttribute('placeholder', "Points");
 
 		li.setAttribute('class', 'QuestionItems QuestionListItems');
 		li.setAttribute('id', 'question');
@@ -52,26 +59,42 @@ function handle(questions){
 		
 		divList.appendChild(li);
 		divList.appendChild(button);
+		divList.appendChild(pointsBox);
 		
 		divList.innerHTML += '<hr />';
 	}
 }
 
-selections = new Set();
+selections = new Map();
 
 function addQuestion(clickedButton){
 
-	selections.add(clickedButton.name);
-	clickedButton.setAttribute("value", "Remove Question");
+        const points = document.getElementById('pointsBox' + clickedButton.name);
+        
+        if (points.value == '')
+            points.value = '0';
+
+	selections.set(clickedButton.name, points.value);
+	
+        clickedButton.setAttribute("value", "Remove Question");
 	clickedButton.setAttribute("id", 'removeButton' + clickedButton.name);
-	console.log("Added " + clickedButton.name);
+
+        points.style.visibility = "hidden";
+        
+	console.log("Added " + clickedButton.name + " with points value " + points.value);
 }
 
 function removeQuestion(clickedButton){
 
+        const points = document.getElementById('pointsBox' + clickedButton.name);
+
 	selections.delete(clickedButton.name);
+
 	clickedButton.setAttribute("value", "Add Question");
 	clickedButton.setAttribute("id", 'addButton' + clickedButton.name);
+
+        points.style.visibility = "initial";
+
 	console.log("Removed " + clickedButton.name);
 }
 
@@ -81,8 +104,17 @@ function ajaxCreateExam(e){
 	const SERVER = 'ajaxHandler.php';
 
 	let examname = document.getElementById("examname").value;
+
+	let ids = [];
+	let points = [];
 	
-	let post_params = 'RequstType=createExam&examname=' + examname + '&questionsid=' + selections.values();
+	for(let question of selections){
+		ids.push(question[0]);
+		points.push(question[1]);
+	}
+		
+	
+	let post_params = 'RequestType=createExam&examname=' + examname + '&ids=' + ids + '&points=' + points;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);
