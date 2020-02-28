@@ -12,10 +12,12 @@
 	if($loginRespJSON['resp'] == 'P'){
 		$_SESSION['logon'] = true;
 		$_SESSION['teacher'] = true;
+                $_SESSION['user'] = $_POST['ucid'];
 	}
 	else if($loginRespJSON['resp'] == 'S'){
 		$_SESSION['logon'] = true;
 		$_SESSION['student'] = true;
+                $_SESSION['user'] = $_POST['ucid'];
 	}
 
 	echo $req;
