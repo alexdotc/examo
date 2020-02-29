@@ -15,6 +15,7 @@
             <li><a href='#home'>Home</a></li>
             <li><a href='#question'>Create Question</a></li>
 	    <li><a href='#exam'>Create Exam</a></li>
+            <li><a href='#grade'>Grade Exams</a></li>
             <li><a href='logout.php'>LOGOUT</a></li>
 	</ul>
 	</div>

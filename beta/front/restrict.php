@@ -4,7 +4,7 @@
 	$STUDENT_PATH   = '../front/student.php';
 	$TEACHER_PATH   = '../front/teacher.php';
 
-	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherQuestion.php','teacherHome.php');
+	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherGrade.php', 'teacherQuestion.php', 'teacherHome.php');
 
 	if (!defined('MAGICNUMBER')){
 		header("Location:" . $LOGIN_PATH);

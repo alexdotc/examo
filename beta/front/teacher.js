@@ -8,7 +8,8 @@ function hashevent(){
 	let hash = (location.hash).substr(1);
 	let hashes = { home: 'teacherHome',
 		       question: 'teacherQuestion',
-		       exam: 'teacherExam' };
+		       exam: 'teacherExam',
+                       grade: 'teacherGrade' };
 
 	if(!hash)
 		hash = 'home';
