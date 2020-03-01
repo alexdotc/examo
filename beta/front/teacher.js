@@ -9,10 +9,14 @@ function hashevent(){
 	let hashes = { home: 'teacherHome',
 		       question: 'teacherQuestion',
 		       exam: 'teacherExam',
+                       completed: 'teacherCompleted',
                        grade: 'teacherGrade' };
 
 	if(!hash)
 		hash = 'home';
+
+        else if(hash.substr(0,5) == 'grade')
+                hash = 'grade';
 	
 	hash = hashes[hash];
 

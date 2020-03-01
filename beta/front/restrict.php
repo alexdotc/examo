@@ -6,7 +6,7 @@
 
 	$STUDENT_PAGES = array('student.php', 'studentExam.php', 'studentTake.php', 'studentReview.php', 'studentHome.php');
 
-	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherGrade.php', 'teacherQuestion.php', 'teacherHome.php');
+	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherCompleted.php', 'teacherGrade.php', 'teacherQuestion.php', 'teacherHome.php');
 
 	if (!defined('MAGICNUMBER')){
 		header("Location:" . $LOGIN_PATH);
