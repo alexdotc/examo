@@ -18,8 +18,6 @@ $dat=array('RequestType'=>"gradingExam",'data'=>array('ucid'=>'yav3','exaName'=>
     return start","stringNultiply(str1, num)
 	print(str1 * 2)"),'scores'=>array(50,26),'maxScores'=>array(50,50),'comments'=>array("coment1","coment2"),'expectedAnswers'=>array("256,81,16,16","foofoo, barbarbarbar, hihihi, worldworldworldworldworld"),'resultingAnswers'=>array("256,81,16,16","foofoo, barbar, hihi, worldworld"),'deductedPointsPerEachTest'=>array("0, 0, 0, 0","0, 5, 5, 5"),'deductedPointscorrectName'=>array(0,3),'deductedPointshasDef'=>array(0,3),'deductedPointsisMissingColon'=>array(0,3),'deductedPointsusedLoop'=>array(0,0)));
 
-
-
 $url="https://web.njit.edu/~yav3/backEndCS490Betha.php";
 
 $ch = curl_init();
