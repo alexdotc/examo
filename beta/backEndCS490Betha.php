@@ -131,6 +131,39 @@ if ($request == 'showExam'){//for student
 
 	echo json_encode($exam);	
 }
+if ($request == 'gradingExam'){//for professor
+	$ucid = $data['ucid'];
+	$exaName = $data['exaName'];
+	$questID = $data['questionsid'];
+	$answer=$data['answers'];
+	$score=$data['scores'];
+	$maxScore=$data['maxScores'];
+	$comments=$data['comments'];
+	$released=$data['released'];//always stores N until the professor changes
+	$testCaseExpected = $data['expectedAnswers'];
+	$testCaseAnswered = $data['resultingAnswers'];
+	$testPointsDeducted = $data['deductedPointsPerEachTest'];
+	$correctName = $data['deductedPointscorrectName'];
+  	$def = $data['deductedPointshasDef'];
+	$isMissingColon = $data['deductedPointsisMissingColon'];
+	$usedLoop = $data['deductedPointsusedLoop'];
+	
+	
+	$count = count($questID);
+	for($i=0; $i < $count; $i++){
+		
+		$query = "INSERT INTO gradesTable (ucid,exaName,questID,answer,score,maxScore,comments,released, expectedAnswers, resultingAnswers, deductedPointsPerEachTest, deductedPointscorrectName, deductedPointshasDef, deductedPointsisMissingColon,deductedPointsusedLoop)
+		VALUES ('$ucid', '$exaName','$questID[$i]','$answer[$i]','$score[$i]','$maxScore[$i]','$comments[$i]','$released', '$testCaseExpected[$i]', '$testCaseAnswered[$i]', '$testPointsDeducted[$i]', '$correctName[$i]', '$def[$i]', '$isMissingColon[$i]', '$usedLoop[$i]')";
+		$db->query($query) or die('There was an error saving the grades');
+		
+	}
+	$ans =  "grade successfully saved";
+		
+		
+	echo json_encode($ans);
+	
+}
+
 mysqli_close($db);
 
 ?>
