@@ -4,6 +4,8 @@
 	$STUDENT_PATH   = '../front/student.php';
 	$TEACHER_PATH   = '../front/teacher.php';
 
+	$STUDENT_PAGES = array('student.php', 'studentExam.php', 'studentTake.php', 'studentReview.php', 'studentHome.php');
+
 	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherGrade.php', 'teacherQuestion.php', 'teacherHome.php');
 
 	if (!defined('MAGICNUMBER')){
@@ -21,7 +23,7 @@
 		header("Location:" . $STUDENT_PATH);
 		die("Restricted");
 	}
-	else if((basename($_SERVER['SCRIPT_FILENAME']) == 'student.php') && !$_SESSION['student']){
+	else if((in_array(basename($_SERVER['SCRIPT_FILENAME']), $STUDENT_PAGES)) && !$_SESSION['student']){
 		header("Location:" . $TEACHER_PATH);
 		die("Restricted");
 	}

@@ -9,7 +9,7 @@
 
 //$dat=array('RequestType'=>"listExams",'data'=>"");//data does not store anything
 
-$dat=array('RequestType'=>"showExam",'data'=>array('exaName'=>"exam345", 'exaRes'=>"20"));
+$dat=array('RequestType'=>"showExam",'data'=>array('exaName'=>"exam345"));
 
 $url="https://web.njit.edu/~yav3/backEndCS490Betha.php";
 
@@ -23,7 +23,7 @@ curl_setopt ($ch, CURLOPT_REFERER, $url);
 curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($dat));
 curl_setopt($ch, CURLOPT_POST, true);
 $unprocessedResult = curl_exec($ch);
-echo http_build_query($dat);
+echo $unprocessedResult;
 curl_close($ch);
 
 ?>

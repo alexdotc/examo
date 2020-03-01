@@ -22,8 +22,13 @@
 			$points = $_POST['points'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'questionsid' => explode(",",$ids), 'questPoint' => explode(",",$points))));
 			break;
+		case 'showExam':
+			$ename = $_POST['examname'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $ename)));
+			break;
 		default:
                         //GetQuestions
+                        //listExams
 			break;
 	}
 
