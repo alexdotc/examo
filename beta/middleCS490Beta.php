@@ -154,4 +154,116 @@ if($requestID == 'showExam'){
 
 }
 
+if($requestID == 'gradingExam'){ //Perform auto-grader here!
+
+
+
+}
+
+if($requestID == 'showGradedExam'){
+
+        $examName = $data['exaName'];
+
+        $dataz = array('exaName' => $examName);
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $dataz));
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $sendData);
+
+        $result = curl_exec($ch);
+        echo $result;
+        curl_close($ch);
+
+}
+
+if($requestID == 'modifyGradedExam'){
+
+        $ucid = $data['ucid'];
+        $examName = $data['exaName'];
+        $gradeID = $data['gradesID'];
+        $score = $data['scores'];
+        $comments = $data['comments'];
+        $released = $data['released'];
+
+        $tData = array('ucid' => $ucid, 'exaName' => $examName, 'gradesID' =>
+        $gradeID, 'scores' => $score, 'comments' => $comments, 'released' =>
+        $released);
+
+        $datas = http_build_query('RequestType' => $requestID, 'data' => $tData);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+
+        $result = curl_exec($ch);
+        echo $result;
+        curl_close($ch);
+
+}
+
+if($requestID == 'listGradedExams'){
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        ''));
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+
+        $result = curl_exec($ch);
+        echo $result;
+        curl_close($ch);
+
+}
+
+if($requestID == 'listGradedExamsStudent'){
+
+        $ucid = $data['ucid'];
+
+        $tData = array('ucid' => $ucid);
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        $tData));
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+
+        $result = curl_exec($ch);
+        echo $result;
+        curl_close($ch);
+
+}
+
+if($requestID == 'retrieve'){
+
+        $id = $data['questionsid'];
+
+        $tData = array('questionsid' => $id);
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        $tData));
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+
+        $result = curl_exec($ch);
+        echo $result;
+        curl_close($ch);
+
+}
+        
 ?>
