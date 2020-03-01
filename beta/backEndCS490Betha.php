@@ -4,9 +4,9 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);  //Detectes run-time 
 ini_set('display_errors' , 1);
 
 //DB credentials
-$hostname =  	   
+$hostname = 	   
 $username = 
-$project  =
+$project  = 
 $password = 
 
 //Connects the PHP script to the DB to execute SQL statements
@@ -159,6 +159,113 @@ if ($request == 'gradingExam'){//middle sends me this info
 		
 	echo json_encode($ans);
 }
+	if ($request == 'listGradedExams'){//for instructor 
+		$query = "SELECT DISTINCT exaName FROM gradesTable";
+		$cursor = $db->query($query);
+		if ($cursor->num_rows == 0)
+			die('No exams found, try again later...');
+		while ($row = $cursor->fetch_assoc()) {
+			$exam[] = $row['exaName'];//check adding array if it is needed
+		}
+		echo json_encode($exam);
+    }
+ 
+if ($request == 'showGradedExam'){//for student and instructor
+	$exaName = $data['exaName'];
+	$query="SELECT * FROM gradesTable INNER JOIN questionTable ON gradesTable.questID = questionTable.questID WHERE gradesTable.exaName='$exaName'";
+	//$query = "SELECT * FROM examsTable, questionTable WHERE exaName='$exaName'";
+	$cursor = $db->query($query);
+	if ($cursor->num_rows == 0) die('This exam does not exist, try again later...');
+	while ($row = $cursor->fetch_assoc()) {
+		$exam[] = array("ucid"=>$row['ucid'],
+						"gradesID"=>$row['gradesID'],
+						"questID"=>$row['questID'],
+						"questions"=>$row['question'],
+						"answers"=>$row['answer'],
+						"scores"=>$row['score'],
+						"maxScores"=>$row['maxScore'],
+						"comments"=>$row['comments'],
+						"expectedAnswers"=>$row['expectedAnswers'],
+						"resultingAnswers"=>$row['resultingAnswers'],
+						"deductedPointsPerEachTest"=>$row['deductedPointsPerEachTest'],
+						"deductedPointscorrectName"=>$row['deductedPointscorrectName']
+						);
+	}
+	$query2="SELECT DISTINCT released FROM gradesTable WHERE exaName='$exaName'"; 
+	$cursor = $db->query($query2);
+	if ($cursor->num_rows == 0) die('This exam does not exist, try again later...');
+	while ($row = $cursor->fetch_assoc()) {
+			array_push($exam, $row['released']);
+		
+	}
+    
+	echo json_encode($exam);	
+}
+if ($request == 'modifyGradedExam'){//for instructor
+    $ucid = $data['ucid'];
+    $exaName = $data['exaName'];
+	$gradesID = $data['gradesID'];
+	$score=$data['scores'];
+	$comments=$data['comments'];
+	$released=$data['released'];
+	$count = count($gradesID);
+
+	for($i=0; $i < $count; $i++){
+		$gradesID[$i] = (int) $gradesID[$i];
+		$score[$i] = (int) $score[$i];
+	}
+
+	for($i=0; $i < $count; $i++){
+		
+		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
+		//echo json_encode($query);
+
+		$db->query($query) or die('There was an error saving the grades');
+		
+	}
+	$ans =  'update successfully saved';
+	
+
+	
+	echo json_encode($ans);	
+}
+if ($request == 'listGradedExams'){//for instructor 
+		$query = "SELECT DISTINCT exaName FROM gradesTable";
+		$cursor = $db->query($query);
+		if ($cursor->num_rows == 0)
+			die('No exams found, try again later...');
+		while ($row = $cursor->fetch_assoc()) {
+			$exam[] = $row['exaName'];//check adding array if it is needed
+		}
+		echo json_encode($exam);
+}
+if ($request == 'listGradedExamsStudent'){//for student 
+		$ucid = $data['ucid'];
+		$query = "SELECT DISTINCT exaName FROM gradesTable where ucid='$ucid' and released='Y'";
+		$cursor = $db->query($query);
+		if ($cursor->num_rows == 0)
+			die('No exams found, try again later...');
+		while ($row = $cursor->fetch_assoc()) {
+			$exam[] = $row['exaName'];//check adding array if it is needed
+		}
+		echo json_encode($exam);
+}
+if ($request == 'retrieve') {
+	$ids = $data['questionsid'];
+    $result = array();
+	$count = count($ids);
+
+	for ($i = 0; $i < $count; $i++) {
+		$query="SELECT * FROM questionTable WHERE questID=".$ids[$i];
+		$cursor = $db->query($query);
+		while ($row = $cursor->fetch_assoc()) {
+			$result[] = array('topic'=>$row['questTopic'], 'questText'=>$row['question'], 'questTest'=>$row['questTest']);
+		}
+	}
+
+	echo json_encode($result);
+}
+
 mysqli_close($db);
 
 ?>
