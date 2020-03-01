@@ -144,16 +144,13 @@ if ($request == 'gradingExam'){//middle sends me this info
 	$testCaseAnswered = $data['resultingAnswers'];
 	$testPointsDeducted = $data['deductedPointsPerEachTest'];
 	$correctName = $data['deductedPointscorrectName'];
-  	$def = $data['deductedPointshasDef'];
-	$isMissingColon = $data['deductedPointsisMissingColon'];
-	$usedLoop = $data['deductedPointsusedLoop'];
-	
+  	
 	
 	$count = count($questID);
 	for($i=0; $i < $count; $i++){
 		
-		$query = "INSERT INTO gradesTable (ucid,exaName,questID,answer,score,maxScore,comments,released, expectedAnswers, resultingAnswers, deductedPointsPerEachTest, deductedPointscorrectName, deductedPointshasDef, deductedPointsisMissingColon,deductedPointsusedLoop)
-		VALUES ('$ucid', '$exaName','$questID[$i]','$answer[$i]','$score[$i]','$maxScore[$i]','$comments[$i]','$released', '$testCaseExpected[$i]', '$testCaseAnswered[$i]', '$testPointsDeducted[$i]', '$correctName[$i]', '$def[$i]', '$isMissingColon[$i]', '$usedLoop[$i]')";
+		$query = "INSERT INTO gradesTable (ucid,exaName,questID,answer,score,maxScore,comments,released, expectedAnswers, resultingAnswers, deductedPointsPerEachTest, deductedPointscorrectName)
+		VALUES ('$ucid', '$exaName','$questID[$i]','$answer[$i]','$score[$i]','$maxScore[$i]','$comments[$i]','$released', '$testCaseExpected[$i]', '$testCaseAnswered[$i]', '$testPointsDeducted[$i]', '$correctName[$i]')";
 		$db->query($query) or die('There was an error saving the grades');
 		
 	}
@@ -161,9 +158,7 @@ if ($request == 'gradingExam'){//middle sends me this info
 		
 		
 	echo json_encode($ans);
-	
 }
-
 mysqli_close($db);
 
 ?>
