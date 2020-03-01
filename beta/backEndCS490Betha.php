@@ -131,7 +131,7 @@ if ($request == 'showExam'){//for student
 
 	echo json_encode($exam);	
 }
-if ($request == 'gradingExam'){//for professor
+if ($request == 'gradingExam'){//middle sends me this info 
 	$ucid = $data['ucid'];
 	$exaName = $data['exaName'];
 	$questID = $data['questionsid'];
@@ -139,7 +139,7 @@ if ($request == 'gradingExam'){//for professor
 	$score=$data['scores'];
 	$maxScore=$data['maxScores'];
 	$comments=$data['comments'];
-	$released=$data['released'];//always stores N until the professor changes
+	$released="N";//I dont need take this inf from data because it is always gonna be N until the professor modifies 
 	$testCaseExpected = $data['expectedAnswers'];
 	$testCaseAnswered = $data['resultingAnswers'];
 	$testPointsDeducted = $data['deductedPointsPerEachTest'];
