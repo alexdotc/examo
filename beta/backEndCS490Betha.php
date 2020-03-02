@@ -159,16 +159,7 @@ if ($request == 'gradingExam'){//middle sends me this info
 		
 	echo json_encode($ans);
 }
-	if ($request == 'listGradedExams'){//for instructor 
-		$query = "SELECT DISTINCT exaName FROM gradesTable";
-		$cursor = $db->query($query);
-		if ($cursor->num_rows == 0)
-			die('No exams found, try again later...');
-		while ($row = $cursor->fetch_assoc()) {
-			$exam[] = $row['exaName'];//check adding array if it is needed
-		}
-		echo json_encode($exam);
-    }
+	
  
 if ($request == 'showGradedExam'){//for student and instructor
 	$exaName = $data['exaName'];
@@ -230,12 +221,13 @@ if ($request == 'modifyGradedExam'){//for instructor
 	echo json_encode($ans);	
 }
 if ($request == 'listGradedExams'){//for instructor 
-		$query = "SELECT DISTINCT exaName FROM gradesTable";
+		$query = "SELECT DISTINCT exaName,ucid FROM gradesTable";
 		$cursor = $db->query($query);
 		if ($cursor->num_rows == 0)
 			die('No exams found, try again later...');
 		while ($row = $cursor->fetch_assoc()) {
-			$exam[] = $row['exaName'];//check adding array if it is needed
+			$exam[] = array("exaName"=>$row['exaName'],"ucid"=>$row['ucid']);//check adding array if it is needed
+			
 		}
 		echo json_encode($exam);
 }
