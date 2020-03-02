@@ -132,7 +132,41 @@ if($requestID == 'showExam'){
 
 if($requestID == 'gradingExam'){ //Perform auto-grader here!
 
+        $testFile = "test.py";
 
+        $ucid = $data['ucid'];
+        $examName = $data['exaName'];
+        $questionIDs = $data['questionsid'];
+        $answers = $data['answers'];
+        $scores = $data['scores'];
+        $maxScores = $data['maxScores'];
+        $comments = $data['comments'];
+        $expectedAnswers = $data['expectedAnswers'];
+        //$testcases = $data['testcases'];
+
+        for($i = 0; $i < $questionIDs; $i++){
+
+                //I require knowledge of where to get the expected answers from
+                //to the check the answers of the outputs
+                $expectedAnswer = $expectedAnswers[$i]; //Don't we need to do two testcases per single question? So wouldn't we need arguments?
+                //$expectedAnswer2 = $data[''];
+                //$testcase1 = $testcases[$i]['testcase1']; //Gets both testcases
+                //of that answer to check with
+                //$testcase2 = $testcases[$i]['testcase2'];
+                $score = $scores[$i];
+                $maxScore = $maxScores[$i];
+                $answer = $answers[$i];
+                //Puts coded answer into the file to be executed
+                file_put_contents($testFile, $answer);
+
+                $result = exec("./$testFile");
+                //Executes the code to get an answer, if its not complete or
+                //does not match expected answers then it won't work
+
+                if($result != $expectedAnswer)
+                        $score = $score - $score/2;
+
+        }
 
 }
 
