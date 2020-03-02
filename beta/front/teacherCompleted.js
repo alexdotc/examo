@@ -3,7 +3,7 @@ ajaxList(listExams);
 function ajaxList(callback){
 
         const SERVER = 'ajaxHandler.php';
-        const post_params = "RequestType=listCompleted";
+        const post_params = "RequestType=listGradedExams";
 
         let xhr = new XMLHttpRequest();
         xhr.open("POST", SERVER, true);
@@ -26,7 +26,8 @@ function listExams(exams){
 		
 		li.setAttribute('class', 'ExamItems ExamNames');
 		li.setAttribute('id', 'examname');
-                li.innerHTML += '<a href="#grade?exam=' + exams[exam] + '">' + exams[exam] + '</a><br />';
+                li.innerHTML += '<a href="#grade?exam=' + exams[exam]['exaName'] + '">' + exams[exam]['exaName'] + '</a>';
+		li.innerHTML += ' STUDENT: <strong>' + exams[exam]['ucid'] + '</strong><br />';
 		
 		divList.appendChild(li);
 	}

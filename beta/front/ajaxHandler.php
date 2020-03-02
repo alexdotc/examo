@@ -37,9 +37,9 @@
 			break;
 
 		default:
-                        //GetQuestions
+			//GetQuestions
 			//listExams
-			//completedExams
+			//listGradedExams
 			break;
 	}
 

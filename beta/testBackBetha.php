@@ -21,8 +21,8 @@
 //$dat=array('RequestType'=>"showGradedExam",'data'=>array('exaName'=>"exam100"));
 //$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'yav3','exaName'=>"exam100",'gradesID'=>array(417,418),'answers'=>array("ans1","ans2"),'scores'=>array(10,20),'comments'=>array("comentnew1","coment2"),'released'=>"Y"));
 
-//$dat=array('RequestType'=>"listGradedExams",'data'=>"");//data does not store anything
-$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));
+$dat=array('RequestType'=>"listGradedExams",'data'=>"");//data does not store anything
+//$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));
 
 
 $url="https://web.njit.edu/~yav3/backEndCS490Betha.php";
