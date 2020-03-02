@@ -169,7 +169,7 @@ if($requestID == 'modifyGradedExam'){
         $gradeID, 'scores' => $score, 'comments' => $comments, 'released' =>
         $released);
 
-        $datas = http_build_query('RequestType' => $requestID, 'data' => $tData);
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $tData));
 
         $ch = curl_init();
 
