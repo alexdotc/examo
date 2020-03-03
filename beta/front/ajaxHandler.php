@@ -2,7 +2,7 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
-        $URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
+        $URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
 	$reqtype = $_POST['RequestType'];
 
@@ -36,10 +36,14 @@
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'user' => $_SESSION['user'], 'questionsid' => explode(",",$ids), 'answers' => explode(",",$answers))));
 			break;
 
+		case 'showGradedExam':
+			$name = $_POST['examname'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name)));
+
 		default:
-			//GetQuestions
-			//listExams
+                        //GetQuestions
 			//listGradedExams
+			//completedExams
 			break;
 	}
 
