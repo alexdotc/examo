@@ -7,7 +7,8 @@
 	<div id="GradeDiv" class="GradeDiv GradeItems">
 	</div>
 	<form id="GradeForm" class="GradeItems GradeForm">
-		<input type="submit" value="Update Grades" class="GradeSubmit GradeItems"/>
+		<br />
+		<input type="submit" value="UPDATE EXAM" class="GradeSubmit GradeItems"/>
 	</form>
 	<h3 id="response" class="UpdateGradesResponse"></h3>
 </div>
