@@ -26,7 +26,7 @@ function listExams(exams){
 		
 		li.setAttribute('class', 'ExamItems ExamNames');
 		li.setAttribute('id', 'examname');
-                li.innerHTML += '<a href="#grade?exam=' + exams[exam]['exaName'] + '">' + exams[exam]['exaName'] + '</a>';
+                li.innerHTML += '<a href="#grade?exam=' + exams[exam]['exaName'] + '?user=' + exams[exam]['ucid'] + '">' + exams[exam]['exaName'] + '</a>';
 		li.innerHTML += ' STUDENT: <strong>' + exams[exam]['ucid'] + '</strong><br />';
 		
 		divList.appendChild(li);

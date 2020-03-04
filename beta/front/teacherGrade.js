@@ -1,4 +1,4 @@
-ajaxShowGraded(getExamNameParam(window.location.href), renderExam);
+ajaxShowGraded(getParam(window.location.href, 'exam'), renderExam);
 
 document.getElementById("GradeDiv").addEventListener("click", function(e){
 
@@ -14,13 +14,18 @@ document.getElementById("GradeDiv").addEventListener("click", function(e){
 document.getElementById("GradeForm").addEventListener("submit", ajaxUpdateExam);
 
 
-function getExamNameParam(currentURL){
+function getParam(currentURL, param){
 	
-	let sp = "exam=";
+	let sp = param + "=";
 	let pInd = currentURL.search(sp);
-	let exam = currentURL.substr(pInd + sp.length);
+	let eInd = currentURL.indexOf('?', pInd);
+
+	if (eInd == -1)
+		eInd = currentURL.length;
+
+	let param_val = currentURL.substring(pInd + sp.length, eInd);
 	
-	return exam;
+	return param_val;
 }
 
 function ajaxShowGraded(ename, callback){
@@ -62,11 +67,11 @@ function renderExam(ename, questions){
 
 		li.setAttribute('class', 'GradeItems GradeQuestions');
 		li.setAttribute('id', 'examquestion');
-		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br />';
+		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
 		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
-		li.innerHTML += "<br />Student's Answer:<br />" + questions[question]['answers'] + '<br />';
-		li.innerHTML += 'Test case results: <br /><br />';
+		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br />" + questions[question]['answers'] + '<br /><br />';
+		li.innerHTML += '<strong>Test Case Results: </strong><br /><br />';
 
 		for(let tc = 0; tc < deductions.length; ++tc){
 			
@@ -75,7 +80,7 @@ function renderExam(ename, questions){
 			li.innerHTML += "Expected Answer: " + expected[tc];
 			li.innerHTML += " Resulting Answer: " + actual[tc];
 			li.innerHTML += " Deducted Points: " + deductions[tc] + '<br />';
-			li.innerHTML += '<strong> Modify Deduction: </strong>';
+			//li.innerHTML += '<strong> Modify Deduction: </strong>';
 			
 			change.setAttribute('type', 'text');
 			change.setAttribute('class', 'GradeItems GradeChange');
@@ -83,22 +88,21 @@ function renderExam(ename, questions){
 			change.setAttribute('id', 'tcD' + tc + 'q' + questions[question]['questID']);
 			change.setAttribute('placeholder', 'points');
 			
-			li.appendChild(change);
-			li.innerHTML += '<br /><br />';
+			//li.appendChild(change);
 		}
 		
 		if (questions[question]['deductedPointscorrectName'] != '0'){
 
 			li.innerHTML += 'Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name<br />';
+		}
 			let change = document.createElement("input");
 			change.setAttribute('type', 'text');
 			change.setAttribute('name', 'NameD');
 			change.setAttribute('class', 'GradeItems GradeChange');
-			change.setAttribute('id', 'NameD' + questions[question]['questID']);
-			change.setAttribute('placeholder', 'points');
-			li.innerHTML += '<strong> Modify Deduction: </strong>';
+			change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
+			change.setAttribute('placeholder', questions[question]['scores']);
+			li.innerHTML += '<br /><strong> Modify Question Score: </strong>';
 			li.appendChild(change);
-		}
 
 		divExam.appendChild(li);
 
@@ -111,9 +115,16 @@ function renderExam(ename, questions){
 	
 	button.setAttribute('type', 'button');
 	button.setAttribute('class', 'GradeItems GradeReleaseButton');
-	button.setAttribute('id', 'releaseButton');
 	button.setAttribute('name', 'ExamReleaseButton');
-	button.setAttribute('value', 'Release Exam');
+	
+	if (released == 'Y'){
+		button.setAttribute('id', 'withdrawButton');
+		button.setAttribute('value', 'Withdraw Exam');
+	}
+	else if (released == 'N'){
+		button.setAttribute('id', 'releaseButton');
+		button.setAttribute('value', 'Release Exam');
+	}
 
 	divExam.appendChild(button);
 }
@@ -136,21 +147,38 @@ function ajaxUpdateExam(e){
 
 	const SERVER = 'ajaxHandler.php';
 
-	let examname = getExamNameParam(window.location.href);
-	let allanswers = document.getElementsByClassName("TakeAnswer");
+	let examname = getParam(window.location.href, 'exam');
+	let user = getParam(window.location.href, 'user');
+	let allmods = document.getElementsByName("NameD");
+	let rb = (document.getElementsByName("ExamReleaseButton"))[0];
+	let released;
+
+	if (rb && rb['id'] == 'releaseButton')
+		released = 'N';
+	else if (rb && rb['id'] == 'withdrawButton')
+		released = 'Y';
 
 	let ids = [];
-	let answers = [];
+	let scores = [];
+	let comments = ['c1','c2']; // placeholder
 
-	for(let answer in allanswers){
-		if(allanswers[answer]['type'] != 'textarea')
+	for(let mod in allmods){
+
+		if (allmods[mod]['type'] != 'text')
 			continue;
-		console.log(allanswers[answer]);
-		ids.push(allanswers[answer]['id'].substr(10));
-		answers.push(allanswers[answer]['value']);
+
+		let score = allmods[mod]['value'];
+		let id = allmods[mod]['id'].substr(5);
+
+		ids.push(id);
+
+		if (score == '')
+			score = allmods[mod]['placeholder'];
+		
+		scores.push(score);
 	}
 
-	let post_params = 'RequestType=submitExam&examname=' + examname + '&ids=' + ids + '&answers=' + answers;
+	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);

@@ -39,6 +39,17 @@
 		case 'showGradedExam':
 			$name = $_POST['examname'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name)));
+			break;
+		
+		case 'modifyGradedExam':
+			$name = $_POST['examname'];
+			$user = $_POST['user'];
+			$released = $_POST['released'];
+			$ids = $_POST['ids'];
+			$scores = $_POST['scores'];
+			$comments = $_POST['comments'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released)));
+			break;
 
 		default:
                         //GetQuestions
