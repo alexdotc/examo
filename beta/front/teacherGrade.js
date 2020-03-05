@@ -95,14 +95,27 @@ function renderExam(ename, questions){
 
 			li.innerHTML += 'Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name<br />';
 		}
-			let change = document.createElement("input");
-			change.setAttribute('type', 'text');
-			change.setAttribute('name', 'NameD');
-			change.setAttribute('class', 'GradeItems GradeChange');
-			change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
-			change.setAttribute('placeholder', questions[question]['scores']);
-			li.innerHTML += '<br /><strong> Modify Question Score: </strong>';
-			li.appendChild(change);
+		
+		let change = document.createElement("input");
+		change.setAttribute('type', 'text');
+		change.setAttribute('name', 'NameD');
+		change.setAttribute('class', 'GradeItems GradeChange');
+		change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
+		change.setAttribute('placeholder', questions[question]['scores']);
+		li.innerHTML += '<br /><strong> Modify Question Score: </strong>';
+		li.appendChild(change);
+
+		let comment = document.createElement("textarea");
+		comment.setAttribute('wrap', 'soft');
+		comment.setAttribute('cols', '100');
+		comment.setAttribute('rows', '6');
+		comment.setAttribute('name', 'Comment');
+		comment.setAttribute('class', 'GradeItems GradeComment');
+		comment.setAttribute('id', 'comment');
+		comment.setAttribute('placeholder', 'Leave a comment for the student');
+		comment.innerHTML = questions[question]['comments'];
+		li.innerHTML += '<br /><br /><strong>Leave Comment:</strong><br />';
+		li.appendChild(comment);
 
 		divExam.appendChild(li);
 
@@ -150,6 +163,7 @@ function ajaxUpdateExam(e){
 	let examname = getParam(window.location.href, 'exam');
 	let user = getParam(window.location.href, 'user');
 	let allmods = document.getElementsByName("NameD");
+	let allcomments = document.getElementsByName("Comment");
 	let rb = (document.getElementsByName("ExamReleaseButton"))[0];
 	let released;
 
@@ -160,7 +174,7 @@ function ajaxUpdateExam(e){
 
 	let ids = [];
 	let scores = [];
-	let comments = ['c1','c2']; // placeholder
+	let comments = []; // placeholder
 
 	for(let mod in allmods){
 
@@ -176,6 +190,14 @@ function ajaxUpdateExam(e){
 			score = allmods[mod]['placeholder'];
 		
 		scores.push(score);
+	}
+
+	for(let comment in allcomments){
+
+		if (allcomments[comment]['type'] != 'textarea')
+			continue;
+
+		comments.push(allcomments[comment]['value']);
 	}
 
 	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released;
