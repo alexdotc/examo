@@ -4,7 +4,6 @@ window.addEventListener("hashchange", hashevent);
 
 function hashevent(){
 
-	console.log(location.hash);
 	let hash = (location.hash).substr(1);
 	let hashes = { home: 'teacherHome',
 		       question: 'teacherQuestion',

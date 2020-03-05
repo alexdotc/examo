@@ -10,6 +10,11 @@ function ajaxList(callback){
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function(){
                 if (xhr.status == 200){
+                	if (this.responseText == "No exams found, try again later..."){
+                        	document.getElementById("CompletedList").innerHTML = "No exams found...";
+                        	return;
+                }
+
                         let resp = JSON.parse(this.responseText);
                         callback(resp);
                 }
