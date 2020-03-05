@@ -4,18 +4,21 @@ window.addEventListener("hashchange", hashevent);
 
 function hashevent(){
 
-	console.log(location.hash);
 	let hash = (location.hash).substr(1);
 	let hashes = { home: 'studentHome',
 		       exam: 'studentExam',
 		       review: 'studentReview',
-		       take: 'studentTake' };
+		       take: 'studentTake',
+		       view: 'studentView' };
 
 	if(!hash)
 		hash = 'home';
 	
 	else if(hash.substr(0,4) == 'take')
 		hash = 'take';
+	
+	else if(hash.substr(0,4) == 'view')
+		hash = 'view';
 	
 	hash = hashes[hash];
 

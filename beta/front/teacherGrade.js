@@ -91,7 +91,7 @@ function renderExam(ename, questions){
 			//li.appendChild(change);
 		}
 		
-		if (questions[question]['deductedPointscorrectName'] != '0'){
+		if (questions[question]['deductedPointscorrectName'] != 0){
 
 			li.innerHTML += 'Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name<br />';
 		}

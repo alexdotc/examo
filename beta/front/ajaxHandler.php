@@ -33,7 +33,8 @@
 			$name = $_POST['examname'];
 			$ids = $_POST['ids'];
 			$answers = $_POST['answers'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'user' => $_SESSION['user'], 'questionsid' => explode(",",$ids), 'answers' => explode(",",$answers))));
+			$user = $_SESSION['user'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'user' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode(",",$answers))));
 			break;
 
 		case 'showGradedExam':
@@ -51,10 +52,15 @@
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released)));
 			break;
 
+		case 'listGradedExamsStudent':
+			$user = $_SESSION['user'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('ucid' => $user)));
+			break;
+
 		default:
-                        //GetQuestions
+			//listExams
+			//GetQuestions
 			//listGradedExams
-			//completedExams
 			break;
 	}
 

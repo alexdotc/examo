@@ -4,7 +4,7 @@
 	$STUDENT_PATH   = '../front/student.php';
 	$TEACHER_PATH   = '../front/teacher.php';
 
-	$STUDENT_PAGES = array('student.php', 'studentExam.php', 'studentTake.php', 'studentReview.php', 'studentHome.php');
+	$STUDENT_PAGES = array('student.php', 'studentExam.php', 'studentTake.php', 'studentReview.php', 'studentView.php', 'studentHome.php');
 
 	$TEACHER_PAGES = array('teacher.php', 'teacherExam.php', 'teacherCompleted.php', 'teacherGrade.php', 'teacherQuestion.php', 'teacherHome.php');
 
