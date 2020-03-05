@@ -64,7 +64,17 @@ if ($request == 'CreateQuestion'){
 	echo json_encode($ans);
 	
 }	
-
+if ($request == 'listGradedExamsStudent'){//for student 
+		$ucid = $data['ucid'];
+		$query = "SELECT DISTINCT exaName FROM gradesTable where ucid='$ucid' and released='Y'";
+		$cursor = $db->query($query);
+		if ($cursor->num_rows == 0)
+			die('No exams found, try again later...');
+		while ($row = $cursor->fetch_assoc()) {
+			$exam[] = $row['exaName'];//check adding array if it is needed
+		}
+		echo json_encode($exam);
+}
 if ($request == 'GetQuestions'){//list questions 
 	$query="SELECT * from questionTable";
 	$cursor = $db->query($query);
@@ -163,7 +173,8 @@ if ($request == 'gradingExam'){//middle sends me this info
  
 if ($request == 'showGradedExam'){//for student and instructor
 	$exaName = $data['exaName'];
-	$query="SELECT * FROM gradesTable INNER JOIN questionTable ON gradesTable.questID = questionTable.questID WHERE gradesTable.exaName='$exaName'";
+	$ucid = $data['ucid'];
+	$query="SELECT * FROM gradesTable INNER JOIN questionTable ON gradesTable.questID = questionTable.questID WHERE gradesTable.exaName='$exaName' and gradesTable.ucid='$ucid'";
 	//$query = "SELECT * FROM examsTable, questionTable WHERE exaName='$exaName'";
 	$cursor = $db->query($query);
 	if ($cursor->num_rows == 0) die('This exam does not exist, try again later...');
@@ -182,7 +193,7 @@ if ($request == 'showGradedExam'){//for student and instructor
 						"deductedPointscorrectName"=>$row['deductedPointscorrectName']
 						);
 	}
-	$query2="SELECT DISTINCT released FROM gradesTable WHERE exaName='$exaName'"; 
+	$query2="SELECT DISTINCT released FROM gradesTable WHERE exaName='$exaName' and ucid='$ucid'";
 	$cursor = $db->query($query2);
 	if ($cursor->num_rows == 0) die('This exam does not exist, try again later...');
 	while ($row = $cursor->fetch_assoc()) {
@@ -231,17 +242,7 @@ if ($request == 'listGradedExams'){//for instructor
 		}
 		echo json_encode($exam);
 }
-if ($request == 'listGradedExamsStudent'){//for student 
-		$ucid = $data['ucid'];
-		$query = "SELECT DISTINCT exaName FROM gradesTable where ucid='$ucid' and released='Y'";
-		$cursor = $db->query($query);
-		if ($cursor->num_rows == 0)
-			die('No exams found, try again later...');
-		while ($row = $cursor->fetch_assoc()) {
-			$exam[] = $row['exaName'];//check adding array if it is needed
-		}
-		echo json_encode($exam);
-}
+
 if ($request == 'retrieve') {
 	$ids = $data['questionsid'];
     $result = array();
