@@ -13,8 +13,8 @@
         <div id="nav">
 	<ul>
             <li><a href='#home'>Home</a></li>
-            <li><a href='#exam'>Take Exam</a></li>
-	    <li><a href='#review'>Review Exam</a></li>
+            <li><a href='#exam'>Take Exams</a></li>
+	    <li><a href='#review'>Review Exams</a></li>
             <li><a href='logout.php'>LOGOUT</a></li>
 	</ul>
 	</div>

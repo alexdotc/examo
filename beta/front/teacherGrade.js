@@ -32,7 +32,7 @@ function ajaxShowGraded(ename, callback){
 	
 	const SERVER = 'ajaxHandler.php';
 
-	let post_params = 'RequestType=showGradedExam&examname=' + ename;
+	let post_params = 'RequestType=showGradedExam&examname=' + ename + '&user=' + getParam(window.location.href, 'user');
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);

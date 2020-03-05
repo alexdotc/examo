@@ -26,7 +26,7 @@ function listExams(exams){
 		
 		li.setAttribute('class', 'ReviewItems ReviewNames');
 		li.setAttribute('id', 'examname');
-                li.innerHTML += '<a href="#view?exam=' + exams[exam]['exaName'] + '">' + exams[exam]['exaName'] + '</a><br />';
+                li.innerHTML += '<a href="#view?exam=' + exams[exam] + '">' + exams[exam] + '</a><br />';
 		
 		divList.appendChild(li);
 	}

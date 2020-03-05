@@ -39,7 +39,11 @@
 
 		case 'showGradedExam':
 			$name = $_POST['examname'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name)));
+			if ($_SESSION['teacher'])
+				$user = $_POST['user'];
+			else if ($_SESSION['student'])
+				$user = $_SESSION['user'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user)));
 			break;
 		
 		case 'modifyGradedExam':
