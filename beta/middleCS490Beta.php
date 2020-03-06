@@ -130,7 +130,7 @@ if($requestID == 'showExam'){
 
 }
 
-if($requestID == 'gradingExam'){ //Perform auto-grader here!
+if($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $testFile = "test.py";
 
@@ -138,35 +138,109 @@ if($requestID == 'gradingExam'){ //Perform auto-grader here!
         $examName = $data['exaName'];
         $questionIDs = $data['questionsid'];
         $answers = $data['answers'];
-        $scores = $data['scores'];
-        $maxScores = $data['maxScores'];
-        $comments = $data['comments'];
-        $expectedAnswers = $data['expectedAnswers'];
-        //$testcases = $data['testcases'];
+        $maxScores = $data['maxScore'];
+
+        $tData[] = array('questionsid' => $questionIDs);
+        $requesting = 'retrieve';
+
+        $datas = http_build_query(array('RequestType' => $requesting, 'data' => $tData));
+        $chr = curl_init();
+
+        curl_setopt($chr, CURLOPT_URL, $backurl);
+        curl_setopt($chr, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($chr, CURLOPT_POSTFIELDS, $datas);
+
+        $result = curl_exec($chr);
+        curl_close($chr);
+
+        $topic = $result['topic'];
+        $question = $result['questText'];
+        $testcases = $result['questTest'];
+
+        $scores[] = array();
+        $testCasesAnswered[] = array();
+        $correctNames[] = array();
+        $deductedPointsPerTest[] = array();
 
         for($i = 0; $i < $questionIDs; $i++){
 
-                //I require knowledge of where to get the expected answers from
-                //to the check the answers of the outputs
-                $expectedAnswer = $expectedAnswers[$i]; //Don't we need to do two testcases per single question? So wouldn't we need arguments?
-                //$expectedAnswer2 = $data[''];
-                //$testcase1 = $testcases[$i]['testcase1']; //Gets both testcases
-                //of that answer to check with
-                //$testcase2 = $testcases[$i]['testcase2'];
-                $score = $scores[$i];
-                $maxScore = $maxScores[$i];
+                $expectedAnswer = $testcases[$i];
+                //$expectedAnswer1 = $testcases[$i][0];
+                //$expectedAnswer2 = $testcases[$i][1];
+                $deductedPoints[] = array();
+                //$deducted1 = 0;
+                //$deducted2 = 0;
+                $deducted = 0;
                 $answer = $answers[$i];
+                //One max score for each question for total points compared to
+                //total missed
+                $maxScore = $maxScores[$i];
+                $score = $maxScore/2;
+                $correctNameScore = 0;
                 //Puts coded answer into the file to be executed
                 file_put_contents($testFile, $answer);
 
-                $result = exec("./$testFile");
+                $resultCheck = exec("./$testFile");
                 //Executes the code to get an answer, if its not complete or
                 //does not match expected answers then it won't work
 
-                if($result != $expectedAnswer)
-                        $score = $score - $score/2;
+                //If answers != testcase, no points, if second testcase, then
+                //points per testcase by total of testcases
+                if($resultCheck != $expectedAnswer){
+                        $score = 0;
+                        $deducted = $maxScore/2;
+                }
+                //Adds to number of testcases answered to send to back
+
+                $fh = fopen($testFile, 'r') or die($php_errormsg);
+                while(! feof($fh)){
+                        if($s = fgets($fh, 1048576)){
+                                $words = preg_split('/\s+/',$s,-1,PREG_SPLIT_NO_EMPTY);
+                                $fileSize = sizeof($words);
+                                for($i = 0; $i < $fileSize; $i++){
+                                        if($words[$i] != "def"){
+                                                continue;
+                                        }
+                                        else{
+        //If name is there, then give them points for having correct name
+                                                $correctNameScore = $maxScore/2;
+                                        }
+                                }
+                        }
+                }
+
+                //array_push($deductedPoints, $deducted1, $deducted2);
+                array_push($deductedPoints, $deducted);
+                array_push($scores, $score);
+                array_push($testCasesAnswered, $resultCheck);
+                array_push($correctNames, $correctNameScore);
+                array_push($deductedPointsPerTest, $deductedPoints);
 
         }
+
+//Comments are nothing since the autograder doesn't input comments nor gets
+//when student completes exam, so they are empty
+        $tData[] = array('comments' => '', 'ucid' => $ucid, 'exaName' =>
+        $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
+        'maxScores' => $maxScores, 'expectedAnswers' => $testcases,
+        'resultingAnswers' => $testCasesAnswered, 'deductedPointscorrectName'
+        => $correctNames, 'deductedPointsPerEachTest' =>
+        $deductedPointsPerTest, 'scores' => $scores);
+
+        $request = 'gradingExam';
+
+        $datas = http_build_query(array('RequestType' => $request, 'data' =>
+        $tData));
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $backurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
+
+        $resulting = curl_exec($ch);
+        echo $resulting;
+        curl_close($ch);
 
 }
 
