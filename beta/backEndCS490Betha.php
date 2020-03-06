@@ -116,13 +116,24 @@ if ($request == 'createExam'){
 	echo json_encode($ans);
 }
 if ($request == 'listExams'){//for student 
+       
+	    $ucid = $data['ucid'];
 		$query = "SELECT DISTINCT exaName FROM examsTable";
 		$cursor = $db->query($query);
 		if ($cursor->num_rows == 0)
 			die('No exams found, try again later...');
 		while ($row = $cursor->fetch_assoc()) {
-			$exam[] = $row['exaName'];//check adding array if it is needed
+			$exam1[] = $row['exaName'];//check adding array if it is needed
 		}
+		$query = $query = "SELECT DISTINCT exaName FROM gradesTable where ucid='$ucid'";
+		$cursor = $db->query($query);
+		if ($cursor->num_rows == 0)
+			die('No exams found, try again later...');
+		while ($row = $cursor->fetch_assoc()) {
+			$exam2[] = $row['exaName'];//check adding array if it is needed
+		}
+		$exam=array_diff($exam1,$exam2);
+		
 		echo json_encode($exam);
 }
 if ($request == 'showExam'){//for student 
