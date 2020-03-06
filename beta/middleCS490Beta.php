@@ -329,25 +329,4 @@ if($requestID == 'listGradedExamsStudent'){
 
 }
 
-if($requestID == 'retrieve'){
-
-        $id = $data['questionsid'];
-
-        $tData = array('questionsid' => $id);
-
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $backurl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
-
-        $result = curl_exec($ch);
-        echo $result;
-        curl_close($ch);
-
-}
-
 ?>
