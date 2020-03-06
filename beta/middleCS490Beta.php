@@ -6,13 +6,9 @@ $requestID = $_POST['RequestType'];
 $data = $_POST['data'];
 
 if ($requestID == 'login'){
-        $username = $data['ucid'];
-        $password = $data['password'];
-
-        $tData = array('ucid' => $username, 'password' => $password);
 
         $post = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
+        $data));
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $backurl);
@@ -25,19 +21,10 @@ if ($requestID == 'login'){
 
 }
 
-if ($requestID == 'CreateQuestion'){
+elseif ($requestID == 'CreateQuestion'){
 //Creates the question then sends data to back to store in database
-
-        $topic = $data['topic'];
-        $difficulty = $data['difficulty'];
-        $questiontext = $data['questiontext'];
-        $testcases = $data['testcases'];
-
-        $tData = array('topic' => $topic, 'difficulty' => $difficulty,
-        'questiontext' => $questiontext, 'testcases' => $testcases);
-
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
+        $data));
 
         $ch = curl_init();
 
@@ -51,10 +38,10 @@ if ($requestID == 'CreateQuestion'){
 
 }
 
-if ($requestID == 'GetQuestions'){//Send the request data forward for the
+elseif ($requestID == 'GetQuestions'){//Send the request data forward for the
 //back to retreive the question data from the database to then send to front
 //Data will be holding the request type for back to determine which to send
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => ''));
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
 
         $ch = curl_init();
 
@@ -68,17 +55,10 @@ if ($requestID == 'GetQuestions'){//Send the request data forward for the
 
 }
 
-if ($requestID == 'createExam'){
+elseif ($requestID == 'createExam'){
 //Data will be holding the exam created to save in database
-        $examName = $data['exaName'];
-        $questID = $data['questionsid'];
-        $questPoint = $data['questPoint'];
-
-        $tData = array('exaName' => $examName, 'questionsid' => $questID,
-        'questPoint' => $questPoint);
-
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
+        $data));
 
         $ch = curl_init();
 
@@ -92,10 +72,10 @@ if ($requestID == 'createExam'){
 
 }
 
-if ($requestID == 'listExams'){
+elseif ($requestID == 'listExams'){
 //Data will be sending the list of exams created to the front
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        ''));
+        $data));
 
         $ch = curl_init();
 
@@ -109,14 +89,10 @@ if ($requestID == 'listExams'){
 
 }
 
-if($requestID == 'showExam'){
+elseif($requestID == 'showExam'){
 //Data will be sending the exam chosen to the front to display
-        $examName = $data['exaName'];
-
-        $tData = array('exaName' => $examName);
-
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
+        $data));
 
         $ch = curl_init();
 
@@ -130,7 +106,7 @@ if($requestID == 'showExam'){
 
 }
 
-if($requestID == 'submitExam'){ //Perform auto-grader here!
+elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $testFile = "test.py";
 
@@ -244,13 +220,8 @@ if($requestID == 'submitExam'){ //Perform auto-grader here!
 
 }
 
-if($requestID == 'showGradedExam'){
-
-        $examName = $data['exaName'];
-
-        $tData = array('exaName' => $examName);
-
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $tData));
+elseif($requestID == 'showGradedExam'){
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
 
         $ch = curl_init();
 
@@ -264,20 +235,8 @@ if($requestID == 'showGradedExam'){
 
 }
 
-if($requestID == 'modifyGradedExam'){
-
-        $ucid = $data['ucid'];
-        $examName = $data['exaName'];
-        $gradeID = $data['gradesID'];
-        $score = $data['scores'];
-        $comments = $data['comments'];
-        $released = $data['released'];
-
-        $tData = array('ucid' => $ucid, 'exaName' => $examName, 'gradesID' =>
-        $gradeID, 'scores' => $score, 'comments' => $comments, 'released' =>
-        $released);
-
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $tData));
+elseif($requestID == 'modifyGradedExam'){
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
 
         $ch = curl_init();
 
@@ -291,10 +250,10 @@ if($requestID == 'modifyGradedExam'){
 
 }
 
-if($requestID == 'listGradedExams'){
+elseif($requestID == 'listGradedExams'){
 
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        ''));
+        $data));
 
         $ch = curl_init();
 
@@ -308,14 +267,9 @@ if($requestID == 'listGradedExams'){
 
 }
 
-if($requestID == 'listGradedExamsStudent'){
-
-        $ucid = $data['ucid'];
-
-        $tData = array('ucid' => $ucid);
-
+elseif($requestID == 'listGradedExamsStudent'){
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
-        $tData));
+        $data));
 
         $ch = curl_init();
 
