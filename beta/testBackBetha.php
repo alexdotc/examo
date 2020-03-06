@@ -7,7 +7,7 @@
 //$dat=array('RequestType'=>"createExam",'data'=>array('exaName'=>"exam345",'questionsid'=>array(1,5),'questPoint'=>array(10,40)));
 
 
-//$dat=array('RequestType'=>"listExams",'data'=>"");//data does not store anything
+$dat=array('RequestType'=>"listExams",'data'=>array('ucid'=>'yav3'));//
 
 //$dat=array('RequestType'=>"showExam",'data'=>array('exaName'=>"exam345"));
 //$dat=array('RequestType'=>"gradingExam",'data'=>array('ucid'=>'yav3','exaName'=>"exam100",'questionsid'=>array(31,39),
@@ -21,7 +21,7 @@
 //$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'yav3','exaName'=>"exam100",'gradesID'=>array(417,418),'answers'=>array("ans1","ans2"),'scores'=>array(10,20),'comments'=>array("comentnew1","coment2"),'released'=>"Y"));
 
 //$dat=array('RequestType'=>"listGradedExams",'data'=>"");//data does not store anything
-$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));//data does not store anything
+//$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));//data does not store anything
 
 $url="https://web.njit.edu/~yav3/backEndCS490Betha.php";
 
