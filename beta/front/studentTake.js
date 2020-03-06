@@ -33,6 +33,8 @@ function ajaxShowExam(ename, callback){
 
 }
 
+qpoints = [];
+
 function renderExam(ename, questions){
 	const divExam = document.getElementById("TakeDiv");
 	const divName = document.getElementById("examName");
@@ -41,6 +43,9 @@ function renderExam(ename, questions){
 
 	let friendlyctr = 1;
 	for (let question in questions){
+
+		qpoints[friendlyctr-1] = questions[question]['points'];
+
 		let li = document.createElement("div");
 		let answer = document.createElement("textarea");
 
@@ -85,7 +90,7 @@ function ajaxSubmitExam(e){
 		answers.push(allanswers[answer]['value']);
 	}
 
-	let post_params = 'RequestType=submitExam&examname=' + examname + '&ids=' + ids + '&answers=' + answers;
+	let post_params = 'RequestType=submitExam&examname=' + examname + '&ids=' + ids + '&answers=' + answers + '&points=' + qpoints;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);
