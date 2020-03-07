@@ -2,6 +2,27 @@ document.getElementById("TakeForm").addEventListener("submit", ajaxSubmitExam);
 
 ajaxShowExam(getExamNameParam(window.location.href), renderExam);
 
+document.getElementById("TakeDiv").addEventListener("keydown", tabOverride);
+
+function tabOverride(e){
+	
+	if (e.keyCode === 9){
+
+		let start = this.selectionStart;
+		let end = this.selectionEnd;
+
+		let target = e.target;
+		let value = e.target.value;
+
+		target.value = value.substring(0, start) + "\t" + value.substring(end);
+
+		this.selectionStart = this.selectionEnd = start + 1;
+
+		e.preventDefault();
+
+	}
+}
+
 function getExamNameParam(currentURL){
 	
 	let sp = "exam=";
@@ -61,6 +82,7 @@ function renderExam(ename, questions){
 		answer.setAttribute('rows', '8');
 		answer.setAttribute('wrap', 'soft');
 		answer.setAttribute('placeholder', "Enter answer for question " + friendlyctr + " here");
+		
 		divExam.appendChild(li);
 		divExam.appendChild(answer);
 
