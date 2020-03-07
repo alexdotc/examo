@@ -16,7 +16,7 @@
 			$topic = $_POST['topic'];
 			$difficulty = $_POST['difficulty'];
 			$questiontext = $_POST['questiontext'];
-			$testcases = $_POST['testcase1'] . $_POST['testcase2'];
+			$testcases = $_POST['testcases'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases)));
 			break;
 
@@ -65,8 +65,12 @@
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('ucid' => $user)));
 			break;
 
+		case 'listExams':
+			$user = $_SESSION['user'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('ucid' => $user)));
+			break;
+
 		default:
-			//listExams
 			//GetQuestions
 			//listGradedExams
 			break;
