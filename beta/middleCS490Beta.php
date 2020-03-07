@@ -156,7 +156,10 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 //Puts coded answer into the file to be executed
                 file_put_contents($testFile, $answer);
 
-                $resultCheck = exec("./$testFile");
+                //$resultCheck = exec("./$testFile");
+                $command = escapeshellcmd($testFile);
+                $resultCheck = shell_exec($command);
+                
                 //Executes the code to get an answer, if its not complete or
                 //does not match expected answers then it won't work
 
