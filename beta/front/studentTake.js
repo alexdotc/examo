@@ -2,25 +2,29 @@ document.getElementById("TakeForm").addEventListener("submit", ajaxSubmitExam);
 
 ajaxShowExam(getExamNameParam(window.location.href), renderExam);
 
-document.getElementById("TakeDiv").addEventListener("keydown", tabOverride);
+document.getElementById("TakeDiv").addEventListener("keydown", function(e){
 
-function tabOverride(e){
-	
-	if (e.keyCode === 9){
+	if(e.keyCode === 9){
 
-		let start = this.selectionStart;
-		let end = this.selectionEnd;
+	        let myta = document.getElementById(e.target.id);
 
-		let target = e.target;
-		let value = e.target.value;
-
-		target.value = value.substring(0, start) + "\t" + value.substring(end);
-
-		this.selectionStart = this.selectionEnd = start + 1;
-
+        	if (myta && myta.id.startsWith("answerText"))
+                	tabOverride(myta);
+		
 		e.preventDefault();
-
 	}
+});
+
+function tabOverride(textArea){
+
+	let start = textArea.selectionStart;
+	let end = textArea.selectionEnd;
+	let target = textArea;
+	let value = textArea.value;
+
+	target.value = value.substring(0, start) + "\t" + value.substring(end);
+
+	textArea.selectionStart = textArea.selectionEnd = start + 1;
 }
 
 function getExamNameParam(currentURL){
