@@ -114,7 +114,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $examName = $data['exaName'];
         $questionIDs = $data['questionsid'];
         $answers = $data['answers'];
-        $maxScores = $data['maxScore'];
+        $maxScores = $data['points'];
 
         $tData[] = array('questionsid' => $questionIDs);
         $requesting = 'retrieve';
@@ -141,59 +141,92 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         for($i = 0; $i < $questionIDs; $i++){
 
                 $expectedAnswer = $testcases[$i];
-                //$expectedAnswer1 = $testcases[$i][0];
-                //$expectedAnswer2 = $testcases[$i][1];
+                //Since only one input, only one will be used, so for example,
+                //don't do codes that use more than one arguments unless its
+                //for multiple testcases
+                $input1 = $expectedAnswer['testinput1'];
+                $input2 = $expectedAnswer['testinput2'];
+                $testcase1 = $expectedAnswer['testoutput1'];
+                $testcase2 = $expectedAnswer['testoutput2'];
+                $functionName = $expectedAnswer['fname'];
+
+                //Deducted for both testcases
                 $deductedPoints[] = array();
-                //$deducted1 = 0;
-                //$deducted2 = 0;
-                $deducted = 0;
+                $deducted1 = 0;
+                $deducted2 = 0;
+
                 $answer = $answers[$i];
                 //One max score for each question for total points compared to
                 //total missed
                 $maxScore = $maxScores[$i];
-                $score = $maxScore/2;
+                //Two scores for two testcases
+                $score1 = 0;
+                $score2 = 0;
                 $correctNameScore = 0;
                 //Puts coded answer into the file to be executed
-                file_put_contents($testFile, $answer);
+                file_put_contents($testFile, "#!/usr/bin/env python\nimport
+                sys\n");
+                file_put_contents($testFile, $answer, FILE_APPEND);
+                file_put_contents($testFile, "\n $functionName($input1)", FILE_APPEND);
 
-                //$resultCheck = exec("./$testFile");
-                $command = escapeshellcmd($testFile);
-                $resultCheck = shell_exec($command);
-                
+                $command = escapeshellcmd('/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py');//Might need full file
+                //path
+                $resultCheck1 = shell_exec($command);
+
                 //Executes the code to get an answer, if its not complete or
                 //does not match expected answers then it won't work
 
                 //If answers != testcase, no points, if second testcase, then
                 //points per testcase by total of testcases
-                if($resultCheck != $expectedAnswer){
-                        $score = 0;
-                        $deducted = $maxScore/2;
+                if($resultCheck != $testcase1){
+                        $score1 = 0;
+                        $deducted1 = $maxScore/4;
                 }
-                //Adds to number of testcases answered to send to back
+                else{
+                        $score1 = $maxScore/4;
+                        $deducted2 = 0;
+                }
 
-                $fh = fopen($testFile, 'r') or die($php_errormsg);
-                while(! feof($fh)){
-                        if($s = fgets($fh, 1048576)){
-                                $words = preg_split('/\s+/',$s,-1,PREG_SPLIT_NO_EMPTY);
-                                $fileSize = sizeof($words);
-                                for($i = 0; $i < $fileSize; $i++){
-                                        if($words[$i] != "def"){
-                                                continue;
-                                        }
-                                        else{
-        //If name is there, then give them points for having correct name
-                                                $correctNameScore = $maxScore/2;
-                                        }
-                                }
-                        }
+                file_put_contents($testFile, "#!/usr/bin/env python\nimport sys\n");
+                file_put_contents($testFile, $answer, FILE_APPEND);
+                file_put_contents($testFile, "\n $functionName(input2)", FILE_APPEND);
+
+                $command =
+                escapeshellcmd("/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py");
+                $resultCheck1 = shell_exec($command);
+
+                if($resultCheck != $testcase2){
+                        $score2 = 0;
+                        $deducted2 = $maxScore/4;
+                }
+                else{
+                        $score2 = $maxScore/4;
+                        $deducted2 = 0;
+                }
+
+                $score[] = array('score1' => $score1, 'score2' => $score2);
+
+                $resultCheck[] = array('resultCheck1' => $resultCheck1,
+                'resultCheck2' => $resultCheck2);
+
+                $deducted[] = array('test1Deducted' => $deducted1,
+                'test2Deducted' => $deducted2);
+
+                //Adds to number of testcases answered to send to back
+                $functionNameCheck = "def $functionName";
+
+                if(strpos($answer, $functionNameCheck)){
+                        $correctNameScore = $maxScore/2;
+                }
+                else{
+                        $correctNameScore = 0;
                 }
 
                 //array_push($deductedPoints, $deducted1, $deducted2);
-                array_push($deductedPoints, $deducted);
                 array_push($scores, $score);
                 array_push($testCasesAnswered, $resultCheck);
                 array_push($correctNames, $correctNameScore);
-                array_push($deductedPointsPerTest, $deductedPoints);
+                array_push($deductedPointsPerTest, $deducted);
 
         }
 
