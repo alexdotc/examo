@@ -9,6 +9,7 @@ $username =
 $project  = 
 $password = 
 
+
 //Connects the PHP script to the DB to execute SQL statements
 $db = mysqli_connect ($hostname, $username, $password, $project);
 if (mysqli_connect_errno ($db))
@@ -128,7 +129,7 @@ if ($request == 'listExams'){//for student
 		$query = $query = "SELECT DISTINCT exaName FROM gradesTable where ucid='$ucid'";
 		$cursor = $db->query($query);
 		if ($cursor->num_rows == 0)
-			die('No exams found, try again later...');
+			$exam2=array();
 		while ($row = $cursor->fetch_assoc()) {
 			$exam2[] = $row['exaName'];//check adding array if it is needed
 		}
@@ -221,6 +222,7 @@ if ($request == 'modifyGradedExam'){//for instructor
 	$score=$data['scores'];
 	$comments=$data['comments'];
 	$released=$data['released'];
+	$correctName = $data['deductedPointscorrectName'];
 	$count = count($gradesID);
 
 	for($i=0; $i < $count; $i++){
@@ -230,7 +232,7 @@ if ($request == 'modifyGradedExam'){//for instructor
 
 	for($i=0; $i < $count; $i++){
 		
-		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
+		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released',`deductedPointscorrectName`='$correctName[$i]' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
 		//echo json_encode($query);
 
 		$db->query($query) or die('There was an error saving the grades');
