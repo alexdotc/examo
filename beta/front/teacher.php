@@ -11,12 +11,12 @@
 </head>
 <body>
         <div id="nav">
-	<ul>
-            <li><a href='#home'>Home</a></li>
-            <li><a href='#question'>Create Question</a></li>
-	    <li><a href='#exam'>Create Exam</a></li>
-            <li><a href='#completed'>Grade Exams</a></li>
-            <li><a href='logout.php'>LOGOUT</a></li>
+	<ul id="navlist">
+            <li class="NavItems"><a class="NavLinks" href='#home'>Home</a></li>
+            <li class="NavItems"><a class="NavLinks" href='#question'>Create Question</a></li>
+	    <li class="NavItems"><a class="NavLinks" href='#exam'>Create Exam</a></li>
+            <li class="NavItems"><a class="NavLinks" href='#completed'>Grade Exams</a></li>
+            <li class="NavItems"><a class="NavLinks" href='logout.php'>LOGOUT</a></li>
 	</ul>
 	</div>
 	<div id="main">

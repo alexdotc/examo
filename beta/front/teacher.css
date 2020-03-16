@@ -1,3 +1,7 @@
+body {
+	background-color: #F53C13;
+}
+
 #ExamMain {
 	margin: auto;
 }
@@ -8,6 +12,7 @@
 	border-right: 5px ridge;
 	padding-right: 10px;
 }
+
 
 #SelectedQuestions {
 	width: 44%;
@@ -21,4 +26,41 @@
 .fix {
 	position: fixed;
 	top: 0;
+}
+
+#navlist {
+       	list-style-type: none;
+	background-color: #F0F0F0;
+	overflow: hidden;
+	border: black 5px groove;
+}
+
+.NavItems{
+	float: left;
+}
+
+.NavLinks {
+	display: block;
+	color: #000000;
+	text-align: center;
+	padding: 20px 24px;
+	text-decoration: none;
+	font-family: Georgia;
+}
+
+.NavItems:hover {
+	background-color: #000000;
+}
+
+.NavLinks:hover {
+	color: #FFFFFF;
+}
+
+#home, #QuestionMain, #ExamMain, #GradeExam, #CompExams, #QuestionList, #SelectedQuestions {
+	background-color: #F0F0F0;
+	border: black 5px groove;
+}
+
+#home {
+	text-align: center;
 }

@@ -2,7 +2,7 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 ?>
-<div id="QuestionForm" class="QuestionItems QuestionMain">
+<div id="QuestionMain" class="QuestionItems QuestionMain">
     <h2 class="QuestionHeader">New Question</h2>
     <form id="QuestionForm">
         <label for="Topic" class="QuestionLabel QuestionItems"><strong>Topic: </strong></label>
