@@ -1,6 +1,8 @@
 ajaxList(listQuestions);
 
-document.getElementById("QuestionList").addEventListener("click", function(e){
+window.onscroll = function() { offsetSelected(); }
+
+document.getElementById("split").addEventListener("click", function(e){
 	let clickedButton = document.getElementById(e.target.id);
 
 	if (clickedButton && clickedButton.id.substr(0,9) == 'addButton')
@@ -11,6 +13,16 @@ document.getElementById("QuestionList").addEventListener("click", function(e){
 });
 
 document.getElementById("SubmitExamForm").addEventListener("submit", ajaxCreateExam);
+
+function offsetSelected(){
+	
+	const divSelected = document.getElementById('SelectedQuestions');
+
+	if (window.pageYOffset > divSelected.offsetTop)
+		divSelected.classList.add('fix');
+	else
+		divSelected.classList.remove('fix');
+}
 
 function ajaxList(callback){
 
@@ -33,10 +45,12 @@ function ajaxList(callback){
 function listQuestions(questions){
 	const divList = document.getElementById("QuestionList");
 
+	let index = 0;
 	for(let question in questions){
 		let li = document.createElement("div");
 		let button = document.createElement("input");
                 let pointsBox = document.createElement("input");
+		let hr = document.createElement("hr");
 		
 		button.setAttribute('type', 'button');
 		button.setAttribute('class', 'QuestionItems QuestionAddButton');
@@ -49,19 +63,24 @@ function listQuestions(questions){
                 pointsBox.setAttribute('id', 'pointsBox' + questions[question]['questID']);
                 pointsBox.setAttribute('name', questions[question]['questID']);
                 pointsBox.setAttribute('placeholder', "Points");
+		pointsBox.style.visibility = "hidden";
 
 		li.setAttribute('class', 'QuestionItems QuestionListItems');
-		li.setAttribute('id', 'question');
+		li.setAttribute('id', 'question' + questions[question]['questID']);
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
 		li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
 		li.innerHTML += '<strong>Test Cases:</strong> ' + questions[question]['testcases'] + '<br /><br />';
+
+		hr.setAttribute('id', 'hr' + index);
+		hr.setAttribute('class', "ExamItems ExamHR");
 		
 		divList.appendChild(li);
-		divList.appendChild(button);
-		divList.appendChild(pointsBox);
-		
-		divList.innerHTML += '<hr />';
+		li.appendChild(button);
+		li.appendChild(pointsBox);
+		li.appendChild(hr);
+
+		++index;
 	}
 }
 
@@ -70,32 +89,64 @@ selections = new Map();
 function addQuestion(clickedButton){
 
         const points = document.getElementById('pointsBox' + clickedButton.name);
-        
-        if (points.value == '')
-            points.value = '0';
+	const divParent = document.getElementById('SelectedQuestions');
+	
+	let divChild = document.getElementById("question" + clickedButton.name);
 
-	selections.set(clickedButton.name, points.value);
+	divChild.setAttribute('id', 'selected' + clickedButton.name);
+	divChild.setAttribute('class', 'ExamItems ExamSelections')
+        
+	selections.set(clickedButton.name, '0');
 	
         clickedButton.setAttribute("value", "Remove Question");
 	clickedButton.setAttribute("id", 'removeButton' + clickedButton.name);
+	
+	if (points.value == '')
+		points.value = '0';
+        points.style.visibility = "visible";
 
-        points.style.visibility = "hidden";
-        
-	console.log("Added " + clickedButton.name + " with points value " + points.value);
+	divParent.appendChild(divChild);
 }
 
 function removeQuestion(clickedButton){
 
-        const points = document.getElementById('pointsBox' + clickedButton.name);
+	let divChild = document.getElementById('selected' + clickedButton.name);
+        
+	const points = document.getElementById('pointsBox' + clickedButton.name);
+	const divParent = document.getElementById('QuestionList');
+	const qIndex = parseInt((divChild.getElementsByTagName("hr")[0]).id.substr(2));
+	const il = divParent.getElementsByTagName("hr");
+
+	let nIndex = 0;
+
+	for(let q in il){
+
+		if (il[q].type != "hr")
+			continue;
+
+		let hrid = parseInt(il[q]['id'].substr(2));
+		if (hrid > qIndex){
+			nIndex = il[q].parentNode;
+			break;
+		}
+	}
+
+	divChild.setAttribute('id', 'question' + clickedButton.name);
+	divChild.setAttribute('class', 'ExamItems ExamQuestions');
 
 	selections.delete(clickedButton.name);
 
 	clickedButton.setAttribute("value", "Add Question");
 	clickedButton.setAttribute("id", 'addButton' + clickedButton.name);
 
-        points.style.visibility = "initial";
+        points.style.visibility = "hidden";
 
-	console.log("Removed " + clickedButton.name);
+	if (nIndex == 0){
+		divParent.appendChild(divChild);
+		return;
+	}
+
+	divParent.insertBefore(divChild, nIndex);
 }
 
 function ajaxCreateExam(e){
@@ -109,8 +160,11 @@ function ajaxCreateExam(e){
 	let points = [];
 	
 	for(let question of selections){
+		
+		let pv = document.getElementById('pointsBox' + question[0]);
+
 		ids.push(question[0]);
-		points.push(question[1]);
+		points.push(pv.value);
 	}
 		
 	

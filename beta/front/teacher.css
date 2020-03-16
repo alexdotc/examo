@@ -1,0 +1,24 @@
+#ExamMain {
+	margin: auto;
+}
+
+#QuestionList {
+	width: 52%;
+	float: left;
+	border-right: 5px ridge;
+	padding-right: 10px;
+}
+
+#SelectedQuestions {
+	width: 44%;
+	height: 100vh;
+	right: 0;
+	float: right;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+.fix {
+	position: fixed;
+	top: 0;
+}
