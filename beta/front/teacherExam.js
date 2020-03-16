@@ -121,7 +121,7 @@ function removeQuestion(clickedButton){
 
 	for(let q in il){
 
-		if (il[q].type != "hr")
+		if (il[q].tagName != "HR")
 			continue;
 
 		let hrid = parseInt(il[q]['id'].substr(2));
