@@ -138,15 +138,15 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $result = json_decode($resultEn, true);
 
-        $scores[] = array();
-        $testcasesAnswered[] = array();
-        $correctNames[] = array();
-        $deductedPointsPerTest[] = array();
+        $scores = array();
+        $testCasesAnswered = array();
+        $correctNames = array();
+        $deductedPointsPerTest = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
 
                 //Deducted for both testcases
-                $deductedPoints[] = array();
+                $deductedPoints = array();
 
                 $topic = $result[$i]['topic'];
                 $question = $result[$i]['questText'];
@@ -199,7 +199,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $returnSet = array();
 
-                exec("python test.py", $returnSet, $exec_return_code);
+                $resulting = exec("python $testFile");
+                $returnSet = explode(' ', $resulting);
 
                 //Executes the code to get an answer, if its not complete or
                 //does not match expected answers then it won't work
@@ -207,6 +208,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 //If answers != testcase, no points, if second testcase, then
                 //points per testcase by total of testcases
                 foreach($returnSet as $returned){
+                        echo $returned;
                         if($returned === $curTestcase[0]){
                                 $score1 = $maxScore/4;
                                 $deducted1 = 0;
@@ -223,15 +225,12 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $score = array('score1' => $score1, 'score2' => $score2);
 
-                $resultCheck = array('resultCheck1' => $resultCheck1,
-                'resultCheck2' => $resultCheck2);
-
                 $deducted = array('test1Deducted' => $deducted1,
                 'test2Deducted' => $deducted2);
 
                 //array_push($deductedPoints, $deducted1, $deducted2);
                 array_push($scores, $score);
-                array_push($testCasesAnswered, $resultCheck);
+                array_push($testCasesAnswered, $returnSet);
                 array_push($correctNames, $correctNameScore);
                 array_push($deductedPointsPerTest, $deducted);
 
@@ -239,9 +238,9 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
 //Comments are nothing since the autograder doesn't input comments nor gets
 //when student completes exam, so they are empty
-        $tData[] = array('comments' => '', 'ucid' => $ucid, 'exaName' =>
+        $tData = array('comments' => '', 'ucid' => $ucid, 'exaName' =>
         $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
-        'maxScores' => $maxScores, 'expectedAnswers' => $testcases,
+        'maxScores' => $maxScores, 'expectedAnswers' => $curTestcase,
         'resultingAnswers' => $testCasesAnswered, 'deductedPointscorrectName'
         => $correctNames, 'deductedPointsPerEachTest' =>
         $deductedPointsPerTest, 'scores' => $scores);
@@ -258,7 +257,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
         $resulting = curl_exec($ch);
-        echo "This completes";
         echo $resulting;
         curl_close($ch);
 
