@@ -6,8 +6,6 @@
 	$URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 	$TEST_FILE = "test.py";
 
-	$INFINITY = 10; // don't allow buffer overflow DoS attack on AFS.....
-
 	$ARGS_START_DELIMITER = "(";
 	$ARGS_END_DELIMITER = ")";
 	$CASE_DELIMITER = "?";
@@ -21,12 +19,20 @@
 	$answers = $data['answers'];
 	$maxScores = $data['points'];
 
-	$data = array('questionsid' => $questionIDs);
-	$request = 'retrieve';
+	$rdata = array('questionsid' => $questionIDs);
 
-	$params = http_build_query(array('RequestType' => $request, 'data' => $data));
+	$params = http_build_query(array('RequestType' => 'retrieve', 'data' => $rdata));
 
 	$result = json_decode(do_curl($params, $URL), true);
+
+	$deductions_tc = array();
+	$deductions_name = array();
+	$deductions_no_run = array();
+
+	$scores = array();
+	$comments = array();
+	$expecteds = array();
+	$resulting = array();
 
 	for($i = 0; $i < count($questionIDs); ++$i){
 
@@ -36,24 +42,17 @@
 		$answer = $answers[$i];
 
 		$functionName = substr($testcaseStr, 0, strpos($testcaseStr, $ARGS_START_DELIMITER));
-		$testcases = array();
+		$testcases = explode($CASE_DELIMITER, $testcaseStr);
 		$testInputs = array();
 		$expectedReturns = array();
 
-		$fq = 0;
-		$j = 0;
+		$NAME_DEDUCTION = 5; // should this be scaled?
+		$NO_RUN_DEDUCTION = (int)($maxScores[$i] * 0.2);
+		$TC_DEDUCTION = (int)(($maxScores[$i] - $NAME_DEDUCTION - $NO_RUN_DEDUCTION)/count($testcases));
 
-		while($j++ < $INFINITY){
-			$nfq = strpos($testcaseStr, $CASE_DELIMITER, $fq);
-
-			if ($nfq === false){ // last test case
-				$testcases[] = substr($testcaseStr, $fq);
-				break;
-			}
-
-			$testcases[] = substr($testcaseStr, $fq, $nfq - $fq);
-			$fq = $nfq + 1;
-		}
+		//adjust for all deductions to add to the max score
+		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		$deducted_each = array();
 
 		foreach($testcases as $testcase){
 			$expectedReturns[] = substr($testcase, strpos($testcase, $RETURN_DELIMITER) + 1);
@@ -69,10 +68,43 @@
 
 		exec("python test.py", $python_stdout, $exec_return_code);
 
-		foreach($python_stdout as $returned)
-			echo $returned . "\n";
+		if (count($python_stdout) == count($expectedReturns)){
+			for($j = 0; $j < count($expectedReturns); ++$j)
+				$python_stdout[$j] != $expectedReturns[$j] ? $deducted_each[$j] = $TC_DEDUCTION : $deducted_each[$j] = 0;
+			$deductions_no_run[$i] = 0;
+		}
 
+		else if($exec_return_code){
+			for($j = 0; $j < count($expectedReturns); ++$j){
+				$deducted_each[$j] = $TC_DEDUCTION;
+				$python_stdout[$i] = "";
+			}
+			$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
+		}
+
+		$deductions_tc[$i] = $deducted_each;
+		check_name($functionName, $answer) ? $deductions_name[$i] = 0 : $deductions_name[$i] = $NAME_DEDUCTION;
+
+		$exec_return_code ? $deductions_no_run[$i] = $NO_RUN_DEDUCTION : $deductions_no_run[$i] = 0;
+		$scores[$i] = $maxScores[$i] - $deductions_no_run[$i] - $deductions_name[$i];
+		foreach($deducted_each as $tcd)
+			$scores[$i] -= $tcd;
+
+		$comments[$i] = "";
+		$expecteds[$i] = $expectedReturns;
+		$resulting[$i] = $python_stdout;
 	}
+
+	//yuck, why are we using arrays of strings instead of just arrays of arrays when each piece is a discrete value that will need to be modified?
+
+	str_flatten(", ", $expecteds);
+	str_flatten(", ", $resulting);
+	str_flatten(", ", $deductions_tc);
+
+	$params = http_build_query(array('RequestType' => 'gradingExam', 'data' => array('ucid' => $ucid, 'exaName' => $examName, 'questionsid' => $questionIDs, 'answers' => $answers, 'scores' => $scores, 'maxScores' => $maxScores, 'comments' => $comments, 'expectedAnswers' => $expecteds, 'resultingAnswers' => $resulting, 'deductedPointsPerEachTest' => $deductions_tc, 'deductedPointscorrectName' => $deductions_name)));
+
+	$result = do_curl($params, $URL);
+	echo $result;
 
 	function do_curl($params, $url){
 		$handle = curl_init();
@@ -86,4 +118,16 @@
 		return $result;
 	}
 
+	function check_name($fname, $answer){
+		$a = strtok($answer, "\n");
+		while(ctype_space($a))
+			$a = strtok("\n");
+		$r = preg_match('/def[ \t]+' . $fname . '.+/', $a);
+		return $r;
+	}
+
+        function str_flatten($delim, &$arr){
+		foreach($arr as &$a)
+			$a = implode($delim, $a);
+	}
 ?>

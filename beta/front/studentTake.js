@@ -127,7 +127,10 @@ function ajaxSubmitExam(e){
 			let elem = document.getElementById("response");
 			let resp = JSON.parse(this.responseText);
 
-			elem.innerHTML = resp;
+			if(resp == "grade successfully saved")
+				elem.innerHTML = "Exam successfully submitted!";
+			else
+				elem.innerHTML = "Something went wrong while submitting your exam...";
 		}
 	}
 
