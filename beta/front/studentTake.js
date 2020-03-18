@@ -106,14 +106,14 @@ function ajaxSubmitExam(e){
 	let allanswers = document.getElementsByClassName("TakeAnswer");
 
 	let ids = [];
-	let answers = [];
+	let answers = "";
 
 	for(let answer in allanswers){
 		if(allanswers[answer]['type'] != 'textarea')
 			continue;
-		console.log(allanswers[answer]);
+
 		ids.push(allanswers[answer]['id'].substr(10));
-		answers.push(allanswers[answer]['value']);
+		answers += (encodeURIComponent(allanswers[answer]['value']) + "\"\"\"\"\"\"\"\""); //shitty hack for now
 	}
 
 	let post_params = 'RequestType=submitExam&examname=' + examname + '&ids=' + ids + '&answers=' + answers + '&points=' + qpoints;

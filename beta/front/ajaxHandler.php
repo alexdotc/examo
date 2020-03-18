@@ -7,7 +7,7 @@
 	$reqtype = $_POST['RequestType'];
 
 	if ($reqtype == 'submitExam')
-		$URL = 'http://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
+		$URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
 
 	$post_params = http_build_query(array('RequestType' => $reqtype, data => ''));
 
@@ -35,10 +35,10 @@
 		case 'submitExam':
 			$name = $_POST['examname'];
 			$ids = $_POST['ids'];
-			$answers = $_POST['answers'];
 			$points = $_POST['points'];
+			$answers = $_POST['answers'];
 			$user = $_SESSION['user'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'user' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode(",",$answers), 'points' => explode(",",$points))));
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode("\"\"\"\"\"\"\"\"",$answers), 'points' => explode(",",$points))));
 			break;
 
 		case 'showGradedExam':
