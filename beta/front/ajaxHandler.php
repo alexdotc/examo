@@ -2,12 +2,9 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
-        $URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
+        $URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
 
 	$reqtype = $_POST['RequestType'];
-
-	if ($reqtype == 'submitExam')
-		$URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
 
 	$post_params = http_build_query(array('RequestType' => $reqtype, data => ''));
 
