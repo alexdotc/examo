@@ -60,7 +60,7 @@ a:hover {
 	font-family: Georgia;
 }
 
-.NavItems:hover, .NavLogout:hover{
+.NavItems:hover, .NavLogout:hover {
 	background-color: #000000;
 }
 
@@ -68,7 +68,7 @@ a:hover {
 	color: #FFFFFF;
 }
 
-#home, #QuestionMain, #ExamMain, #GradeExam, #CompExams, #QuestionList, #SelectedQuestions {
+#home, #AvailExams, #ReleasedExams, #TakeExam, #ViewExam{
 	background-color: #F0F0F0;
 	border: black 5px groove;
 }
@@ -78,15 +78,15 @@ a:hover {
 }
 
 .ExamNames, .ReviewNames{
-        list-style-type: none;
-        padding-bottom: 3px;
-        font-family: Verdana;
-        font-size: 32px;
-        float: center;
-        text-align: center;
-        color: #000000;
+	list-style-type: none;
+	padding-bottom: 3px;
+	font-family: Verdana;
+	font-size: 32px;
+	float: center;
+	text-align: center;
+	color: #000000;
 }
 
-.CompListHeader {
-        text-align: center;
+.ExamListHeader, .ReviewListHeader {
+	text-align: center;
 }

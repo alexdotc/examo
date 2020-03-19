@@ -16,7 +16,7 @@
             <li class="NavItems"><a class="NavLinks" href='#question'>Create Question</a></li>
 	    <li class="NavItems"><a class="NavLinks" href='#exam'>Create Exam</a></li>
             <li class="NavItems"><a class="NavLinks" href='#completed'>Grade Exams</a></li>
-            <li class="NavItems"><a class="NavLinks" href='logout.php'>LOGOUT</a></li>
+            <li class="NavLogout"><a class="NavLinks" href='logout.php'>LOGOUT</a></li>
 	</ul>
 	</div>
 	<div id="main">

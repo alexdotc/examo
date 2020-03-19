@@ -3,7 +3,7 @@
 	include 'restrict.php';
 ?>
 <div id="CompExams" class="CompItems CompMain">
-    <h2 class="CompHeader">Completed Exams</h2>
+    <h2 class="CompListHeader">Completed Exams</h2>
     <div id="CompletedList" class="CompItems CompNames">
     </div>
 </div>

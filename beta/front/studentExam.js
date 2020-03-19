@@ -28,10 +28,16 @@ function listExams(exams){
 
 	for(let exam in exams){
 		let li = document.createElement("li");
+		let a = document.createElement("a");
+
+		a.setAttribute('class', 'ExamLinks');
+		a.setAttribute('href', '#take?exam=' + exams[exam]);
+		a.innerHTML = exams[exam];
 		
 		li.setAttribute('class', 'ExamItems ExamNames');
 		li.setAttribute('id', 'examname');
-                li.innerHTML += '<a href="#take?exam=' + exams[exam] + '">' + exams[exam] + '</a><br />';
+		li.appendChild(a);
+                li.innerHTML += '<br />';
 		
 		divList.appendChild(li);
 	}
