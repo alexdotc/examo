@@ -6,6 +6,9 @@
 
 	$reqtype = $_POST['RequestType'];
 
+        if($reqtype == 'submitExam')
+            $URL = 'http://localhost/middle/grader.php';
+
 	$post_params = http_build_query(array('RequestType' => $reqtype, data => ''));
 
 	switch($reqtype){

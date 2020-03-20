@@ -12,7 +12,31 @@ document.getElementById("split").addEventListener("click", function(e){
 		removeQuestion(clickedButton);
 });
 
+document.getElementById('examname').addEventListener('keypress', function(e){ dynamicHeader(e); });
+
+// for some reason it doesn't work for backspace...
+document.getElementById('examname').addEventListener('keyup', function(e) {
+	if (e.keyCode === 8)
+		dynamicHeaderBackspace(e);
+});
+
 document.getElementById("SubmitExamForm").addEventListener("submit", ajaxCreateExam);
+
+function dynamicHeader(e){
+
+	let start = e.target.selectionStart;
+	let end = e.target.selectionEnd;
+
+	h = document.getElementById("examheader");
+	h.innerHTML = e.target.value.substr(0, start) + String.fromCharCode(e.keyCode) + e.target.value.substr(end);
+
+}
+
+function dynamicHeaderBackspace(e){
+
+	h.innerHTML = e.target.value;
+
+}
 
 function offsetSelected(){
 	
