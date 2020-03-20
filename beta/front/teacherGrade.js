@@ -101,7 +101,8 @@ function renderExam(ename, questions){
 		change.setAttribute('name', 'NameD');
 		change.setAttribute('class', 'GradeItems GradeChange');
 		change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
-		change.setAttribute('placeholder', questions[question]['scores']);
+		change.setAttribute('placeholder', 'Score');
+		change.setAttribute('value', questions[question]['scores']);
 		li.innerHTML += '<br /><strong> Modify Question Score: </strong>';
 		li.appendChild(change);
 
