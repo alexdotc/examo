@@ -70,16 +70,17 @@ function renderExam(ename, questions){
 		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
 		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
-		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br />" + questions[question]['answers'] + '<br /><br />';
+		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br />" + questions[question]['answers'] + '<br /><br />';
 		li.innerHTML += '<strong>Test Case Results: </strong><br /><br />';
 
 		for(let tc = 0; tc < deductions.length; ++tc){
 			
 			let change = document.createElement("input");
 
-			li.innerHTML += "Expected Answer: " + expected[tc];
-			li.innerHTML += " Resulting Answer: " + actual[tc];
-			li.innerHTML += " Deducted Points: " + deductions[tc] + '<br />';
+			li.innerHTML += '<strong>Test Case ' + String(tc + 1) + '</strong><br />';
+			li.innerHTML += "Expected Answer: " + expected[tc] + '<br />';
+			li.innerHTML += " Resulting Answer: " + actual[tc] + '<br />';
+			li.innerHTML += " Deducted Points: <strong>" + deductions[tc] + '</strong><br /><br />';
 			//li.innerHTML += '<strong> Modify Deduction: </strong>';
 			
 			change.setAttribute('type', 'text');

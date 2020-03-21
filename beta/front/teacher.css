@@ -32,10 +32,26 @@ textarea {
 	border: 2px solid black;
 }
 
+input::-moz-focus-inner {
+	border: 0;
+}
+
 .QuestionAddButton {
 	background-color: #000000;
 	color: #FFFFFF;
 	padding: 9px 12px;
+}
+
+#withdrawButton, #releaseButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+}
+
+.GradeSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding 18px 24px;
 }
 
 #ExamMain {
@@ -55,15 +71,17 @@ textarea {
 #QuestionList {
 	width: 52%;
 	float: left;
-	border-right: 5px ridge;
-	padding-right: 10px;
 }
 
+#split {
+	background-color: #F0F0F0;
+}
 
 #SelectedQuestions {
-	width: 44%;
+	width: 46%;
 	height: 100vh;
 	right: 0;
+	margin: auto;
 	float: right;
 	overflow: scroll;
 	overflow-x: hidden;
