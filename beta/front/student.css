@@ -11,30 +11,18 @@ a:hover {
 	color: #F53C13;
 }
 
-#ExamMain {
-	margin: auto;
+textarea {
+	border: 2px solid black;
 }
 
-#QuestionList {
-	width: 52%;
-	float: left;
-	border-right: 5px ridge;
-	padding-right: 10px;
+input::moz-focus-inner{
+	border: 0;
 }
 
-
-#SelectedQuestions {
-	width: 44%;
-	height: 100vh;
-	right: 0;
-	float: right;
-	overflow: scroll;
-	overflow-x: hidden;
-}
-
-.fix {
-	position: fixed;
-	top: 0;
+.TakeSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 14px 18px;
 }
 
 #navlist {
