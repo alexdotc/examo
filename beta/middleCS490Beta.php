@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+ini_set('display_errors', 1);
+
 $backurl = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
 $requestID = $_POST['RequestType'];
@@ -108,7 +111,6 @@ elseif($requestID == 'showExam'){
 
 elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
-        $INFINITY = 10;
         $ARGS_START_DELIMITER = "(";
         $ARGS_END_DELIMITER = ")";
         $CASE_DELIMITER = "?";
@@ -139,53 +141,43 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $result = json_decode($resultEn, true);
 
         $scores = array();
-        $testCasesAnswered = array();
-        $correctNames = array();
-        $deductedPointsPerTest = array();
+        $comments = array();
+        $expecteds = array();
+        $resulting = array();
+
+        $deductTest = array();
+        $deductName = array();
+        $deductNoRun = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
 
                 //Deducted for both testcases
-                $deductedPoints = array();
-
                 $topic = $result[$i]['topic'];
                 $question = $result[$i]['questText'];
-                $testcases = $result[$i]['questTest'];
+                $testcasesS = $result[$i]['questTest'];
                 $answer = $answers[$i];
                 //One max score for each question for total points compared to
                 //total missed
-                $fname = substr($testcases, 0, strpos($testcases,
+                $fname = substr($testcasesS, 0, strpos($testcasesS,
                 $ARGS_START_DELIMITER));
-
-                $curTestcase = array();
+                $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
 
-                $fq = 0;
-                $j = 0;
+                $S = $maxScores[$i];
 
-                $maxScore = $maxScores[$i];
-                //Two scores for two testcases
-                $score1 = 0;
-                $score2 = 0;
-                $deducted1 = $maxScore/4;
-                $deducted2 = $maxScore/4;
-                $correctNameScore = 0;
-                //Puts coded answer into the file to be executed
-                while($j++ < $INFINITY){
-                        $nfq = strpos($testcases, $CASE_DELIMITER, $fq);
+                $NAMED = 5;
+                $NORUND = (int)($S * 0.2);
+                $TESTD = (int)(($S - $NAMED -
+                $NORUND)/count($testcases));
 
-                        if($nfq === false){
-                                $curTestcase[] = substr($testcases, $fq);
-                                break;
-                        }
-                        $curTestcase[] = substr($testcases, $fq, $nfq - $fq);
-                        $fq = $nfq + 1;
-                }
+                $NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
+                $totDed = array();
 
                 foreach($curTestcase as $k){
                         $expectedReturns[] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
+
                         $inputs[] = substr($testcase, strpos($testcase,
                         $ARGS_START_DELIMITER), strpos($testcase,
                         $ARGS_END_DELIMITER) - strpos($testcase,
@@ -199,56 +191,65 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $returnSet = array();
 
-                $resulting = exec("python $testFile");
-                $returnSet = explode(' ', $resulting);
+                exec("python test.py", $returnSet, $exec_return_code);
 
                 //Executes the code to get an answer, if its not complete or
                 //does not match expected answers then it won't work
 
                 //If answers != testcase, no points, if second testcase, then
                 //points per testcase by total of testcases
-                foreach($returnSet as $returned){
-                        echo $returned;
-                        if($returned === $curTestcase[0]){
-                                $score1 = $maxScore/4;
-                                $deducted1 = 0;
-                        }
-                        elseif($returned === $curTestcase[1]){
-                                $score2 = $maxScore/4;
-                                $deducted2 = 0;
-                        }
+                if(count($returnSet) == count($expectedReturns)){
+                        for($j = 0; $j < count($expectedReturns); ++$j)
+                                $returnSet[$j] != $expectedReturns[$j] ?
+                                $totDed[$j] = $TESTD : $totDed[$j] = 0;
+                        $deductNoRun[$i] = 0;
                 }
 
-                if(strpos($answer, $fname) !== false){
-                        $correctNameScore = $maxScore/2;
+                elseif($exec_return_code){
+                        for($j = 0; $j < count($expectedReturns); ++$j){
+                                $totDed[$j] = $TESTD;
+                                $returnSet[$i] = "";
+                        }
+                        $deductNoRun[$i] = $NORUND;
                 }
 
-                $score = array('score1' => $score1, 'score2' => $score2);
+                $deductTest[$i] = $totDed;
 
-                $deducted = array('test1Deducted' => $deducted1,
-                'test2Deducted' => $deducted2);
+                $a = strtok($answer, "\n");
+                while(ctype_space($a))
+                        $a = strtok("\n");
+                $r = preg_match('/def[ \t]+' . $fname . '.+/', $a);
 
-                //array_push($deductedPoints, $deducted1, $deducted2);
-                array_push($scores, $score);
-                array_push($testCasesAnswered, $returnSet);
-                array_push($correctNames, $correctNameScore);
-                array_push($deductedPointsPerTest, $deducted);
+                $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
+
+                $exec_return_code ? $deductNoRun[$i] = $NORUND : $deductNoRun[$i]
+                = 0;
+                $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
+                $deductName[$i];
+
+                foreach($totDed as $test)
+                        $scores[$i] -= $test;
+
+                $comments[$i] = "";
+                $expecteds[$i] = $expectedReturns;
+                $resulting[$i] = $resultSet;
 
         }
+
+        str_flatten(", ", $expecteds);
+        str_flatten(", ", $resulting);
+        str_flatten(", ", $deductTest);
 
 //Comments are nothing since the autograder doesn't input comments nor gets
 //when student completes exam, so they are empty
         $tData = array('comments' => '', 'ucid' => $ucid, 'exaName' =>
         $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
-        'maxScores' => $maxScores, 'expectedAnswers' => $curTestcase,
-        'resultingAnswers' => $testCasesAnswered, 'deductedPointscorrectName'
-        => $correctNames, 'deductedPointsPerEachTest' =>
-        $deductedPointsPerTest, 'scores' => $scores);
+        'scores' => $scores, 'maxScores' => $maxScores, 'expectedAnswers' =>
+        $expecteds, 'resultingAnswers' => $resulting,
+        'deductedPointscorrectName' => $deductName,
+        'deductedPointsPerEachTest' => $deductTest);
 
-        $request = 'gradingExam';
-
-        $datas = http_build_query(array('RequestType' => $request, 'data' =>
-        $tData));
+        $datas = http_build_query(array('RequestType' => 'gradingExam', 'data' => $tData));
 
         $ch = curl_init();
 
@@ -257,8 +258,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
         $resulting = curl_exec($ch);
-        echo $resulting;
         curl_close($ch);
+        echo $resulting;
 
 }
 
