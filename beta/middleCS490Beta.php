@@ -103,7 +103,7 @@ elseif($requestID == 'showExam'){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
-        $result = curl_exec($ch);
+        $result = curl_exec($ch); 
         echo $result;
         curl_close($ch);
 
