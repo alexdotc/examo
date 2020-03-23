@@ -64,7 +64,7 @@ function renderExam(ename, questions){
 	const divExam = document.getElementById("TakeDiv");
 	const divName = document.getElementById("examName");
 
-	divName.innerHTML = "Currently taking " + ename;
+	divName.innerHTML = "Currently taking " + decodeURI(ename);
 
 	let friendlyctr = 1;
 	for (let question in questions){

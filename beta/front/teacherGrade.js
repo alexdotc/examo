@@ -55,7 +55,7 @@ function renderExam(ename, questions){
 	const divName = document.getElementById("examName");
 	const released = questions.pop();
 
-	divName.innerHTML = "Currently viewing grades for " + ename + " taken by " + questions[0]['ucid'];
+	divName.innerHTML = "Currently viewing grades for " + decodeURI(ename) + " taken by " + questions[0]['ucid'];
 
 	let friendlyctr = 1;
 	for (let question in questions){

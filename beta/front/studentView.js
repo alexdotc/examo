@@ -36,7 +36,7 @@ function renderExam(ename, questions){
 	const divName = document.getElementById('examName');
 	const released = questions.pop();
 
-	divName.innerHTML = "Currently viewing " + ename;
+	divName.innerHTML = "Currently viewing " + decodeURI(ename);
 
 	let friendlyctr = 1;
 	for (let question in questions){
