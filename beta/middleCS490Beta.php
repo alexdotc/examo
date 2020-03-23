@@ -156,8 +156,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $answer = $answers[$i];
                 //One max score for each question for total points compared to
                 //total missed
-                $fname = substr($testcasesS, 0, strpos($testcasesS,
-        0, strpos($testcasesS, $ARGS_START_DELIMITER));
+                $fname = substr($testcasesS, 0, strpos($testcasesS, $ARGS_START_DELIMITER));
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
