@@ -327,4 +327,10 @@ elseif($requestID == 'listGradedExamsStudent'){
 
 }
 
+function str_flatten($delim, &$arr){
+        foreach($arr as &$a)
+                $a = implode($delim, $a);
+}
+                                
+
 ?>
