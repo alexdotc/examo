@@ -116,8 +116,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $CASE_DELIMITER = "?";
         $RETURN_DELIMITER = ":";
 
-        $testFile = "test.py";
-
         $ucid = $data['ucid'];
         $examName = $data['exaName'];
         $questionIDs = $data['questionsid'];
@@ -159,12 +157,14 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 //One max score for each question for total points compared to
                 //total missed
                 $fname = substr($testcasesS, 0, strpos($testcasesS,
-                $ARGS_START_DELIMITER));
+        0, strpos($testcasesS, $ARGS_START_DELIMITER));
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
 
                 $S = $maxScores[$i];
+                $testFile =
+                '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
 
                 $NAMED = 5;
                 $NORUND = (int)($S * 0.2);
@@ -174,20 +174,22 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
 
-                foreach($curTestcase as $k){
+                foreach($testcases as $k){
                         $expectedReturns[] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
 
-                        $inputs[] = substr($testcase, strpos($testcase,
-                        $ARGS_START_DELIMITER), strpos($testcase,
-                        $ARGS_END_DELIMITER) - strpos($testcase,
+                        $inputs[] = substr($k, strpos($k,
+                        $ARGS_START_DELIMITER), strpos($k,
+                        $ARGS_END_DELIMITER) - strpos($k,
                         $ARGS_START_DELIMITER) + 1);
                 }
 
+                clearstatcache();
+                //Ensures file is overwritten
                 file_put_contents($testFile, $answer);
 
                 foreach($inputs as $l)
-                        file_put_contents($testFile, "\nprint($functionName$l)", FILE_APPEND);
+                        file_put_contents($testFile, "\nprint($fname$l)", FILE_APPEND);
 
                 $returnSet = array();
 
@@ -222,8 +224,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
-                $exec_return_code ? $deductNoRun[$i] = $NORUND : $deductNoRun[$i]
-                = 0;
+                $exec_return_code ? $deductNoRun[$i] = $NORUND :
+                $deductNoRun[$i] = 0;
                 $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
                 $deductName[$i];
 
@@ -232,8 +234,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $comments[$i] = "";
                 $expecteds[$i] = $expectedReturns;
-                $resulting[$i] = $resultSet;
-
+                $resulting[$i] = $returnSet;
         }
 
         str_flatten(", ", $expecteds);
@@ -242,7 +243,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
 //Comments are nothing since the autograder doesn't input comments nor gets
 //when student completes exam, so they are empty
-        $tData = array('comments' => '', 'ucid' => $ucid, 'exaName' =>
+        $tData = array('comments' => $comments, 'ucid' => $ucid, 'exaName' =>
         $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
         'scores' => $scores, 'maxScores' => $maxScores, 'expectedAnswers' =>
         $expecteds, 'resultingAnswers' => $resulting,
