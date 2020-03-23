@@ -3,7 +3,7 @@
 	define('MAGICNUMBER', true);
 	include 'unlock.php';
 
-	$URL = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
+	$URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
 
 	$req = login($_POST['ucid'], $_POST['password'], $URL);
 
