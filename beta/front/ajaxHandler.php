@@ -1,8 +1,5 @@
 <?php
 
-	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-	ini_set('display_errors' , 1);
-
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
@@ -86,8 +83,6 @@
 
 	$resp = handoff($post_params, $URL);
 	echo $resp;
-	if($reqtype == 'modifyGradedExam')
-		echo $post_params;
 
 	function handoff($post_params, $URL){
 		$ch = curl_init();

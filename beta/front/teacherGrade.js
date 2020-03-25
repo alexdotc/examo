@@ -73,7 +73,7 @@ function renderExam(ename, questions){
 		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
 		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
-		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br />" + questions[question]['answers'] + '<br /><br />';
+		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br /><pre>" + questions[question]['answers'] + '</pre><br /><br />';
 		li.innerHTML += '<strong>Test Case Results: </strong><br /><br />';
 
 		for(let tc = 0; tc < deductions.length; ++tc){

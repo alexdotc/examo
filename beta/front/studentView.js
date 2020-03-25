@@ -50,7 +50,7 @@ function renderExam(ename, questions){
 		li.innerHTML += questions[question]['questions'];
 
 		li.innerHTML += '<br /><br /><strong>Your Answer:</strong><br />';
-		li.innerHTML += questions[question]['answers'] + '<br />';
+		li.innerHTML += '<pre>' + questions[question]['answers'] + '</pre><br />';
 		
 		if (questions[question]['deductedPointscorrectName'] != 0)
 			li.innerHTML += '<br /><strong>Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name</strong>';
