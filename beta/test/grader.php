@@ -41,6 +41,8 @@
 		$testcaseStr = $result[$i]['questTest'];
 		$answer = $answers[$i];
 
+		$studentFunctionName = get_student_fname($answer);
+
 		$functionName = substr($testcaseStr, 0, strpos($testcaseStr, $ARGS_START_DELIMITER));
 		$testcases = explode($CASE_DELIMITER, $testcaseStr);
 		$testInputs = array();
@@ -62,7 +64,7 @@
 		file_put_contents($TEST_FILE, $answer);
 
 		foreach($testInputs as $inp)
-			file_put_contents($TEST_FILE, "\nprint($functionName$inp)", FILE_APPEND);
+			file_put_contents($TEST_FILE, "\nprint($studentFunctionName$inp)", FILE_APPEND);
 
 		$python_stdout = array();
 
@@ -125,6 +127,16 @@
 		$r = preg_match('/def[ \t]+' . $fname . '.+/', $a);
 		return $r;
 	}
+
+	function get_student_fname($answer){
+		$m = array();
+		$a = strtok($answer, "\n");
+		while(ctype_space($a))
+			$a = strtok("\n");
+		$r = preg_match('/def[ \t]+([a-zA-z0-9_]+)/', $a, $m);
+		return $m[1];
+	}
+		
 
         function str_flatten($delim, &$arr){
 		foreach($arr as &$a)
