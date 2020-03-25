@@ -1,5 +1,7 @@
 ajaxShowGraded(getParam(window.location.href, 'exam'), renderExam);
 
+window.onscroll = function() { return; }; // remove any scroll event handler
+
 document.getElementById("GradeDiv").addEventListener("click", function(e){
 
 	let clickedButton = document.getElementById(e.target.id);
