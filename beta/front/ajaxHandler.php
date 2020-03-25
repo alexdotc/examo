@@ -1,4 +1,8 @@
 <?php
+
+	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+	ini_set('display_errors' , 1);
+
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
@@ -6,7 +10,10 @@
 
 	$reqtype = $_POST['RequestType'];
 
-	$post_params = http_build_query(array('RequestType' => $reqtype, data => ''));
+	if($reqtype == 'submitExam')
+		$URL = 'http://localhost/middle/grader.php';
+
+	$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => ''));
 
 	switch($reqtype){
 		case 'CreateQuestion':
@@ -54,7 +61,11 @@
 			$ids = $_POST['ids'];
 			$scores = $_POST['scores'];
 			$comments = $_POST['comments'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released)));
+			$nameDs = $_POST['nameDs'];
+			$tcDs = $_POST['tcDs'];
+			$shittytcDs = explode(",",$tcDs);
+			$shittytcDs = str_replace("...", ", ", $shittytcDs);
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released, 'deductedPointscorrectName' => explode(",",$nameDs), 'deductedPointsPerEachTest' => $shittytcDs)));
 			break;
 
 		case 'listGradedExamsStudent':
@@ -75,6 +86,8 @@
 
 	$resp = handoff($post_params, $URL);
 	echo $resp;
+	if($reqtype == 'modifyGradedExam')
+		echo $post_params;
 
 	function handoff($post_params, $URL){
 		$ch = curl_init();

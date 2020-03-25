@@ -66,7 +66,8 @@ function renderExam(ename, questions){
 		let deductions = (questions[question]['deductedPointsPerEachTest']).split(",");
 
 		li.setAttribute('class', 'GradeItems GradeQuestions');
-		li.setAttribute('id', 'examquestion');
+		li.setAttribute('id', 'examquestion' + questions[question]['gradesID'] + 'mscore' + questions[question]['maxScores']);
+
 		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
 		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
@@ -77,25 +78,25 @@ function renderExam(ename, questions){
 			
 			let change = document.createElement("input");
 
-			li.innerHTML += '<strong>Test Case ' + String(tc + 1) + '</strong><br />';
+			li.innerHTML += '<strong><em>Test Case ' + String(tc + 1) + '</em></strong><br />';
 			li.innerHTML += "Expected Answer: " + expected[tc] + '<br />';
 			li.innerHTML += " Resulting Answer: " + actual[tc] + '<br />';
-			li.innerHTML += " Deducted Points: <strong>" + deductions[tc] + '</strong><br /><br />';
-			//li.innerHTML += '<strong> Modify Deduction: </strong>';
+			li.innerHTML += " <strong>Deducted Points </strong>";
 			
 			change.setAttribute('type', 'text');
 			change.setAttribute('class', 'GradeItems GradeChange');
 			change.setAttribute('name', 'tcD' + tc);
-			change.setAttribute('id', 'tcD' + tc + 'q' + questions[question]['questID']);
+			change.setAttribute('id', 'tcD' + tc + 'q' + questions[question]['gradesID']);
 			change.setAttribute('placeholder', 'points');
+			change.setAttribute('value', deductions[tc]);
 			
-			//li.appendChild(change);
-		}
-		
-		if (questions[question]['deductedPointscorrectName'] != 0){
+			li.appendChild(change);
 
-			li.innerHTML += 'Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name<br />';
+			li.innerHTML += "<br /><br />";
 		}
+
+		li.innerHTML += "<strong>Function Name:</strong><br /><br />";
+		li.innerHTML += "<strong>Deducted Points </strong>";
 		
 		let change = document.createElement("input");
 		change.setAttribute('type', 'text');
@@ -103,8 +104,7 @@ function renderExam(ename, questions){
 		change.setAttribute('class', 'GradeItems GradeChange');
 		change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
 		change.setAttribute('placeholder', 'Score');
-		change.setAttribute('value', questions[question]['scores']);
-		li.innerHTML += '<br /><strong> Modify Question Score: </strong>';
+		change.setAttribute('value', questions[question]['deductedPointscorrectName']);
 		li.appendChild(change);
 
 		let comment = document.createElement("textarea");
@@ -175,23 +175,46 @@ function ajaxUpdateExam(e){
 		released = 'Y';
 
 	let ids = [];
+	let nameDs = [];
+	let comments = [];
+	let tcDs = [];
 	let scores = [];
-	let comments = []; // placeholder
 
 	for(let mod in allmods){
 
 		if (allmods[mod]['type'] != 'text')
 			continue;
 
-		let score = allmods[mod]['value'];
+		let nameD = allmods[mod]['value'];
+		let tcDq = [];
 		let id = allmods[mod]['id'].substr(5);
+		let qdiv = document.getElementById(document.querySelector('[id^="examquestion' + id + '"').id);
 
-		ids.push(id);
-
-		if (score == '')
-			score = allmods[mod]['placeholder'];
+		let qdc = qdiv.childNodes;
+		let mscore = qdiv['id'].substr(qdiv['id'].search("mscore") + 6);
+		let tcDsum = 0;
 		
-		scores.push(score);
+		for(let q in qdc){
+			if (qdc[q]['type'] != 'text')
+				continue;
+			if (qdc[q]['id'].startsWith("tc")){
+				if (qdc[q]['value'] == '')
+					qdc[q]['value'] = '0';
+				tcDq.push(qdc[q]['value']);
+				tcDsum += parseInt(qdc[q]['value']);
+			}
+		}
+
+		
+		ids.push(id);
+		tcDs.push(tcDq.join("..."));
+
+		if (nameD == '')
+			nameD = '0';
+
+		nameDs.push(nameD);
+
+		scores.push(String(parseInt(mscore) - parseInt(nameD) - tcDsum));
 	}
 
 	for(let comment in allcomments){
@@ -202,7 +225,9 @@ function ajaxUpdateExam(e){
 		comments.push(allcomments[comment]['value']);
 	}
 
-	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released;
+	console.log(tcDs);
+
+	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released + '&tcDs=' + tcDs + '&nameDs=' + nameDs;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);
