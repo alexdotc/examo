@@ -156,7 +156,11 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $answer = $answers[$i];
                 //One max score for each question for total points compared to
                 //total missed
-                $fname = substr($testcasesS, 0, strpos($testcasesS, $ARGS_START_DELIMITER));
+                $functionName = substr($testcasesS, 0, strpos($testcasesS,
+                $ARGS_START_DELIMITER));
+                $fname = substr($answer, 0, strpos($answer, $ARGS_START_DELIMITER));
+                $fname = preg_replace("/def /", "", $fname);
+
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
@@ -172,15 +176,17 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
+                $p = 0;
 
                 foreach($testcases as $k){
-                        $expectedReturns[] = substr($k, strpos($k,
+                        $expectedReturns[$p] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
 
-                        $inputs[] = substr($k, strpos($k,
+                        $inputs[$p] = substr($k, strpos($k,
                         $ARGS_START_DELIMITER), strpos($k,
                         $ARGS_END_DELIMITER) - strpos($k,
                         $ARGS_START_DELIMITER) + 1);
+                        $p += 1;
                 }
 
                 clearstatcache();
@@ -219,7 +225,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $a = strtok($answer, "\n");
                 while(ctype_space($a))
                         $a = strtok("\n");
-                $r = preg_match('/def[ \t]+' . $fname . '.+/', $a);
+                $r = preg_match('/def[ \t]+' . $functionName . '.+/', $a);
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
