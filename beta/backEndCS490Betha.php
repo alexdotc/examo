@@ -222,6 +222,7 @@ if ($request == 'modifyGradedExam'){//for instructor
 	$score=$data['scores'];
 	$comments=$data['comments'];
 	$released=$data['released'];
+	$testPointsDeducted = $data['deductedPointsPerEachTest'];
 	$correctName = $data['deductedPointscorrectName'];
 	$count = count($gradesID);
 
@@ -232,7 +233,7 @@ if ($request == 'modifyGradedExam'){//for instructor
 
 	for($i=0; $i < $count; $i++){
 		
-		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released',`deductedPointscorrectName`='$correctName[$i]' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
+		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released',`deductedPointsPerEachTest`='$testPointsDeducted[$i]',`deductedPointscorrectName`='$correctName[$i]' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
 		//echo json_encode($query);
 
 		$db->query($query) or die('There was an error saving the grades');
