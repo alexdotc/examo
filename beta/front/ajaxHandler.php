@@ -36,7 +36,7 @@
 			$points = $_POST['points'];
 			$answers = $_POST['answers'];
 			$user = $_SESSION['user'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode("\"\"\"\"\"\"\"\"",$answers), 'points' => explode(",",$points))));
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode("HACKMAGICK",$answers), 'points' => explode(",",$points))));
 			break;
 
 		case 'showGradedExam':

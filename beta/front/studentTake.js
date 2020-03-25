@@ -113,7 +113,7 @@ function ajaxSubmitExam(e){
 			continue;
 
 		ids.push(allanswers[answer]['id'].substr(10));
-		answers += (encodeURIComponent(allanswers[answer]['value']) + "\"\"\"\"\"\"\"\""); //shitty hack for now
+		answers += (encodeURIComponent(allanswers[answer]['value']) + "HACKMAGICK"); //shitty hack for now
 	}
 
 	let post_params = 'RequestType=submitExam&examname=' + examname + '&ids=' + ids + '&answers=' + answers + '&points=' + qpoints;
