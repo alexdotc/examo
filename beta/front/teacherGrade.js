@@ -63,8 +63,8 @@ function renderExam(ename, questions){
 	for (let question in questions){
 
 		let li = document.createElement("div");
-		let expected = (questions[question]['expectedAnswers']).split(",");
-		let actual = (questions[question]['resultingAnswers']).split(",");
+		let expected = (questions[question]['expectedAnswers']).split("HACKMAGICK");
+		let actual = (questions[question]['resultingAnswers']).split("HACKMAGICK");
 		let deductions = (questions[question]['deductedPointsPerEachTest']).split(",");
 
 		li.setAttribute('class', 'GradeItems GradeQuestions');
