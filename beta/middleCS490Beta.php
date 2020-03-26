@@ -225,7 +225,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $a = strtok($answer, "\n");
                 while(ctype_space($a))
                         $a = strtok("\n");
-                $r = preg_match('/def[ \t]+' . $functionName . '.+/', $a);
+                $r = preg_match('/def[ \t]+' . $functionName . '[ \t]*\(.+/', $a);
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
