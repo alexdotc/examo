@@ -49,11 +49,11 @@
 		$expectedReturns = array();
 
 		$NAME_DEDUCTION = 5; // should this be scaled?
-		$NO_RUN_DEDUCTION = (int)($maxScores[$i] * 0.2);
-		$TC_DEDUCTION = (int)(($maxScores[$i] - $NAME_DEDUCTION)/count($testcases));
+		$NO_RUN_DEDUCTION = 0;
+		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION)/count($testcases));
 
 		//adjust for all deductions to add to the max score
-		//$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
@@ -73,22 +73,23 @@
 		if (count($python_stdout) == count($expectedReturns)){
 			for($j = 0; $j < count($expectedReturns); ++$j)
 				$python_stdout[$j] != $expectedReturns[$j] ? $deducted_each[$j] = $TC_DEDUCTION : $deducted_each[$j] = 0;
-			//$deductions_no_run[$i] = 0;
+			$deductions_no_run[$i] = 0;
 		}
 
 		else if($exec_return_code){
 			for($j = 0; $j < count($expectedReturns); ++$j){
-				$deducted_each[$j] = $TC_DEDUCTION;
-				$python_stdout[$i] = "";
+				if(!isset($python_stdout[$j]))
+					$python_stdout[$j] = "(Python crashed!)";
+				$python_stdout[$j] != $expectedReturns[$j] ? $deducted_each[$j] = $TC_DEDUCTION : $deducted_each[$j] = 0;
 			}
-			//$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
+			$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
 		}
 
 		$deductions_tc[$i] = $deducted_each;
 		check_name($functionName, $answer) ? $deductions_name[$i] = 0 : $deductions_name[$i] = $NAME_DEDUCTION;
 
 		$exec_return_code ? $deductions_no_run[$i] = $NO_RUN_DEDUCTION : $deductions_no_run[$i] = 0;
-		$scores[$i] = $maxScores[$i] - $deductions_no_run[$i] - $deductions_name[$i];
+		$scores[$i] = $maxScores[$i] - $deductions_name[$i];
 		foreach($deducted_each as $tcd)
 			$scores[$i] -= $tcd;
 
