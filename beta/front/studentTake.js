@@ -100,6 +100,10 @@ function ajaxSubmitExam(e){
 	
 	e.preventDefault();
 
+        let elem = document.getElementById("response");
+
+        elem.innerHTML = "Submitting..."
+
 	const SERVER = 'ajaxHandler.php';
 
 	let examname = getExamNameParam(window.location.href);
@@ -124,10 +128,13 @@ function ajaxSubmitExam(e){
 
 	xhr.onload = function(){
 		if (xhr.status == 200){
-			let elem = document.getElementById("response");
-			let resp = JSON.parse(this.responseText);
+			let resp = this.responseText;
+			try{
+				resp = JSON.parse(resp);
+			}
+			catch{ }
 
-			if(resp == "grade successfully saved")
+			if(resp.search("grade successfully saved") != -1)
 				elem.innerHTML = "Exam successfully submitted!";
 			else
 				elem.innerHTML = "Something went wrong while submitting your exam...";
