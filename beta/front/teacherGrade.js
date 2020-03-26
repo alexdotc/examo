@@ -67,6 +67,9 @@ function renderExam(ename, questions){
 		let actual = (questions[question]['resultingAnswers']).split("HACKMAGICK");
 		let deductions = (questions[question]['deductedPointsPerEachTest']).split(",");
 
+                for(let d in deductions)
+                        deductions[d] = deductions[d].trim();
+
 		li.setAttribute('class', 'GradeItems GradeQuestions');
 		li.setAttribute('id', 'examquestion' + questions[question]['gradesID'] + 'mscore' + questions[question]['maxScores']);
 
