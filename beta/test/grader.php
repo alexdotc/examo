@@ -27,7 +27,7 @@
 
 	$deductions_tc = array();
 	$deductions_name = array();
-	$deductions_no_run = array();
+	//$deductions_no_run = array();
 
 	$scores = array();
 	$comments = array();
@@ -50,10 +50,10 @@
 
 		$NAME_DEDUCTION = 5; // should this be scaled?
 		$NO_RUN_DEDUCTION = (int)($maxScores[$i] * 0.2);
-		$TC_DEDUCTION = (int)(($maxScores[$i] - $NAME_DEDUCTION - $NO_RUN_DEDUCTION)/count($testcases));
+		$TC_DEDUCTION = (int)(($maxScores[$i] - $NAME_DEDUCTION)/count($testcases));
 
 		//adjust for all deductions to add to the max score
-		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		//$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
@@ -73,7 +73,7 @@
 		if (count($python_stdout) == count($expectedReturns)){
 			for($j = 0; $j < count($expectedReturns); ++$j)
 				$python_stdout[$j] != $expectedReturns[$j] ? $deducted_each[$j] = $TC_DEDUCTION : $deducted_each[$j] = 0;
-			$deductions_no_run[$i] = 0;
+			//$deductions_no_run[$i] = 0;
 		}
 
 		else if($exec_return_code){
@@ -81,7 +81,7 @@
 				$deducted_each[$j] = $TC_DEDUCTION;
 				$python_stdout[$i] = "";
 			}
-			$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
+			//$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
 		}
 
 		$deductions_tc[$i] = $deducted_each;
@@ -95,12 +95,14 @@
 		$comments[$i] = "";
 		$expecteds[$i] = $expectedReturns;
 		$resulting[$i] = $python_stdout;
+
 	}
+
 
 	//yuck, why are we using arrays of strings instead of just arrays of arrays when each piece is a discrete value that will need to be modified?
 
-	str_flatten(", ", $expecteds);
-	str_flatten(", ", $resulting);
+	str_flatten("HACKMAGICK", $expecteds);
+	str_flatten("HACKMAGICK", $resulting);
 	str_flatten(", ", $deductions_tc);
 
 	$params = http_build_query(array('RequestType' => 'gradingExam', 'data' => array('ucid' => $ucid, 'exaName' => $examName, 'questionsid' => $questionIDs, 'answers' => $answers, 'scores' => $scores, 'maxScores' => $maxScores, 'comments' => $comments, 'expectedAnswers' => $expecteds, 'resultingAnswers' => $resulting, 'deductedPointsPerEachTest' => $deductions_tc, 'deductedPointscorrectName' => $deductions_name)));
@@ -124,7 +126,7 @@
 		$a = strtok($answer, "\n");
 		while(ctype_space($a))
 			$a = strtok("\n");
-		$r = preg_match('/def[ \t]+' . $fname . '.+/', $a);
+		$r = preg_match('/def[ \t]+' . $fname . '[ \t]*\(.+/', $a);
 		return $r;
 	}
 
