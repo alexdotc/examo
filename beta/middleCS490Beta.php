@@ -145,7 +145,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $deductTest = array();
         $deductName = array();
-        $deductNoRun = array();
+        //$deductNoRun = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
 
@@ -170,11 +170,11 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
 
                 $NAMED = 5;
-                $NORUND = (int)($S * 0.2);
-                $TESTD = (int)(($S - $NAMED -
-                $NORUND)/count($testcases));
+                //$NORUND = (int)($S * 0.2);
+                $TESTD = (int)(($S - $NAMED /*-
+                $NORUND*/)/count($testcases));
 
-                $NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
+                //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
 
@@ -209,15 +209,17 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         for($j = 0; $j < count($expectedReturns); ++$j)
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
-                        $deductNoRun[$i] = 0;
+                        //$deductNoRun[$i] = 0;
                 }
 
-                elseif($exec_return_code){
+                 else if($exec_return_code){
                         for($j = 0; $j < count($expectedReturns); ++$j){
-                                $totDed[$j] = $TESTD;
-                                $returnSet[$i] = "";
+                                if(!isset($returnSet[$j]))
+                                $returnSet[$j] = "(Python crashed!)";
+
+                                $returnSet[$j] != $expectedReturns[$j] ?
+                                $totDed[$j] = $TESTD : $totDed[$j] = 0;
                         }
-                        $deductNoRun[$i] = $NORUND;
                 }
 
                 $deductTest[$i] = $totDed;
@@ -229,8 +231,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
-                $exec_return_code ? $deductNoRun[$i] = $NORUND :
-                $deductNoRun[$i] = 0;
+                //$exec_return_code ? $deductNoRun[$i] = $NORUND :
+                //$deductNoRun[$i] = 0;
                 $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
                 $deductName[$i];
 
