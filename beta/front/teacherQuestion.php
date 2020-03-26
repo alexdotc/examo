@@ -7,13 +7,11 @@
     <form id="QuestionForm">
         <label for="Topic" class="QuestionLabel QuestionItems"><strong>Topic </strong></label>
         <select required name="Topic" id="topic" class="QuestionSelect QuestionItems">
-            <option value="Arrays">Arrays</option>
+	    <option value="Lists">Lists</option>
             <option value="Loops">Loops</option>
-            <option value="Dictionaries">Dictionaries</option>
-            <option value="Generators">Generators</option>
-            <option value="Recursion">Recursion</option>
-            <option value="Lists">Lists</option>
-            <option value="Strings">Strings</option>
+	    <option value="Math">Math</option>
+	    <option value="Strings">Strings</option>
+	    <option value="Recursion">Recursion</option>
         </select><br />
         <label for="Difficulty" class="QuestionLabel QuestionItems"><strong>Difficulty </strong></label>
         <select required name="Difficulty" id="difficulty" class="QuestionSelect QuestionItems">

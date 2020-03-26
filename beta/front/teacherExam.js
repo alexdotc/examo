@@ -12,6 +12,7 @@ document.getElementById("split").addEventListener("click", function(e){
 		removeQuestion(clickedButton);
 });
 
+
 document.getElementById('examname').addEventListener('keypress', function(e){ dynamicHeader(e); });
 
 // for some reason it doesn't work for backspace...
@@ -22,17 +23,100 @@ document.getElementById('examname').addEventListener('keyup', function(e) {
 
 document.getElementById("SubmitExamForm").addEventListener("submit", ajaxCreateExam);
 
+document.getElementById("ftopic").addEventListener("change", function(e){
+	let t = e.target.value;
+	filterTopic(t, false);
+});
+
+document.getElementById("fdifficulty").addEventListener("change", function(e){
+	let t = e.target.value;
+	filterDifficulty(t, false);
+});
+
+function filterTopic(topic, chain){
+	let ql = document.getElementById("QuestionList").childNodes;
+
+	if(chain === false){
+		for(let n in ql){
+			if (ql[n].tagName != "DIV")
+				continue;
+			ql[n].style.display = 'block';
+		}
+	}
+
+	if(topic == "All"){
+		if (chain === false){
+			for(let n in ql){
+				if (ql[n].tagName != "DIV")
+					continue;
+				ql[n].style.display = 'block';
+			}
+			filterDifficulty(document.getElementById("fdifficulty").value, true);
+		}
+		return;
+	}
+
+	for(let n in ql){
+		if (ql[n].tagName != "DIV")
+			continue;
+		if (ql[n].classList.contains('Topic-' + topic) === false)
+			ql[n].style.display = 'none';
+	}
+	
+	if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+		filterDifficulty(document.getElementById("fdifficulty").value, true);
+}
+
+
+function filterDifficulty(difficulty, chain){
+	let ql = document.getElementById("QuestionList").childNodes;
+
+	if(chain === false){
+		for(let n in ql){
+			if (ql[n].tagName != "DIV")
+				continue;
+			ql[n].style.display = 'block';
+		}
+	}
+
+	if(difficulty == "All"){
+		if (chain === false){
+			for(let n in ql){
+				if (ql[n].tagName != "DIV")
+					continue;
+				ql[n].style.display = 'block';
+			}
+			filterTopic(document.getElementById("ftopic").value, true);
+		}
+		return;
+	}
+
+	for(let n in ql){
+		if (ql[n].tagName != "DIV")
+			continue;
+		if (ql[n].classList.contains('Difficulty-' + difficulty) === false)
+			ql[n].style.display = 'none';
+	}
+
+	if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+		filterTopic(document.getElementById("ftopic").value, true);
+}
+
+	
+
 function dynamicHeader(e){
 
 	let start = e.target.selectionStart;
 	let end = e.target.selectionEnd;
 
-	h = document.getElementById("examheader");
+	let h = document.getElementById("examheader");
 	h.innerHTML = e.target.value.substr(0, start) + String.fromCharCode(e.keyCode) + e.target.value.substr(end);
 
 }
 
 function dynamicHeaderBackspace(e){
+
+	let h = document.getElementById("examheader");
 
 	h.innerHTML = e.target.value;
 
@@ -89,7 +173,7 @@ function listQuestions(questions){
                 pointsBox.setAttribute('placeholder', "Points");
 		pointsBox.style.visibility = "hidden";
 
-		li.setAttribute('class', 'QuestionItems QuestionListItems');
+		li.setAttribute('class', 'QuestionItems QuestionListItems' + ' Topic-' + questions[question]['topic'] + ' Difficulty-' + questions[question]['difficulty']);
 		li.setAttribute('id', 'question' + questions[question]['questID']);
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
