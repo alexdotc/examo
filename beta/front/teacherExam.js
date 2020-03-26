@@ -202,7 +202,6 @@ function addQuestion(clickedButton){
 	let divChild = document.getElementById("question" + clickedButton.name);
 
 	divChild.setAttribute('id', 'selected' + clickedButton.name);
-	divChild.setAttribute('class', 'ExamItems ExamSelections')
         
 	selections.set(clickedButton.name, '0');
 	
@@ -240,7 +239,6 @@ function removeQuestion(clickedButton){
 	}
 
 	divChild.setAttribute('id', 'question' + clickedButton.name);
-	divChild.setAttribute('class', 'ExamItems ExamQuestions');
 
 	selections.delete(clickedButton.name);
 
@@ -251,10 +249,15 @@ function removeQuestion(clickedButton){
 
 	if (nIndex == 0){
 		divParent.appendChild(divChild);
+		filterTopic(document.getElementById("ftopic").value, false);
+		filterDifficulty(document.getElementById("fdifficulty").value, false);
 		return;
 	}
 
 	divParent.insertBefore(divChild, nIndex);
+
+	filterTopic(document.getElementById("ftopic").value, false);
+	filterDifficulty(document.getElementById("fdifficulty").value, false);
 }
 
 function ajaxCreateExam(e){
