@@ -225,7 +225,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $a = strtok($answer, "\n");
                 while(ctype_space($a))
                         $a = strtok("\n");
-                $r = preg_match('/def[ \t]+' . $functionName . '.+/', $a);
+                $r = preg_match('/def[ \t]+' . $functionName . '[ \t]*\(.+/', $a);
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
@@ -242,8 +242,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $resulting[$i] = $returnSet;
         }
 
-        str_flatten(", ", $expecteds);
-        str_flatten(", ", $resulting);
+        str_flatten("HACKMAGICK", $expecteds);
+        str_flatten("HACKMAGICK", $resulting);
         str_flatten(", ", $deductTest);
 
 //Comments are nothing since the autograder doesn't input comments nor gets
