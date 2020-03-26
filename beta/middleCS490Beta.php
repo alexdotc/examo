@@ -242,8 +242,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $resulting[$i] = $returnSet;
         }
 
-        str_flatten(", ", $expecteds);
-        str_flatten(", ", $resulting);
+        str_flatten("HACKMAGICK", $expecteds);
+        str_flatten("HACKMAGICK", $resulting);
         str_flatten(", ", $deductTest);
 
 //Comments are nothing since the autograder doesn't input comments nor gets
