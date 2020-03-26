@@ -214,12 +214,11 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                  else if($exec_return_code){
                         for($j = 0; $j < count($expectedReturns); ++$j){
-                                if(!isset($python_stdout[$j]))
-                                $python_stdout[$j] = "(Python crashed!)";
+                                if(!isset($returnSet[$j]))
+                                $returnSet[$j] = "(Python crashed!)";
 
-                                $python_stdout[$j] != $expectedReturns[$j] ?
-                                $deducted_each[$j] = $TC_DEDUCTION :
-                                $deducted_each[$j] = 0;
+                                $returnSet[$j] != $expectedReturns[$j] ?
+                                $totDed[$j] = $TESTD : $totDed[$j] = 0;
                         }
                 }
 
