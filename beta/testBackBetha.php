@@ -18,7 +18,7 @@
 //	print(str1 * 2)"),'scores'=>array(50,26),'maxScores'=>array(50,50),'comments'=>array("coment1","coment2"),'expectedAnswers'=>array("256,81,16,16","foofoo, barbarbarbar, hihihi, worldworldworldworldworld"),'resultingAnswers'=>array("256,81,16,16","foofoo, barbar, hihi, worldworld"),'deductedPointsPerEachTest'=>array("0, 0, 0, 0","0, 5, 5, 5"),'deductedPointscorrectName'=>array(0,3)));
 
 //$dat=array('RequestType'=>"showGradedExam",'data'=>array('exaName'=>"exam100",'ucid'=>'yav3'));
-$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'np595','exaName'=>"COVID-19 Fun",'gradesID'=>array(64,65,66,67,68),'answers'=>array("ans1","ans2","ans3","ans4","ans5"),'scores'=>array(10,20,30,40,50),'comments'=>array("comentnew1","coment2","","",""),'released'=>"Y",'deductedPointsPerEachTest'=>array("1, 2","0, 5", "5, 5","10,10","0,0"),'deductedPointscorrectName'=>array(3,2,5,5,5)));
+$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'np595','exaName'=>"COVID-19 Fun",'gradesID'=>array(64,65,66,67,68),'answers'=>array("ans1","ans2","ans3","ans4","ans5"),'scores'=>array(10,20,30,40,50),'comments'=>array("comentnew1","You\'re","","",""),'released'=>"Y",'deductedPointsPerEachTest'=>array("1, 2","0, 5", "5, 5","10,10","0,0"),'deductedPointscorrectName'=>array(3,2,5,5,5)));
 
 //$dat=array('RequestType'=>"listGradedExams",'data'=>"");//data does not store anything
 //$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));//data does not store anything
