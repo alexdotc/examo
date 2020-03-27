@@ -1,15 +1,16 @@
 <?php
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-ini_set('display_errors', 1);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+//ini_set('display_errors', 1);
 
 $backurl = 'https://web.njit.edu/~yav3/backEndCS490Betha.php';
 
 $requestID = $_POST['RequestType'];
 $data = $_POST['data'];
+//Due to no connection of post being sent to back, the back would need the data
+//To call $data['RequestType'] to get the request type
 
 if ($requestID == 'login'){
-
         $post = http_build_query(array('RequestType' => $requestID, 'data' =>
         $data));
 
@@ -26,6 +27,7 @@ if ($requestID == 'login'){
 
 elseif ($requestID == 'CreateQuestion'){
 //Creates the question then sends data to back to store in database
+
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
         $data));
 
@@ -44,7 +46,8 @@ elseif ($requestID == 'CreateQuestion'){
 elseif ($requestID == 'GetQuestions'){//Send the request data forward for the
 //back to retreive the question data from the database to then send to front
 //Data will be holding the request type for back to determine which to send
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        $data)); //Data is empty sending
 
         $ch = curl_init();
 
@@ -94,6 +97,10 @@ elseif ($requestID == 'listExams'){
 
 elseif($requestID == 'showExam'){
 //Data will be sending the exam chosen to the front to display
+/*      $examName = $data['exaName'];
+
+        $tData[] = array('exaName' => $examName);
+*/
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
         $data));
 
@@ -103,7 +110,7 @@ elseif($requestID == 'showExam'){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $datas);
 
-        $result = curl_exec($ch); 
+        $result = curl_exec($ch);
         echo $result;
         curl_close($ch);
 
@@ -156,19 +163,18 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $answer = $answers[$i];
                 //One max score for each question for total points compared to
                 //total missed
+                //echo $testcasesS;
                 $functionName = substr($testcasesS, 0, strpos($testcasesS,
                 $ARGS_START_DELIMITER));
                 $fname = substr($answer, 0, strpos($answer, $ARGS_START_DELIMITER));
                 $fname = preg_replace("/def /", "", $fname);
-
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
-
+                //echo $testcases[0];
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
-
                 $NAMED = 5;
                 //$NORUND = (int)($S * 0.2);
                 $TESTD = (int)(($S - $NAMED /*-
@@ -177,7 +183,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
-
                 foreach($testcases as $k){
                         $expectedReturns[$p] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
@@ -186,9 +191,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $ARGS_START_DELIMITER), strpos($k,
                         $ARGS_END_DELIMITER) - strpos($k,
                         $ARGS_START_DELIMITER) + 1);
-                        $p += 1;
+                        $p = 1 + $p;
                 }
-
                 clearstatcache();
                 //Ensures file is overwritten
                 file_put_contents($testFile, $answer);
@@ -200,19 +204,17 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 exec("python test.py", $returnSet, $exec_return_code);
 
-                //Executes the code to get an answer, if its not complete or
-                //does not match expected answers then it won't work
-
                 //If answers != testcase, no points, if second testcase, then
                 //points per testcase by total of testcases
                 if(count($returnSet) == count($expectedReturns)){
-                        for($j = 0; $j < count($expectedReturns); ++$j)
+                        for($j = 0; $j < count($expectedReturns); ++$j){
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
+                        }
                         //$deductNoRun[$i] = 0;
                 }
 
-                 else if($exec_return_code){
+                else if($exec_return_code){
                         for($j = 0; $j < count($expectedReturns); ++$j){
                                 if(!isset($returnSet[$j]))
                                 $returnSet[$j] = "(Python crashed!)";
@@ -238,7 +240,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 foreach($totDed as $test)
                         $scores[$i] -= $test;
-
                 $comments[$i] = "";
                 $expecteds[$i] = $expectedReturns;
                 $resulting[$i] = $returnSet;
@@ -250,12 +251,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
 //Comments are nothing since the autograder doesn't input comments nor gets
 //when student completes exam, so they are empty
-        $tData = array('comments' => $comments, 'ucid' => $ucid, 'exaName' =>
-        $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
-        'scores' => $scores, 'maxScores' => $maxScores, 'expectedAnswers' =>
-        $expecteds, 'resultingAnswers' => $resulting,
-        'deductedPointscorrectName' => $deductName,
-        'deductedPointsPerEachTest' => $deductTest);
+
+        $tData = array('comments' => $comments, 'ucid' => $ucid, 'exaName' => $examName, 'questionsid' => $questionIDs, 'answers' => $answers, 'scores' => $scores, 'maxScores' => $maxScores, 'expectedAnswers' => $expecteds, 'resultingAnswers' => $resulting, 'deductedPointscorrectName' => $deductName, 'deductedPointsPerEachTest' => $deductTest);
 
         $datas = http_build_query(array('RequestType' => 'gradingExam', 'data' => $tData));
 
@@ -272,7 +269,9 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 }
 
 elseif($requestID == 'showGradedExam'){
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        $data));
 
         $ch = curl_init();
 
@@ -287,7 +286,9 @@ elseif($requestID == 'showGradedExam'){
 }
 
 elseif($requestID == 'modifyGradedExam'){
-        $datas = http_build_query(array('RequestType' => $requestID, 'data' => $data));
+
+        $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
+        $data));
 
         $ch = curl_init();
 
@@ -319,6 +320,7 @@ elseif($requestID == 'listGradedExams'){
 }
 
 elseif($requestID == 'listGradedExamsStudent'){
+
         $datas = http_build_query(array('RequestType' => $requestID, 'data' =>
         $data));
 
@@ -338,6 +340,5 @@ function str_flatten($delim, &$arr){
         foreach($arr as &$a)
                 $a = implode($delim, $a);
 }
-                                
 
 ?>
