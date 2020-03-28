@@ -60,7 +60,11 @@ function renderExam(ename, questions){
 			if (deductions[tc] == 0)
 				++passed;
 		
-		li.innerHTML += '<br /><strong>Passed ' + passed + ' out of ' + deductions.length + ' test cases</strong><br />';
+		li.innerHTML += '<br /><br /><strong>Passed ' + passed + ' out of ' + deductions.length + ' test cases</strong><br />';
+
+		for (let tc = 0; tc < deductions.length; ++tc)
+			if (deductions[tc].trim() != '0')
+				li.innerHTML += '<strong>Deducted ' + deductions[tc] + ' for test case ' + (tc + 1) + '<br />';
 
 		if (questions[question]['comments'] != ''){
 			li.innerHTML += '<br /><strong>Instructor Comments:</srong><br />';

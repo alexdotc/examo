@@ -152,6 +152,7 @@ function ajaxList(callback){
 
 function listQuestions(questions){
 	const divList = document.getElementById("QuestionList");
+	const TC_DELIMITER = "?";
 
 	let index = 0;
 	for(let question in questions){
@@ -178,7 +179,7 @@ function listQuestions(questions){
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
 		li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
-		li.innerHTML += '<strong>Test Cases:</strong> ' + questions[question]['testcases'] + '<br /><br />';
+		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_DELIMITER, "<br />") + '<br /><br />';
 
 		hr.setAttribute('id', 'hr' + index);
 		hr.setAttribute('class', "ExamItems ExamHR");

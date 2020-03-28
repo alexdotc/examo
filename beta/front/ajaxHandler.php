@@ -58,7 +58,7 @@
 			$nameDs = $_POST['nameDs'];
 			$tcDs = $_POST['tcDs'];
 			$shittytcDs = explode(",",$tcDs);
-			$shittytcDs = str_replace("...", ",", $shittytcDs);
+			$shittytcDs = str_replace("...", ", ", $shittytcDs);
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released, 'deductedPointscorrectName' => explode(",",$nameDs), 'deductedPointsPerEachTest' => $shittytcDs)));
 			break;
 
