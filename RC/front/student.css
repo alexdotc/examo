@@ -1,0 +1,80 @@
+body {
+	background-color: #F53C13;
+}
+
+a {
+	color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #F53C13;
+}
+
+textarea {
+	border: 2px solid black;
+}
+
+input::moz-focus-inner{
+	border: 0;
+}
+
+.TakeSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 14px 18px;
+}
+
+#navlist {
+       	list-style-type: none;
+	background-color: #F0F0F0;
+	overflow: hidden;
+	border: black 5px groove;
+}
+
+.NavItems{
+	float: left;
+}
+
+.NavLogout{
+	float: right;
+}
+
+.NavLinks {
+	display: block;
+	color: #000000;
+	text-align: center;
+	padding: 20px 24px;
+	font-family: Georgia;
+}
+
+.NavItems:hover, .NavLogout:hover {
+	background-color: #000000;
+}
+
+.NavLinks:hover {
+	color: #FFFFFF;
+}
+
+#home, #AvailExams, #ReleasedExams, #TakeExam, #ViewExam{
+	background-color: #F0F0F0;
+	border: black 5px groove;
+}
+
+#home {
+	text-align: center;
+}
+
+.ExamNames, .ReviewNames{
+	list-style-type: none;
+	padding-bottom: 3px;
+	font-family: Verdana;
+	font-size: 32px;
+	float: center;
+	text-align: center;
+	color: #000000;
+}
+
+.ExamListHeader, .ReviewListHeader {
+	text-align: center;
+}

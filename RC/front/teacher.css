@@ -1,0 +1,168 @@
+body {
+	background-color: #F53C13;
+}
+
+a {
+	color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #F53C13;
+}
+
+input {
+	border: 2px solid black;
+	padding: 5px;
+	margin: 3px;
+}
+
+select {
+	position: relative;
+	border: 2px solid black;
+	padding: 3px;
+	margin: 3px;
+}
+
+option {
+	border: 2px solid black;
+}
+
+textarea {
+	border: 2px solid black;
+}
+
+input::-moz-focus-inner {
+	border: 0;
+}
+
+.QuestionAddButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+}
+
+#withdrawButton, #releaseButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+}
+
+.GradeSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding 18px 24px;
+}
+
+#ExamMain {
+	margin: auto;
+}
+
+#QuestionMain {
+	margin: auto;
+	text-align: center;
+}
+
+#QuestionForm {
+	display: inline-block;
+	margin: auto;
+}
+
+#QuestionList {
+	width: 52%;
+	float: left;
+}
+
+#split {
+	background-color: #F0F0F0;
+}
+
+#SelectedQuestions {
+	width: 46%;
+	height: 100vh;
+	right: 0;
+	margin: auto;
+	float: right;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+.fix {
+	position: fixed;
+	top: 0;
+}
+
+#navlist {
+       	list-style-type: none;
+	background-color: #F0F0F0;
+	overflow: hidden;
+	border: black 5px groove;
+}
+
+.NavItems{
+	float: left;
+}
+
+.NavLogout{
+	float: right;
+}
+
+.NavLinks {
+	display: block;
+	color: #000000;
+	text-align: center;
+	padding: 20px 24px;
+	font-family: Georgia;
+}
+
+.NavItems:hover, .NavLogout:hover{
+	background-color: #000000;
+}
+
+.NavLinks:hover {
+	color: #FFFFFF;
+}
+
+#home, #QuestionMain, #ExamMain, #GradeExam, #CompExams, #QuestionList, #SelectedQuestions {
+	background-color: #F0F0F0;
+	border: black 5px groove;
+}
+
+#home {
+	text-align: center;
+}
+
+.ExamNames, .ReviewNames{
+        list-style-type: none;
+        padding-bottom: 3px;
+        font-family: Verdana;
+        font-size: 32px;
+        float: center;
+        text-align: center;
+        color: #000000;
+}
+
+.QuestionSubmit, .ExamSubmit {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 15px 20px;
+}
+
+.QuestionAddButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+}
+
+.ExamLabel {
+	font-family: Verdana;
+	font-size: 22px;
+}
+
+.ExamForm {
+	text-align: center;
+}
+
+.ExamHeader {
+	text-align: center;
+}
