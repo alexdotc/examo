@@ -152,7 +152,8 @@ function ajaxList(callback){
 
 function listQuestions(questions){
 	const divList = document.getElementById("QuestionList");
-	const TC_DELIMITER = "?";
+	const TC_DELIMITER = "\\\?"; // really fuckin confusing, we basically need to escape the question mark AND the backslash so that this is interpolated correctly at multiple stages
+	const TC_REGEX = new RegExp(TC_DELIMITER,"g");
 
 	let index = 0;
 	for(let question in questions){
@@ -179,7 +180,7 @@ function listQuestions(questions){
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
 		li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
-		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_DELIMITER, "<br />") + '<br /><br />';
+		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_REGEX, "<br />") + '<br /><br />';
 
 		hr.setAttribute('id', 'hr' + index);
 		hr.setAttribute('class', "ExamItems ExamHR");

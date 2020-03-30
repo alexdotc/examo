@@ -20,11 +20,19 @@
             <option value="Hard">Hard</option>
         </select><br /><br />
 	<label for="VQuestion" class="QuestionLabel QuestionItems"><br><strong>Question </strong></label><br />
-	<p>Write a function named <input type="text" placeholder="Name" class="QuestionItems QuestionInput" id="fname" />.<br />Given <input type="text" placeholder="Arguments" class="QuestionItems QuestionInput" id="fargs" />, the function should <input type="text" placeholder="Do Something" class="QuestionItems QuestionInput" id="fbody" /><br /> and <select required name="Output Type" id="fotype" class="QuestionSelect QuestionItems"><option value="return">return</option><option value="print">print</option></select> <input type="text" placeholder="Output" class="QuestionItems QuestionInput" id="foutput" />.</p><br />
+	<p><strong>Function Name </strong><input type="text" placeholder="Name" class="QuestionItems QuestionInput" id="fname" /></p>
+	<textarea id="qbody" class="QuestionItems QuestionBody" cols="100" rows="8" wrap="soft" placeholder="Enter question body here"></textarea><br /><br /><br />
 	<label for="Test Cases" class="QuestionLabel QuestionItems"><strong>Test Cases </strong></label><br /><br />
-	<input type="text" placeholder="Inputs" class="QuestionItems QuestinInput" id="testinput1" name="TestIn" /><input type="text" placeholder="Expected Output" class="QuestionItems QuestionInput" id="testoutput1" name="TestOut" /><br />
-	<input type="text" placeholder="Inputs" class="QuestionItems QuestinInput" id="testinput2" name="TestIn"/><input type="text" placeholder="Expected Output" class="QuestionItems QuestionInput" id="testoutput2" name="TestOut" /><br />
-        <br />
+	<div id="tc">
+	<div id="testcase" class="QuestionItems QuestionTestCases">
+	<input type="text" placeholder="Inputs" class="QuestionItems QuestinInput" id="testinput" name="TestIn"/><input type="text" placeholder="Expected Output" class="QuestionItems QuestionInput" id="testoutput" name="TestOut" /><input type="button" class="QuestionItems QuestionInput QuestionHButton" id="tcRemove" value="Remove"><br />
+	</div>
+	<div id="testcase" class="QuestionItems QuestionTestCases">
+	<input type="text" placeholder="Inputs" class="QuestionItems QuestinInput" id="testinput" name="TestIn"/><input type="text" placeholder="Expected Output" class="QuestionItems QuestionInput" id="testoutput" name="TestOut" /><input type="button" class="QuestionItems QuestionHButton" id="tcRemove" value="Remove" /><br />
+	</div>
+	</div>
+	<input type="button" id="tcAdd" value="Add Another Test Case" class="QuestionItems QuestionButton"></input>
+        <br /><br /><br />
         <input type="submit" value="Create Question" class="QuestionSubmit QuestionItems" />
     </form>
     <h3 id="response" class="QuestionSubmitResponse"></h3>

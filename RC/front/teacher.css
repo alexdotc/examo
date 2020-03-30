@@ -148,10 +148,23 @@ input::-moz-focus-inner {
 	padding: 15px 20px;
 }
 
+.QuestionButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+}
+
 .QuestionAddButton {
 	background-color: #000000;
 	color: #FFFFFF;
 	padding: 9px 12px;
+}
+
+.QuestionHButton {
+	background-color: #000000;
+	color: #FFFFFF;
+	padding: 9px 12px;
+	visibility: hidden;
 }
 
 .ExamLabel {

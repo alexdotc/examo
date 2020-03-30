@@ -1,5 +1,53 @@
 document.getElementById("QuestionForm").addEventListener("submit", ajaxSubmit);
 
+document.getElementById("tc").addEventListener("click", function(e){
+	if (e.target.id != "tcRemove")
+		return;
+	if (e.target.childNodes[3] == undefined){
+		clickedButton = e.target;
+		removeTC(clickedButton.parentNode);
+	}
+});
+
+document.getElementById("tcAdd").addEventListener("click", function(e){
+	const tcdiv = document.getElementById("tc");
+
+	let ntc = document.createElement("div");
+	let nti = document.createElement("input");
+	let nto = document.createElement("input");
+	let ntx = document.createElement("input");
+
+	ntc.setAttribute('id', 'testcase');
+	ntc.setAttribute('class', 'QuestionItems QuestionTestCases');
+
+	nti.setAttribute('id', 'testinput');
+	nti.setAttribute('class', 'QuestionItems QuestionInput');
+	nti.setAttribute('placeholder', 'inputs');
+	nti.setAttribute('name', 'TestIn');
+	
+	nto.setAttribute('id', 'testoutput');
+	nto.setAttribute('class', 'QuestionItems QuestionInput');
+	nto.setAttribute('placeholder', 'Expected Output');
+	nto.setAttribute('name', 'TestOut');
+
+	ntx.setAttribute('id', 'tcRemove');
+	ntx.setAttribute('type', 'button');
+	ntx.setAttribute('class', 'QuestionItems QuestionButton');
+	ntx.setAttribute('value', 'Remove');
+
+	ntc.appendChild(nti);
+	ntc.appendChild(nto);
+	ntc.appendChild(ntx);
+	ntc.innerHTML += "<br />";
+
+	tcdiv.appendChild(ntc);
+});
+
+function removeTC(cb){
+	cb.parentNode.removeChild(cb);
+}
+	
+
 function ajaxSubmit(e){
 	
 	e.preventDefault();
@@ -9,12 +57,9 @@ function ajaxSubmit(e){
 	let difficulty = document.getElementById("difficulty").value;
 	let topic = document.getElementById("topic").value;
 	let fname = document.getElementById("fname").value;
-	let fargs = document.getElementById("fargs").value;
-	let fbody = document.getElementById("fbody").value;
-	let fotype = document.getElementById("fotype").value;
-	let foutput = document.getElementById("foutput").value;
+	let qbody = document.getElementById("qbody").value;
 
-	let vquestion = "Write a function named " + fname + ". Given " + fargs + ", the function should " + fbody + " and " + fotype + " " + foutput + ".";
+	let vquestion = qbody;
 
 	let tcin = document.getElementsByName("TestIn");
 	let tcout = document.getElementsByName("TestOut");
