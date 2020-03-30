@@ -11,7 +11,7 @@
 </head>
 <body>
 	<div id="LoginBox">
-		<h2 class="LoginHeader">CS490 Beta Login -- Group 4</h2>
+		<h2 class="LoginHeader">CS490 RC Login -- Group 4</h2>
 		<div id="LoginForm">
 		<form id="Login">
 			<label for="UCID" class="LoginLabel LoginItems">UCID: </label>
