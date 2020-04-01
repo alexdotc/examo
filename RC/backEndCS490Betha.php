@@ -49,12 +49,13 @@ if ($request == 'CreateQuestion'){
 	$tests = $data['testcases'];
     $difficulty = $data['difficulty'];
     $quest = $data['questiontext'];
+	$constrain = $data['constrain'];
     
 	//Creating the question
 	$query = "SELECT * FROM questionTable WHERE question = '$quest'";
 	$cursor = $db->query($query);
 	if ($cursor->num_rows == 0) {
-		$query = "INSERT INTO questionTable (questTopic, questTest, questDifficulty, question) VALUES ('$topic','$tests', '$difficulty','$quest');";
+		$query = "INSERT INTO questionTable (questTopic, questTest, questDifficulty, question,constrain) VALUES ('$topic','$tests', '$difficulty','$quest','$constrain');";
 		$db->query($query) or die('There was an error saving your question');
 		$ans =  'Question successfully saved with id '.$db->insert_id;
 		//echo json_encode($ans);
@@ -85,12 +86,14 @@ if ($request == 'GetQuestions'){//list questions
         $questionTest = $row[2];
 		$questionDifficulty = $row[3];
 		$question=$row[4];
+		$constrain=$row[5];
 		$ans[] = array(
 			"questID" => $questionID,
 			"topic" => $questionTopic,
 			"testcases" => $questionTest,
 			"difficulty" => $questionDifficulty,
-			"questiontext" => $question);
+			"questiontext" => $question,
+			"constrain" => $constrain);
 	}
 	echo json_encode($ans);
 }
@@ -166,13 +169,16 @@ if ($request == 'gradingExam'){//middle sends me this info
 	$testCaseAnswered = $data['resultingAnswers'];
 	$testPointsDeducted = $data['deductedPointsPerEachTest'];
 	$correctName = $data['deductedPointscorrectName'];
+	$hasDef = $data['deductedPointsHasDef'];
+	$missingColon = $data['deductedPointsMissingColon'];
+	$constrain = $data['deductedPointsConstrain'];
   	
 	
 	$count = count($questID);
 	for($i=0; $i < $count; $i++){
 		
-		$query = "INSERT INTO gradesTable (ucid,exaName,questID,answer,score,maxScore,comments,released, expectedAnswers, resultingAnswers, deductedPointsPerEachTest, deductedPointscorrectName)
-		VALUES ('$ucid', '$exaName','$questID[$i]','$answer[$i]','$score[$i]','$maxScore[$i]','$comments[$i]','$released', '$testCaseExpected[$i]', '$testCaseAnswered[$i]', '$testPointsDeducted[$i]', '$correctName[$i]')";
+		$query = "INSERT INTO gradesTable (ucid,exaName,questID,answer,score,maxScore,comments,released, expectedAnswers, resultingAnswers, deductedPointsPerEachTest, deductedPointscorrectName,deductedPointsHasDef,deductedPointsMissingColon,deductedPointsConstrain)
+		VALUES ('$ucid', '$exaName','$questID[$i]','$answer[$i]','$score[$i]','$maxScore[$i]','$comments[$i]','$released', '$testCaseExpected[$i]', '$testCaseAnswered[$i]', '$testPointsDeducted[$i]', '$correctName[$i]','$hasDef[$i]','$missingColon[$i]','$constrain[$i]')";
 		$db->query($query) or die('There was an error saving the grades');
 		
 	}
@@ -202,7 +208,10 @@ if ($request == 'showGradedExam'){//for student and instructor
 						"expectedAnswers"=>$row['expectedAnswers'],
 						"resultingAnswers"=>$row['resultingAnswers'],
 						"deductedPointsPerEachTest"=>$row['deductedPointsPerEachTest'],
-						"deductedPointscorrectName"=>$row['deductedPointscorrectName']
+						"deductedPointscorrectName"=>$row['deductedPointscorrectName'],
+						"deductedPointsHasDef"=>$row['deductedPointsHasDef'],
+						"deductedPointsMissingColon"=>$row['deductedPointsMissingColon'],
+						"deductedPointsConstrain"=>$row['deductedPointsConstrain']
 						);
 	}
 	$query2="SELECT DISTINCT released FROM gradesTable WHERE exaName='$exaName' and ucid='$ucid'";
@@ -224,6 +233,9 @@ if ($request == 'modifyGradedExam'){//for instructor
 	$released=$data['released'];
 	$testPointsDeducted = $data['deductedPointsPerEachTest'];
 	$correctName = $data['deductedPointscorrectName'];
+	$hasDef = $data['deductedPointsHasDef'];
+	$missingColon = $data['deductedPointsMissingColon'];
+	$constrain = $data['deductedPointsConstrain'];
 	$count = count($gradesID);
 
 	for($i=0; $i < $count; $i++){
@@ -233,7 +245,7 @@ if ($request == 'modifyGradedExam'){//for instructor
 
 	for($i=0; $i < $count; $i++){
 		
-		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released',`deductedPointsPerEachTest`='$testPointsDeducted[$i]',`deductedPointscorrectName`='$correctName[$i]' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
+		$query = "update `gradesTable` set `score`='$score[$i]',`comments`='$comments[$i]',`released`='$released',`deductedPointsPerEachTest`='$testPointsDeducted[$i]',`deductedPointscorrectName`='$correctName[$i]',`deductedPointsHasDef`='$hasDef[$i]',`deductedPointsMissingColon`='$missingColon[$i]',`deductedPointsConstrain`='$constrain[$i]' where `exaName`='$exaName' and `gradesID`='$gradesID[$i]' and `ucid`='$ucid'";
 		//echo json_encode($query);
 
 		$db->query($query) or die('There was an error saving the grades');
@@ -266,7 +278,7 @@ if ($request == 'retrieve') {
 		$query="SELECT * FROM questionTable WHERE questID=".$ids[$i];
 		$cursor = $db->query($query);
 		while ($row = $cursor->fetch_assoc()) {
-			$result[] = array('topic'=>$row['questTopic'], 'questText'=>$row['question'], 'questTest'=>$row['questTest']);
+			$result[] = array('topic'=>$row['questTopic'], 'questText'=>$row['question'], 'questTest'=>$row['questTest'],'constrain'=>$row['constrain']);
 		}
 	}
 
