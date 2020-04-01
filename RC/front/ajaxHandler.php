@@ -15,7 +15,8 @@
 			$difficulty = $_POST['difficulty'];
 			$questiontext = $_POST['questiontext'];
 			$testcases = $_POST['testcases'];
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases)));
+			$constraint = $_POST['constraint'];
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases, 'constrain' => $constraint)));
 			break;
 
 		case 'createExam':

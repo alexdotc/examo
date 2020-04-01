@@ -56,11 +56,9 @@ function ajaxSubmit(e){
 
 	let difficulty = document.getElementById("difficulty").value;
 	let topic = document.getElementById("topic").value;
+	let constraint = document.getElementById("constraint").value;
 	let fname = document.getElementById("fname").value;
-	let qbody = document.getElementById("qbody").value;
-
-	let vquestion = qbody;
-
+	let vquestion = document.getElementById("qbody").value;
 	let tcin = document.getElementsByName("TestIn");
 	let tcout = document.getElementsByName("TestOut");
 
@@ -79,7 +77,7 @@ function ajaxSubmit(e){
 		tcs += tcf;
 	}
  
-        let post_params = "RequestType=CreateQuestion" + "&topic=" + topic + "&difficulty=" + difficulty + "&questiontext=" + vquestion + "&testcases=" + tcs;
+        let post_params = "RequestType=CreateQuestion" + "&topic=" + topic + "&difficulty=" + difficulty + "&questiontext=" + vquestion + "&constraint=" + constraint + "&testcases=" + tcs;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);

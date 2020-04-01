@@ -18,10 +18,17 @@
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
-        </select><br /><br />
+	</select><br /><br />
 	<label for="VQuestion" class="QuestionLabel QuestionItems"><br><strong>Question </strong></label><br />
 	<p><strong>Function Name </strong><input type="text" placeholder="Name" class="QuestionItems QuestionInput" id="fname" /></p>
-	<textarea id="qbody" class="QuestionItems QuestionBody" cols="100" rows="8" wrap="soft" placeholder="Enter question body here"></textarea><br /><br /><br />
+	<textarea id="qbody" class="QuestionItems QuestionBody" cols="100" rows="8" wrap="soft" placeholder="Enter question body here"></textarea><br /><br />
+	<label for="Constraint" class="QuestionLabel QuestionItems"><strong>Constraint </strong></label>
+	<select required name="Constraint" id="constraint" class="QuestionSelect QuestionItems">
+	    <option value="None">None</option>
+	    <option value="Print">Print</option>
+	    <option value="For">For</option>
+	    <option value="While">While</option>
+	</select><br /><br />
 	<label for="Test Cases" class="QuestionLabel QuestionItems"><strong>Test Cases </strong></label><br /><br />
 	<div id="tc">
 	<div id="testcase" class="QuestionItems QuestionTestCases">

@@ -180,6 +180,7 @@ function listQuestions(questions){
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
 		li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
+		li.innerHTML += '<strong>Constraint:</strong> ' + questions[question]['constrain'] + '<br /><br />';
 		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_REGEX, "<br />") + '<br /><br />';
 
 		hr.setAttribute('id', 'hr' + index);
