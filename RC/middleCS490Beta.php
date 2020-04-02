@@ -114,7 +114,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $ARGS_START_DELIMITER = "(";
         $ARGS_END_DELIMITER = ")";
         $CASE_DELIMITER = "?";
-        $RETURN_DELIMITER = ":";
+        $RETURN_DELIMITER = ":";//"HACKMAGICK";
 
         $ucid = $data['ucid'];
         $examName = $data['exaName'];
@@ -145,6 +145,9 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $deductTest = array();
         $deductName = array();
+        $deductDef = array();
+        $deductColon = array();
+        $deductCons = array();
         //$deductNoRun = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
@@ -154,30 +157,31 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $question = $result[$i]['questText'];
                 $testcasesS = $result[$i]['questTest'];
                 $answer = $answers[$i];
+                $constrain = $result[$i]['constrain'];
                 //One max score for each question for total points compared to
                 //total missed
+                //echo $testcasesS;
                 $functionName = substr($testcasesS, 0, strpos($testcasesS,
                 $ARGS_START_DELIMITER));
                 $fname = substr($answer, 0, strpos($answer, $ARGS_START_DELIMITER));
                 $fname = preg_replace("/def /", "", $fname);
-
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
-
+                //echo $testcases[0];
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
-
                 $NAMED = 5;
-                //$NORUND = (int)($S * 0.2);
+                $DEFD = (int)($S * 0.2);
+                $COLOND = (int)(($S - $NAMED - $DEFD) * 0.2);
+                $CONSD = (int)(($S - $NAMED - $DEFD - $CONSD) * 0.2);
                 $TESTD = (int)(($S - $NAMED /*-
                 $NORUND*/)/count($testcases));
-
+a
                 //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
-
                 foreach($testcases as $k){
                         $expectedReturns[$p] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
@@ -186,33 +190,107 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $ARGS_START_DELIMITER), strpos($k,
                         $ARGS_END_DELIMITER) - strpos($k,
                         $ARGS_START_DELIMITER) + 1);
-                        $p += 1;
+                        $p = 1 + $p;
+                }
+
+                $tempAnswer = "";
+
+                if(strpos($answer, "):" === false){
+                        $deductColon[$i] = $COLOND;
+                        //Would be the final input before )
+                        $temp = $inputs[$p];
+                        $finalChar = substr($temp, -1);
+                        //This ensures that it is the parenthesis after the
+                        //input that will add the colon
+                        $tempAnswer = str_replace("$finalChar)", "$finalChar):", $answer);
+                }
+                else
+                        $deductColon[$i] = 0;
+
+                if(strpos($answer,"def") === false && $tempAnswer == ""){
+                        $deductDef[$i] = $DEFD;
+                        $tempAnswer = "def $answer";
+                }
+                elseif(strpos($answer,"def") === false && $tempAnswer != ""){
+                        $deductDef[$i] = $DEFD;
+                        $tempAnswer = "def $tempAnswer";
+                }
+                else{
+                        $deductDef[$i] = 0;
                 }
 
                 clearstatcache();
-                //Ensures file is overwritten
-                file_put_contents($testFile, $answer);
 
-                foreach($inputs as $l)
-                        file_put_contents($testFile, "\nprint($fname$l)", FILE_APPEND);
+                //Ensures their answer is the same but the necessary changes
+                //are made to get an output.
+                if($tempAnswer == "")
+                        file_put_contents($testFile, $answer);
+                else
+                        file_put_contents($testFile, $tempAnswer);
 
+                if($constrain == 'Print'){
+                        //I'm checking if print is there, then if return is
+                        //there since if it is there, then they will be
+                        //breaking the constraint
+                        if(strpos($answer, "print(") === true)
+                                $deductCons[$i] = 0;
+                        if(strpos($answer, "return") === true)
+                                $deductCons[$i] = $CONSD;
+        //If it doesn't have either, their code won't work and will lose points
+        //for this
+                        if(strpos($answer, "print(") === false ||
+                        strpos($answer, "return") === false)
+                                $deductCons[$i] = $CONSD;
+
+                        foreach($inputs as $l)
+                                file_put_contents($testFile, "\n$fname$l", FILE_APPEND);
+                }
+                elseif($constrain == 'For'){
+//All this is doing is checking if for is there, if the rest of the code fails
+//then they should lose any constrain points since they obviously did it wrong.
+//we are unable to fix their code here to try to give them any further points
+//on if their code works or not since that would be giving them points
+                        if(strpos($answer, "for") === true)
+                                $deductCons[$i] = 0;
+                        if(strpos($answer, "while") === true)
+                                $deductCons[$i] = $CONSD;
+                        if(strpos($answer, "for") === false || strpos($answer,
+                        "while") === false)
+                                $deductCons[$i] = $CONSD;
+                }
+                elseif($constrain == 'While'){
+                        if(strpos($answer, "while") === true)
+                                $deductCons[$i] = 0;
+                        if(strpos($answer, "for") === true)
+                                $deductCons[$i] = $CONSD;
+                        if(strpos($answer, "for") === false || strpos($answer,
+                        "while") === false)
+                                $deductCons[$i] = $CONSD;
+                }
+                //If no constraint then just print the answer of the function
+                elseif($constrain == 'None'){
+                        //Since there's no constraint, if the program works
+                        // then full points, else they will lose points if
+                        // there is an error.
+                        $deductCons[$i] = 0;
+                        foreach($inputs as $l)
+                                file_put_contents($testFile, "\nprint($fname$l)", FILE_APPEND);
+                }
                 $returnSet = array();
 
                 exec("python test.py", $returnSet, $exec_return_code);
 
-                //Executes the code to get an answer, if its not complete or
-                //does not match expected answers then it won't work
-
                 //If answers != testcase, no points, if second testcase, then
                 //points per testcase by total of testcases
                 if(count($returnSet) == count($expectedReturns)){
-                        for($j = 0; $j < count($expectedReturns); ++$j)
+                        for($j = 0; $j < count($expectedReturns); ++$j){
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
+                        }
                         //$deductNoRun[$i] = 0;
                 }
 
-                 else if($exec_return_code){
+                else if($exec_return_code){
                         for($j = 0; $j < count($expectedReturns); ++$j){
                                 if(!isset($returnSet[$j]))
                                 $returnSet[$j] = "(Python crashed!)";
@@ -220,6 +298,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
                         }
+                        //If run fails, then cons deducts.
+                        $deductCons[$i] = $CONSD;
                 }
 
                 $deductTest[$i] = $totDed;
@@ -234,11 +314,11 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 //$exec_return_code ? $deductNoRun[$i] = $NORUND :
                 //$deductNoRun[$i] = 0;
                 $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
-                $deductName[$i];
+                $deductName[$i] - $deductDef[$i] - $deductColon[$i] -
+                $deductCons[$i];
 
                 foreach($totDed as $test)
                         $scores[$i] -= $test;
-
                 $comments[$i] = "";
                 $expecteds[$i] = $expectedReturns;
                 $resulting[$i] = $returnSet;
@@ -250,12 +330,15 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
 //Comments are nothing since the autograder doesn't input comments nor gets
 //when student completes exam, so they are empty
+
         $tData = array('comments' => $comments, 'ucid' => $ucid, 'exaName' =>
         $examName, 'questionsid' => $questionIDs, 'answers' => $answers,
         'scores' => $scores, 'maxScores' => $maxScores, 'expectedAnswers' =>
         $expecteds, 'resultingAnswers' => $resulting,
-        'deductedPointscorrectName' => $deductName,
-        'deductedPointsPerEachTest' => $deductTest);
+        'deductedPointscorrectName' => $deductName, 'deductedPointsPerEachTest'
+        => $deductTest, 'deductedPointsHasDef' => $deductDef,
+        'deductedPointsMissingColon' => $deductColon, 'deductedPointsConstrain'
+        => $deductCons);
 
         $datas = http_build_query(array('RequestType' => 'gradingExam', 'data' => $tData));
 
