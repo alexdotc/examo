@@ -178,7 +178,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $CONSD = (int)(($S - $NAMED - $DEFD - $CONSD) * 0.2);
                 $TESTD = (int)(($S - $NAMED /*-
                 $NORUND*/)/count($testcases));
-a
+
                 //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
@@ -195,7 +195,7 @@ a
 
                 $tempAnswer = "";
 
-                if(strpos($answer, "):" === false){
+                if(strpos($answer, "):") === false){
                         $deductColon[$i] = $COLOND;
                         //Would be the final input before )
                         $temp = $inputs[$p];
