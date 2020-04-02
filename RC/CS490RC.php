@@ -113,7 +113,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $ARGS_START_DELIMITER = "(";
         $ARGS_END_DELIMITER = ")";
-        $CASE_DELIMITER = "?";
+        $CASE_DELIMITER = "?";//"BORDERLINEN";
         $RETURN_DELIMITER = ":";//"HACKMAGICK";
 
         $ucid = $data['ucid'];
