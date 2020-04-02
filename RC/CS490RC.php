@@ -1,5 +1,5 @@
 <?php
-
+//                       Filename change to CS490RC.php for RC, the beta version is there, I just made a copy for this
 error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 ini_set('display_errors', 1);
 
