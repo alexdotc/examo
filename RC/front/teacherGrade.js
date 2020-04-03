@@ -76,18 +76,160 @@ function renderExam(ename, questions){
 		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
 		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
-		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br /><pre>" + questions[question]['answers'] + '</pre><br /><br />';
-		li.innerHTML += '<strong>Test Case Results: </strong><br /><br />';
+		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br /><pre>" + questions[question]['answers'] + '</pre><br />';
+		li.innerHTML += '<strong>Results: </strong><br /><br />';
 
+		let gtable = document.createElement("table");
+
+		gtable.setAttribute('id', 'gtable' + questions[question]['gradesID']);
+		gtable.setAttribute('class', 'GradeItems GradeTable');
+		
+		let gti = document.createElement("tr");
+		gti.innerHTML = "<td><strong>Grader Item</strong></td><td><strong>Expected Answer</strong></td><td><strong>Actual Answer</td><td><strong>Deducted Points</strong></td>"
+		gtable.appendChild(gti);
+
+		let gtr_fname = document.createElement("tr");
+		gtr_fname.setAttribute('id', 'gtrfname');
+		gtr_fname.setAttribute('class', 'GradeItems GradeTR');
+
+		let gtd1_fname = document.createElement("td");
+		gtd1_fname.setAttribute('id', 'gtd1fname');
+		gtd1_fname.setAttribute('class', 'GradeItems GradeTD');
+		gtd1_fname.innerHTML = "<strong><em>Function Name</em></strong>";
+
+		let gtd2_fname = document.createElement("td");
+		gtd2_fname.setAttribute('id', 'gtd2fname');
+		gtd2_fname.setAttribute('class', 'GradeItems GradeTD');
+		gtd2_fname.innerHTML = "<em>(see question)</em>";
+
+		let gtd3_fname = document.createElement("td");
+		gtd3_fname.setAttribute('id', 'gtd3fname');
+		gtd3_fname.setAttribute('class', 'GradeItems GradeTD');
+		gtd3_fname.innerHTML = "<em>(see answer)</em>";
+
+		let gtd4_fname = document.createElement("td");
+		gtd4_fname.setAttribute('id', 'gtd4fname');
+		gtd4_fname.setAttribute('class', 'GradeItems GradeTD');
+		
+		let change_fname = document.createElement("input");
+		change_fname.setAttribute('type', 'text');
+		change_fname.setAttribute('name', 'NameD');
+		change_fname.setAttribute('class', 'GradeItems GradeChange');
+		change_fname.setAttribute('id', 'NameD' + questions[question]['gradesID']);
+		change_fname.setAttribute('placeholder', 'Deduction');
+		change_fname.setAttribute('value', questions[question]['deductedPointscorrectName']);
+
+		gtd4_fname.appendChild(change_fname);
+		gtr_fname.appendChild(gtd1_fname);
+		gtr_fname.appendChild(gtd2_fname);
+		gtr_fname.appendChild(gtd3_fname);
+		gtr_fname.appendChild(gtd4_fname);
+		gtable.appendChild(gtr_fname);
+		
+		let gtr_colon = document.createElement("tr");
+		gtr_fname.setAttribute('id', 'gtrcolon');
+		gtr_fname.setAttribute('class', 'GradeItems GradeTR');
+
+		let gtd1_colon = document.createElement("td");
+		gtd1_colon.setAttribute('id', 'gtd1colon');
+		gtd1_colon.setAttribute('class', 'GradeItems GradeTD');
+		gtd1_colon.innerHTML = "<strong><em>Missing Colon</em></strong>";
+
+		let gtd2_colon = document.createElement("td");
+		gtd2_colon.setAttribute('id', 'gtd2colon');
+		gtd2_colon.setAttribute('class', 'GradeItems GradeTD');
+		gtd2_colon.innerHTML = "<em>(not missing)</em>";
+
+		let gtd3_colon = document.createElement("td");
+		gtd3_colon.setAttribute('id', 'gtd3colon');
+		gtd3_colon.setAttribute('class', 'GradeItems GradeTD');
+		gtd3_colon.innerHTML = "<em>(see answer)</em>";
+
+		let gtd4_colon = document.createElement("td");
+		gtd4_colon.setAttribute('id', 'gtd4colon');
+		gtd4_colon.setAttribute('class', 'GradeItems GradeTD');
+		
+		let change_colon = document.createElement("input");
+		change_colon.setAttribute('type', 'text');
+		change_colon.setAttribute('name', 'ColonD');
+		change_colon.setAttribute('class', 'GradeItems GradeChange');
+		change_colon.setAttribute('id', 'ColonD' + questions[question]['gradesID']);
+		change_colon.setAttribute('placeholder', 'Deduction');
+		change_colon.setAttribute('value', questions[question]['deductedPointsMissingColon']);
+
+		gtd4_colon.appendChild(change_colon);
+		gtr_colon.appendChild(gtd1_colon);
+		gtr_colon.appendChild(gtd2_colon);
+		gtr_colon.appendChild(gtd3_colon);
+		gtr_colon.appendChild(gtd4_colon);
+		gtable.appendChild(gtr_colon);
+		
+		let gtr_constraint = document.createElement("tr");
+		gtr_constraint.setAttribute('id', 'gtrconstraint');
+		gtr_constraint.setAttribute('class', 'GradeItems GradeTR');
+
+		let gtd1_constraint = document.createElement("td");
+		gtd1_constraint.setAttribute('id', 'gtd1constraint');
+		gtd1_constraint.setAttribute('class', 'GradeItems GradeTD');
+		gtd1_constraint.innerHTML = "<strong><em>Constraint</em></strong>";
+
+		let gtd2_constraint = document.createElement("td");
+		gtd2_constraint.setAttribute('id', 'gtd2constraint');
+		gtd2_constraint.setAttribute('class', 'GradeItems GradeTD');
+		gtd2_constraint.innerHTML = "<em>(see question)</em>";
+
+		let gtd3_constraint = document.createElement("td");
+		gtd3_constraint.setAttribute('id', 'gtd3constraint');
+		gtd3_constraint.setAttribute('class', 'GradeItems GradeTD');
+		gtd3_constraint.innerHTML = "<em>(see answer)</em>";
+
+		let gtd4_constraint = document.createElement("td");
+		gtd4_constraint.setAttribute('id', 'gtd4constraint');
+		gtd4_constraint.setAttribute('class', 'GradeItems GradeTD');
+		
+		let change_constraint = document.createElement("input");
+		change_constraint.setAttribute('type', 'text');
+		change_constraint.setAttribute('name', 'ConstraintD');
+		change_constraint.setAttribute('class', 'GradeItems GradeChange');
+		change_constraint.setAttribute('id', 'ConstraintD' + questions[question]['gradesID']);
+		change_constraint.setAttribute('placeholder', 'Deduction');
+		change_constraint.setAttribute('value', questions[question]['deductedPointsConstrain']);
+
+		gtd4_constraint.appendChild(change_constraint);
+		gtr_constraint.appendChild(gtd1_constraint);
+		gtr_constraint.appendChild(gtd2_constraint);
+		gtr_constraint.appendChild(gtd3_constraint);
+		gtr_constraint.appendChild(gtd4_constraint);
+		gtable.appendChild(gtr_constraint);
+		
+		
 		for(let tc = 0; tc < deductions.length; ++tc){
+
+			let gtr = document.createElement("tr");
+			gtr.setAttribute('id', 'gtr' + String(tc + 1));
+			gtr.setAttribute('class', 'GradeItems GradeTR');
+
+			let gtdName = document.createElement("td");
+			gtdName.setAttribute('id', 'gtd' + String(tc + 1) + 'Name');
+			gtdName.setAttribute('class', 'GradeItems GradeTD');
+			gtdName.innerHTML = '<strong><em>Test Case ' + String(tc + 1) + '</em></strong>';
+
+			let gtdExp = document.createElement("td");
+			gtdExp.setAttribute('id', 'gtd' + String(tc + 1) + 'Expected');
+			gtdExp.setAttribute('class', 'GradeItems GradeTD');
+			gtdExp.innerHTML = expected[tc];
+			
+			let gtdAct = document.createElement("td");
+			gtdAct.setAttribute('id', 'gtd' + String(tc + 1) + 'Actual');
+			gtdAct.setAttribute('class', 'GradeItems GradeTD');
+			gtdAct.innerHTML = actual[tc];
+
+			let gtdChange = document.createElement("td");
+			gtdAct.setAttribute('id', 'gtd' + String(tc + 1) + 'Change');
+			gtdAct.setAttribute('class', 'GradeItems GradeTD');
 			
 			let change = document.createElement("input");
 
-			li.innerHTML += '<strong><em>Test Case ' + String(tc + 1) + '</em></strong><br />';
-			li.innerHTML += "Expected Answer: " + expected[tc] + '<br />';
-			li.innerHTML += " Resulting Answer: " + actual[tc] + '<br />';
-			li.innerHTML += " <strong>Deducted Points </strong>";
-			
 			change.setAttribute('type', 'text');
 			change.setAttribute('class', 'GradeItems GradeChange');
 			change.setAttribute('name', 'tcD' + tc);
@@ -95,22 +237,15 @@ function renderExam(ename, questions){
 			change.setAttribute('placeholder', 'points');
 			change.setAttribute('value', deductions[tc]);
 			
-			li.appendChild(change);
-
-			li.innerHTML += "<br /><br />";
+			gtdChange.appendChild(change);
+			gtr.appendChild(gtdName);
+			gtr.appendChild(gtdExp);
+			gtr.appendChild(gtdAct);
+			gtr.appendChild(gtdChange);
+			gtable.appendChild(gtr);
 		}
 
-		li.innerHTML += "<strong>Function Name:</strong><br /><br />";
-		li.innerHTML += "<strong>Deducted Points </strong>";
-		
-		let change = document.createElement("input");
-		change.setAttribute('type', 'text');
-		change.setAttribute('name', 'NameD');
-		change.setAttribute('class', 'GradeItems GradeChange');
-		change.setAttribute('id', 'NameD' + questions[question]['gradesID']);
-		change.setAttribute('placeholder', 'Score');
-		change.setAttribute('value', questions[question]['deductedPointscorrectName']);
-		li.appendChild(change);
+		li.appendChild(gtable);
 
 		let comment = document.createElement("textarea");
 		comment.setAttribute('wrap', 'soft');
