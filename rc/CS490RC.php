@@ -212,12 +212,14 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 }
                 else
                         $deductColon[$i] = 0;
-
-                if(strpos($answer,"def $functionName") === false && $tempAnswer == ""){
+                
+                //Ensures the program only checks the beginning for def and not if def appears elsewhere within the code.
+                //I just used the fname that's input instead of the check since we had an input to print whatever the user input
+                if(strpos($answer,"def $fname") === false && $tempAnswer == ""){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $answer";
                 }
-                elseif(strpos($answer,"def $functionName") === false && $tempAnswer != ""){
+                elseif(strpos($answer,"def $fname") === false && $tempAnswer != ""){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $tempAnswer";
                 }
