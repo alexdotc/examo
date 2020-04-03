@@ -192,26 +192,32 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $ARGS_START_DELIMITER) + 1);
                         $p = 1 + $p;
                 }
+                $endUse = substr($answer, strpos($answer,
+                $ARGS_START_DELIMITER), strpos($answer, $ARGS_END_DELIMITER) -
+                strpos($answer,$ARGS_START_DELIMITER) + 1);
+
+                $finalChar = substr($endUse, -1);
 
                 $tempAnswer = "";
 
-                if(strpos($answer, "):") === false){
+                //if(strpos($answer, "):") === false){
+                //finalChar is the final character that the user input into their answer so no matter what they input
+                //so no matter what they input, it will always check vs if there is a colon after the name.
+                //Which brings the question, should we deduct points for forgetting colon after the for loop and while loop?
+                if(strpos($answer, "$finalChar): ") === true){
                         $deductColon[$i] = $COLOND;
-                        //Would be the final input before )
-                        $temp = $inputs[$p];
-                        $finalChar = substr($temp, -1);
-                        //This ensures that it is the parenthesis after the
-                        //input that will add the colon
-                        $tempAnswer = str_replace("$finalChar)", "$finalChar):", $answer);
+                        //This ensures that it is the parenthesis after
+                        //any empty parenthesis that will add the colon
+                        $tempAnswer = str_replace("$finalChar) ", "$finalChar): ", $answer);
                 }
                 else
                         $deductColon[$i] = 0;
 
-                if(strpos($answer,"def") === false && $tempAnswer == ""){
+                if(strpos($answer,"def $functionName") === false && $tempAnswer == ""){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $answer";
                 }
-                elseif(strpos($answer,"def") === false && $tempAnswer != ""){
+                elseif(strpos($answer,"def $functionName") === false && $tempAnswer != ""){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $tempAnswer";
                 }
