@@ -54,6 +54,12 @@ function renderExam(ename, questions){
 		
 		if (questions[question]['deductedPointscorrectName'] != 0)
 			li.innerHTML += '<br /><strong>Deducted ' + questions[question]['deductedPointscorrectName'] + ' for incorrect function name</strong>';
+		
+		if (questions[question]['deductedPointsMissingColon'] != 0)
+			li.innerHTML += '<br /><strong>Deducted ' + questions[question]['deductedPointsMissingColon'] + ' for missing colon</strong>';
+		
+		if (questions[question]['deductedPointsConstrain'] != 0)
+			li.innerHTML += '<br /><strong>Deducted ' + questions[question]['deductedPointsConstrain'] + ' for not following constraint</strong>';
 
 		let passed = 0;
 		for (let tc = 0; tc < deductions.length; ++tc)
