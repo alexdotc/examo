@@ -57,10 +57,13 @@
 			$scores = $_POST['scores'];
 			$comments = $_POST['comments'];
 			$nameDs = $_POST['nameDs'];
+			$colonDs = $_POST['colonDs'];
+			$constraintDs = $_POST['constraintDs'];
+			$defDs = $_POST['defDs'];
 			$tcDs = $_POST['tcDs'];
 			$shittytcDs = explode(",",$tcDs);
 			$shittytcDs = str_replace("...", ", ", $shittytcDs);
-			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released, 'deductedPointscorrectName' => explode(",",$nameDs), 'deductedPointsPerEachTest' => $shittytcDs)));
+			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'gradesID' => explode(",",$ids), 'scores' => explode(",",$scores), 'comments' => explode(",",$comments), 'released' => $released, 'deductedPointscorrectName' => explode(",",$nameDs), 'deductedPointsMissingColon' => explode(",",$colonDs), 'deductedPointsConstrain' => explode(",",$constraintDs), 'deductedPointsHasDef' => explode(",",$defDs), 'deductedPointsPerEachTest' => $shittytcDs)));
 			break;
 
 		case 'listGradedExamsStudent':

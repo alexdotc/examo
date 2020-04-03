@@ -127,8 +127,8 @@ function renderExam(ename, questions){
 		gtable.appendChild(gtr_fname);
 		
 		let gtr_colon = document.createElement("tr");
-		gtr_fname.setAttribute('id', 'gtrcolon');
-		gtr_fname.setAttribute('class', 'GradeItems GradeTR');
+		gtr_colon.setAttribute('id', 'gtrcolon');
+		gtr_colon.setAttribute('class', 'GradeItems GradeTR');
 
 		let gtd1_colon = document.createElement("td");
 		gtd1_colon.setAttribute('id', 'gtd1colon');
@@ -206,7 +206,7 @@ function renderExam(ename, questions){
 		for(let tc = 0; tc < deductions.length; ++tc){
 
 			let gtr = document.createElement("tr");
-			gtr.setAttribute('id', 'gtr' + String(tc + 1));
+			gtr.setAttribute('id', 'gtr_tc' + String(tc + 1));
 			gtr.setAttribute('class', 'GradeItems GradeTR');
 
 			let gtdName = document.createElement("td");
@@ -305,6 +305,8 @@ function ajaxUpdateExam(e){
 	let examname = getParam(window.location.href, 'exam');
 	let user = getParam(window.location.href, 'user');
 	let allmods = document.getElementsByName("NameD");
+	let allcolons = document.getElementsByName("ColonD");
+	let allconstraints = document.getElementsByName("ConstraintD");
 	let allcomments = document.getElementsByName("Comment");
 	let rb = (document.getElementsByName("ExamReleaseButton"))[0];
 	let released;
@@ -316,32 +318,39 @@ function ajaxUpdateExam(e){
 
 	let ids = [];
 	let nameDs = [];
+	let colonDs = [];
+	let constraintDs = [];
+	let defDs = [];
 	let comments = [];
 	let tcDs = [];
 	let scores = [];
 
-	for(let mod in allmods){
+	for(let i = 0; i < allmods.length; i++){
 
-		if (allmods[mod]['type'] != 'text')
+		if (allmods[i]['type'] != 'text')
 			continue;
 
-		let nameD = allmods[mod]['value'];
+		let nameD = allmods[i]['value'];
+		let colonD = allcolons[i]['value'];
+		let constraintD = allconstraints[i]['value'];
 		let tcDq = [];
-		let id = allmods[mod]['id'].substr(5);
-		let qdiv = document.getElementById(document.querySelector('[id^="examquestion' + id + '"').id);
+		let id = allmods[i]['id'].substr(5);
+		let qdiv = document.getElementById(document.querySelector('[id^="gtable' + id + '"').id);
+		let qdivv = document.getElementById(document.querySelector('[id^="examquestion' + id + '"').id);
 
-		let qdc = qdiv.childNodes;
-		let mscore = qdiv['id'].substr(qdiv['id'].search("mscore") + 6);
+		let qdc = qdiv.childNodes[0].childNodes;
+		let mscore = qdivv['id'].substr(qdivv['id'].search("mscore") + 6);
 		let tcDsum = 0;
 		
 		for(let q in qdc){
-			if (qdc[q]['type'] != 'text')
+			if (qdc[q]['tagName'] != 'TR')
 				continue;
-			if (qdc[q]['id'].startsWith("tc")){
-				if (qdc[q]['value'] == '')
-					qdc[q]['value'] = '0';
-				tcDq.push(qdc[q]['value']);
-				tcDsum += parseInt(qdc[q]['value']);
+			if (qdc[q]['id'].startsWith('gtr_tc')){
+				let qdd = qdc[q].childNodes[3].childNodes[0].value;
+				if (qdd == '')
+					qdd = '0';
+				tcDq.push(qdd);
+				tcDsum += parseInt(qdd);
 			}
 		}
 
@@ -354,7 +363,20 @@ function ajaxUpdateExam(e){
 
 		nameDs.push(nameD);
 
-		scores.push(String(parseInt(mscore) - parseInt(nameD) - tcDsum));
+		if (colonD == '')
+			colonD = '0';
+
+		colonDs.push(colonD);
+
+		if (constraintD == '')
+			constraintD = '0';
+
+		constraintDs.push(constraintD);
+
+		defDs.push('0');
+
+		scores.push(String(parseInt(mscore) - parseInt(nameD) - parseInt(colonD) - parseInt(constraintD) - tcDsum));
+
 	}
 
 	for(let comment in allcomments){
@@ -365,9 +387,7 @@ function ajaxUpdateExam(e){
 		comments.push(allcomments[comment]['value']);
 	}
 
-	console.log(tcDs);
-
-	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released + '&tcDs=' + tcDs + '&nameDs=' + nameDs;
+	let post_params = 'RequestType=modifyGradedExam&examname=' + examname + '&user=' + user + '&ids=' + ids + '&scores=' + scores + '&comments=' + comments + '&released=' + released + '&tcDs=' + tcDs + '&nameDs=' + nameDs + '&colonDs=' + colonDs + '&constraintDs=' + constraintDs + '&defDs=' + defDs;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", SERVER, true);
