@@ -372,7 +372,6 @@ function ajaxUpdateExam(e){
 			if (qdc[q]['id'].startsWith('gtr_tc')){
 				let qdd = qdc[q].childNodes[4].childNodes[0].value; // modification value
 				let qdp = qdc[q].childNodes[3].childNodes[0].data; // current (previous once updated) value
-				console.log(qdp);
 				if (qdd == '')
 					qdd = qdp;
 				tcDq.push(qdd);
