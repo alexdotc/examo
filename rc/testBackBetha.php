@@ -23,9 +23,9 @@
 */
 
 
-//$dat=array('RequestType'=>"showGradedExam",'data'=>array('exaName'=>"exam100",'ucid'=>'yav3'));
+$dat=array('RequestType'=>"showGradedExam",'data'=>array('exaName'=>"COVID-19 Fun",'ucid'=>'yav3'));
 
-$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'yav3','exaName'=>"exam100",'gradesID'=>array(763,764),'scores'=>array(10,20),'comments'=>array("comentnew1","coment2"),'released'=>"Y",'deductedPointsPerEachTest'=>array("1, 1, 1, 1","1, 5, 5, 5"),'deductedPointscorrectName'=>array(1,1),'deductedPointsHasDef'=>array(0,3),'deductedPointsMissingColon'=>array(1,1),'deductedPointsConstrain'=>array(0,3)));
+//$dat=array('RequestType'=>"modifyGradedExam",'data'=>array('ucid'=>'yav3','exaName'=>"exam100",'gradesID'=>array(763,764),'scores'=>array(10,20),'comments'=>array("comentnew1","coment2"),'released'=>"Y",'deductedPointsPerEachTest'=>array("1, 1, 1, 1","1, 5, 5, 5"),'deductedPointscorrectName'=>array(1,1),'deductedPointsHasDef'=>array(0,3),'deductedPointsMissingColon'=>array(1,1),'deductedPointsConstrain'=>array(0,3)));
 
 //$dat=array('RequestType'=>"listGradedExams",'data'=>"");//data does not store anything
 //$dat=array('RequestType'=>"listGradedExamsStudent",'data'=>array('ucid'=>'yav3'));//data does not store anything
