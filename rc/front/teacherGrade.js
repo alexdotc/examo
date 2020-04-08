@@ -188,7 +188,10 @@ function renderExam(ename, questions){
 		let gtd2_constraint = document.createElement("td");
 		gtd2_constraint.setAttribute('id', 'gtd2constraint');
 		gtd2_constraint.setAttribute('class', 'GradeItems GradeTD');
-		gtd2_constraint.innerHTML = "<em>(see question)</em>";
+		if (/.*[A-Z][a-z].*/i.test(questions[question]['constrain']) && questions[question]['constrain'] != 'None')
+			gtd2_constraint.innerHTML = "<em>(" + questions[question]['constrain'] + " constraint)</em>";
+		else
+			gtd2_constraint.innerHTML = "<em>(none)</em>";
 
 		let gtd3_constraint = document.createElement("td");
 		gtd3_constraint.setAttribute('id', 'gtd3constraint');
@@ -372,6 +375,7 @@ function ajaxUpdateExam(e){
 			if (qdc[q]['id'].startsWith('gtr_tc')){
 				let qdd = qdc[q].childNodes[4].childNodes[0].value; // modification value
 				let qdp = qdc[q].childNodes[3].childNodes[0].data; // current (previous once updated) value
+				console.log(qdp);
 				if (qdd == '')
 					qdd = qdp;
 				tcDq.push(qdd);

@@ -1,5 +1,7 @@
 ajaxList(listQuestions);
 
+window.onscroll = function() { return; }; // remove any scroll event handler
+
 document.getElementById("ftopic").addEventListener("change", function(e){
 	        let t = e.target.value;
 	        filterTopic(t, false);
