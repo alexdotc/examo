@@ -1,3 +1,15 @@
+ajaxList(listQuestions);
+
+document.getElementById("ftopic").addEventListener("change", function(e){
+	        let t = e.target.value;
+	        filterTopic(t, false);
+});
+
+document.getElementById("fdifficulty").addEventListener("change", function(e){
+	        let t = e.target.value;
+	        filterDifficulty(t, false);
+});
+
 document.getElementById("QuestionForm").addEventListener("submit", ajaxSubmit);
 
 document.getElementById("tc").addEventListener("click", function(e){
@@ -43,10 +55,123 @@ document.getElementById("tcAdd").addEventListener("click", function(e){
 	tcdiv.appendChild(ntc);
 });
 
+function filterTopic(topic, chain){
+	let ql = document.getElementById("QuestionBank").childNodes;
+        
+	if(chain === false){
+                for(let n in ql){
+                        if (ql[n].tagName != "DIV")
+                                continue;
+                        ql[n].style.display = 'block';
+                }
+        }
+
+        if(topic == "All"){
+                if (chain === false){
+                        for(let n in ql){
+                                if (ql[n].tagName != "DIV")
+                                        continue;
+                                ql[n].style.display = 'block';
+                        }
+                        filterDifficulty(document.getElementById("fdifficulty").value, true);
+                }
+                return;
+        }
+
+        for(let n in ql){
+                if (ql[n].tagName != "DIV")
+                        continue;
+                if (ql[n].classList.contains('Topic-' + topic) === false)
+                        ql[n].style.display = 'none';
+        }
+
+        if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+                filterDifficulty(document.getElementById("fdifficulty").value, true);
+}
+
+function filterDifficulty(difficulty, chain){
+       let ql = document.getElementById("QuestionBank").childNodes;
+
+        if(chain === false){
+                for(let n in ql){
+                        if (ql[n].tagName != "DIV")
+                                continue;
+                        ql[n].style.display = 'block';
+                }
+        }
+
+        if(difficulty == "All"){
+                if (chain === false){
+                        for(let n in ql){
+                                if (ql[n].tagName != "DIV")
+                                        continue;
+                                ql[n].style.display = 'block';
+	                }
+                        filterTopic(document.getElementById("ftopic").value, true);
+                }
+                return;
+        }
+
+        for(let n in ql){
+                if (ql[n].tagName != "DIV")
+                        continue;
+                if (ql[n].classList.contains('Difficulty-' + difficulty) === false)
+                        ql[n].style.display = 'none';
+        }
+
+        if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+                filterTopic(document.getElementById("ftopic").value, true);
+}
 function removeTC(cb){
 	cb.parentNode.removeChild(cb);
 }
+
+function ajaxList(callback){
 	
+	const SERVER = 'ajaxHandler.php';
+	const post_params = 'RequestType=GetQuestions';
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", SERVER, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onload = function(){
+		if (xhr.status == 200){
+			let resp = JSON.parse(this.responseText);
+			callback(resp);
+		}
+	}
+
+	xhr.send(post_params);
+}
+
+function listQuestions(questions){
+        const divList = document.getElementById("QuestionBank");
+        const TC_DELIMITER = "\\\?"; // really fuckin confusing, we basically need to escape the question mark AND the backslash so that this is interpolated correctly at multiple stages
+        const TC_REGEX = new RegExp(TC_DELIMITER,"g");
+
+        let index = 0;
+        for(let question in questions){
+                let li = document.createElement("div");
+                let hr = document.createElement("hr");
+
+                li.setAttribute('class', 'QuestionItems QuestionListItems' + ' Topic-' + questions[question]['topic'] + ' Difficulty-' + questions[question]['difficulty']);
+                li.setAttribute('id', 'question' + questions[question]['questID']);
+                li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
+                li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
+                li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
+                li.innerHTML += '<strong>Constraint:</strong> ' + questions[question]['constrain'] + '<br /><br />';
+                li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_REGEX, "<br />") + '<br /><br />';
+
+                hr.setAttribute('id', 'hr' + index);
+                hr.setAttribute('class', "ExamItems ExamHR");
+
+                divList.appendChild(li);
+                li.appendChild(hr);
+
+                ++index;
+        }
+}
+
 
 function ajaxSubmit(e){
 	

@@ -4,14 +4,33 @@
 ?>
 <div id="QuestionMain" class="QuestionItems QuestionMain">
     <h2 class="QuestionHeader">New Question</h2>
+    <label for="Filters" class="QuestionLabel QuestionItems"><strong>Question Filters </strong></label>
+        <select name="FilterTopic" id="ftopic" class="QuestionItems QuestionFilter">
+                <option value="All">All</option>
+                <option value="Math">Math</option>
+                <option value="Loops">Loops</option>
+                <option value="Recursion">Recursion</option>
+                <option value="Lists">Lists</option>
+                <option value="Strings">Strings</option>
+                <option value="Conditionals">Conditionals</option>
+	</select>
+        <select name="FilterDifficulty" id="fdifficulty" class="QuestionItems QuestionFilter">
+                <option value="All">All</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+        </select>
+    <div id="qsplit" class="QuestionSplit">
+    <div id="AddQuestion" class="QuestionItems QuestionAdd">
     <form id="QuestionForm">
-        <label for="Topic" class="QuestionLabel QuestionItems"><strong>Topic </strong></label>
+	<label for="Topic" class="QuestionLabel QuestionItems"><strong>Topic </strong></label>
         <select required name="Topic" id="topic" class="QuestionSelect QuestionItems">
 	    <option value="Lists">Lists</option>
             <option value="Loops">Loops</option>
 	    <option value="Math">Math</option>
 	    <option value="Strings">Strings</option>
 	    <option value="Recursion">Recursion</option>
+	    <option value="Conditionals">Conditionals</option>
         </select><br />
         <label for="Difficulty" class="QuestionLabel QuestionItems"><strong>Difficulty </strong></label>
         <select required name="Difficulty" id="difficulty" class="QuestionSelect QuestionItems">
@@ -43,4 +62,9 @@
         <input type="submit" value="Create Question" class="QuestionSubmit QuestionItems" />
     </form>
     <h3 id="response" class="QuestionSubmitResponse"></h3>
+    </div>
+    <div id="QuestionBank" class="QuestionItems QuestionBank">
+	<h2> Question Bank </h2>
+    </div>
+    </div>
 </div>

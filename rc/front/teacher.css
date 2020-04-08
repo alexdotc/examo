@@ -73,9 +73,31 @@ td {
 	text-align: center;
 }
 
+#qsplit {
+	width: 100%;
+}
+
+#AddQuestion { 
+	float: left;
+}
+
+#QuestionBank {
+	background-color: #F0F0F0;
+	height: 100vh;
+	width: /*weird hack that i stumbled on??? does a div-based auto width. in firefox at least*/
+	float: right;
+	text-align: left;
+	right: 0;
+	margin: auto;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
 #QuestionForm {
+	padding: 50px;
 	display: inline-block;
 	margin: auto;
+	background-color: #F0F0F0;
 }
 
 #QuestionList {

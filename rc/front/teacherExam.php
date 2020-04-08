@@ -17,7 +17,8 @@
        		<option value="Loops">Loops</option>
 	        <option value="Recursion">Recursion</option>
         	<option value="Lists">Lists</option>
-	        <option value="Strings">Strings</option>
+		<option value="Strings">Strings</option>
+		<option value="Conditionals">Conditionals</option>
 	</select>
 	<select name="FilterDifficulty" id="fdifficulty" class="ExamItems ExamFilter">
 		<option value="All">All</option>

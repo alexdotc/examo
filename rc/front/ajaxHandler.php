@@ -3,7 +3,7 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
-        $URL = 'https://web.njit.edu/~np595/CS490Work/middleCS490Beta.php';
+        $URL = 'https://web.njit.edu/~np595/CS490Work/CS490RC.php';
 
 	$reqtype = $_POST['RequestType'];
 
