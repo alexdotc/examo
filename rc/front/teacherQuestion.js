@@ -124,7 +124,7 @@ function filterTopic(topic, chain){
                                 ql[n].style.display = 'block';
                         }
                         filterDifficulty(document.getElementById("fdifficulty").value, true);
-			filterKeyword(document.getElementById("fkeyword").value, true);
+			filterKeyword(pkeyword, true);
                 }
                 return;
         }
@@ -138,7 +138,7 @@ function filterTopic(topic, chain){
 
         if (chain === false){ // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
                 filterDifficulty(document.getElementById("fdifficulty").value, true);
-		filterKeyword(document.getElementById("fkeyword").value, true);
+		filterKeyword(pkeyword, true);
 	}
 }
 
@@ -161,7 +161,7 @@ function filterDifficulty(difficulty, chain){
                                 ql[n].style.display = 'block';
 	                }
                         filterTopic(document.getElementById("ftopic").value, true);
-			filterKeyword(document.getElementById("fkeyword").value, true);
+			filterKeyword(pkeyword, true);
                 }
                 return;
         }
@@ -175,7 +175,7 @@ function filterDifficulty(difficulty, chain){
 
         if (chain === false){ // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
                 filterTopic(document.getElementById("ftopic").value, true);
-		filterKeyword(document.getElementById("fkeyword").value, true);
+		filterKeyword(pkeyword, true);
 	}
 }
 
