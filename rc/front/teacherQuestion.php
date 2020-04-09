@@ -19,7 +19,9 @@
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
-        </select>
+	</select>
+	<input type="text" placeholder="Keyword" id="fkeyword" name="KFilter" class="QuestionItems QuestionInput QuestionFilter" />
+	<input type="button" id="fkeywordbutton" class="QuestionItems QuestionButton" value="Filter Keyword" />
     <div id="qsplit" class="QuestionSplit">
     <div id="AddQuestion" class="QuestionItems QuestionAdd">
     <form id="QuestionForm">
