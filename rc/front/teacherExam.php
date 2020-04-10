@@ -26,6 +26,8 @@
 		<option value="Medium">Medium</option>
 		<option value="Hard">Hard</option>
 	</select>
+	<input type="text" placeholder="Keyword" id="fkeyword" name="KFilter" class="ExamItems ExamInput ExamFilter" />
+	<input type="button" id="fkeywordbutton" class="ExamItems ExamButton" value="Filter Keyword" />
 	<div id="split" class="ExamSplit">
 		<div id="QuestionList" class="ExamItems ExamQuestions">
 		</div>

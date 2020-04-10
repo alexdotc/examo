@@ -2,6 +2,8 @@ ajaxList(listQuestions);
 
 window.onscroll = function() { offsetSelected(); }
 
+pkeyword = ""; // reset on page load
+
 document.getElementById("split").addEventListener("click", function(e){
 	let clickedButton = document.getElementById(e.target.id);
 
@@ -33,6 +35,53 @@ document.getElementById("fdifficulty").addEventListener("change", function(e){
 	filterDifficulty(t, false);
 });
 
+document.getElementById("fkeywordbutton").addEventListener('click', function(e){
+	let t = document.getElementById("fkeyword").value;
+	filterKeyword(t, false);
+});
+
+function filterKeyword(keyword, chain){
+        pkeyword = keyword;
+        let ql = document.getElementById("QuestionList").childNodes;
+
+        if(chain === false){
+                for(let n in ql){
+	                if (ql[n].tagName != "DIV")
+                                continue;
+                        ql[n].style.display = 'block';
+                }
+        }
+
+        if(keyword == ""){
+                if (chain === false){
+                        for(let n in ql){
+                                if (ql[n].tagName != "DIV")
+                                        continue;
+                                ql[n].style.display = 'block';
+                        }
+                        filterDifficulty(document.getElementById("fdifficulty").value, true);
+                        filterTopic(document.getElementById("ftopic").value, true);
+                }
+                return;
+        }
+
+        for(let n in ql){
+                if (ql[n].tagName != "DIV")
+                        continue;
+                let s = ql[n].innerHTML.search('<p>') + 3;
+                let e = ql[n].innerHTML.search('</p>');
+                let desc = ql[n].innerHTML.substr(s, e - s);
+                if (desc.search(keyword) == -1)
+	                ql[n].style.display = 'none';
+        }
+
+        if (chain === false){ // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+                filterDifficulty(document.getElementById("fdifficulty").value, true);
+                filterTopic(document.getElementById("ftopic").value, true);
+        }
+}
+
+
 function filterTopic(topic, chain){
 	let ql = document.getElementById("QuestionList").childNodes;
 
@@ -52,6 +101,7 @@ function filterTopic(topic, chain){
 				ql[n].style.display = 'block';
 			}
 			filterDifficulty(document.getElementById("fdifficulty").value, true);
+			filterKeyword(pkeyword, true);
 		}
 		return;
 	}
@@ -63,8 +113,10 @@ function filterTopic(topic, chain){
 			ql[n].style.display = 'none';
 	}
 	
-	if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+	if (chain === false){ // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
 		filterDifficulty(document.getElementById("fdifficulty").value, true);
+		filterKeyword(pkeyword, true);
+	}
 }
 
 
@@ -87,6 +139,7 @@ function filterDifficulty(difficulty, chain){
 				ql[n].style.display = 'block';
 			}
 			filterTopic(document.getElementById("ftopic").value, true);
+			filterKeyword(pkeyword, true);
 		}
 		return;
 	}
@@ -98,8 +151,10 @@ function filterDifficulty(difficulty, chain){
 			ql[n].style.display = 'none';
 	}
 
-	if (chain === false) // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
+	if (chain === false){ // do not remove or you will blow up the stack in your browser until this bad implementation is refactored
 		filterTopic(document.getElementById("ftopic").value, true);
+		filterKeyword(pkeyword, true);
+	}
 }
 
 	
@@ -179,7 +234,7 @@ function listQuestions(questions){
 		li.setAttribute('id', 'question' + questions[question]['questID']);
 		li.innerHTML += '<strong>Topic:</strong> ' + questions[question]['topic'] + '<br />';
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
-		li.innerHTML += questions[question]['questiontext'] + '<br /><br />';
+		li.innerHTML += '<p>' + questions[question]['questiontext'] + '</p><br />';
 		li.innerHTML += '<strong>Constraint:</strong> ' + questions[question]['constrain'] + '<br /><br />';
 		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_REGEX, "<br />") + '<br /><br />';
 
@@ -261,6 +316,7 @@ function removeQuestion(clickedButton){
 
 	filterTopic(document.getElementById("ftopic").value, false);
 	filterDifficulty(document.getElementById("fdifficulty").value, false);
+	filterKeyword(pkeyword, false);
 }
 
 function ajaxCreateExam(e){

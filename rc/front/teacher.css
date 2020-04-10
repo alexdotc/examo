@@ -52,7 +52,7 @@ td {
 	padding: 9px 12px;
 }
 
-#withdrawButton, #releaseButton {
+#withdrawButton, #releaseButton, #fkeywordbutton {
 	background-color: #000000;
 	color: #FFFFFF;
 	padding: 9px 12px;
