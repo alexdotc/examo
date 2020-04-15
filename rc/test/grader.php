@@ -27,7 +27,10 @@
 
 	$deductions_tc = array();
 	$deductions_name = array();
-	//$deductions_no_run = array();
+	$deductions_colon = array();
+	$deductions_constrain = array();
+	$deductions_def = array();
+	$deductions_no_run = array();
 
 	$scores = array();
 	$comments = array();
@@ -39,9 +42,16 @@
 		$topic = $result[$i]['topic'];
 		$question = $result[$i]['questText'];
 		$testcaseStr = $result[$i]['questTest'];
+		$constrain = $result[$i]['constrain'];
 		$answer = $answers[$i];
+		$with_colon_answer = $answer;
 
 		$studentFunctionName = get_student_fname($answer);
+		$hasColon = check_missing_colon($answer);
+
+		if (! $hasColon)
+			$with_colon_answer = add_colon($with_colon_answer);
+
 
 		$functionName = substr($testcaseStr, 0, strpos($testcaseStr, $ARGS_START_DELIMITER));
 		$testcases = explode($CASE_DELIMITER, $testcaseStr);
@@ -50,10 +60,11 @@
 
 		$NAME_DEDUCTION = 5; // should this be scaled?
 		$NO_RUN_DEDUCTION = 0;
-		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION)/count($testcases));
+		$COLON_DEDUCTION = 3;
+		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION)/count($testcases));
 
 		//adjust for all deductions to add to the max score
-		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $TC_DEDUCTION * count($testcases);
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
@@ -61,7 +72,7 @@
 			$testInputs[] = substr($testcase, strpos($testcase, $ARGS_START_DELIMITER), strpos($testcase, $ARGS_END_DELIMITER) - strpos($testcase, $ARGS_START_DELIMITER) + 1);
 		}
 
-		file_put_contents($TEST_FILE, $answer);
+		file_put_contents($TEST_FILE, $with_colon_answer);
 
 		foreach($testInputs as $inp)
 			file_put_contents($TEST_FILE, "\nprint($studentFunctionName$inp)", FILE_APPEND);
@@ -86,10 +97,17 @@
 		}
 
 		$deductions_tc[$i] = $deducted_each;
+
+		$deductions_constrain[$i] = 0;
+		$deductions_def[$i] = 0;
+
 		check_name($functionName, $answer) ? $deductions_name[$i] = 0 : $deductions_name[$i] = $NAME_DEDUCTION;
 
+		$hasColon ? $deductions_colon[$i] = 0 : $deductions_colon[$i] = $COLON_DEDUCTION;
+
 		$exec_return_code ? $deductions_no_run[$i] = $NO_RUN_DEDUCTION : $deductions_no_run[$i] = 0;
-		$scores[$i] = $maxScores[$i] - $deductions_name[$i];
+
+		$scores[$i] = $maxScores[$i] - $deductions_name[$i] - $deductions_colon[$i] - $deductions_constrain[$i];
 		foreach($deducted_each as $tcd)
 			$scores[$i] -= $tcd;
 
@@ -106,7 +124,7 @@
 	str_flatten("HACKMAGICK", $resulting);
 	str_flatten(", ", $deductions_tc);
 
-	$params = http_build_query(array('RequestType' => 'gradingExam', 'data' => array('ucid' => $ucid, 'exaName' => $examName, 'questionsid' => $questionIDs, 'answers' => $answers, 'scores' => $scores, 'maxScores' => $maxScores, 'comments' => $comments, 'expectedAnswers' => $expecteds, 'resultingAnswers' => $resulting, 'deductedPointsPerEachTest' => $deductions_tc, 'deductedPointscorrectName' => $deductions_name)));
+	$params = http_build_query(array('RequestType' => 'gradingExam', 'data' => array('ucid' => $ucid, 'exaName' => $examName, 'questionsid' => $questionIDs, 'answers' => $answers, 'scores' => $scores, 'maxScores' => $maxScores, 'comments' => $comments, 'expectedAnswers' => $expecteds, 'resultingAnswers' => $resulting, 'deductedPointsPerEachTest' => $deductions_tc, 'deductedPointscorrectName' => $deductions_name, 'deductedPointsMissingColon' => $deductions_colon, 'deductedPointsConstrain' => $deductions_constrain, 'deductedPointsHasDef' => $deductions_def)));
 
 	$result = do_curl($params, $URL);
 	echo $result;
@@ -138,6 +156,33 @@
 			$a = strtok("\n");
 		$r = preg_match('/def[ \t]+([a-zA-z0-9_]+)/', $a, $m);
 		return $m[1];
+	}
+
+	function check_missing_colon($answer){
+		$a = strtok($answer, "\n");
+		while(ctype_space($a))
+			$a = strtok("\n");
+		$r = preg_match('/def[ \t]+[A-Za-z0-9_]+[ \t]*\(.*\)[ \t]*:/', $a);
+		return $r;
+	}
+
+	function add_colon(&$answer){
+		$s = array();
+		$a = strtok($answer, "\n");
+		while(ctype_space($a)){
+			$s[] = a;
+			$a = strtok("\n");
+		}
+		$b = strtok("\n");
+		$b .= ":";
+		$s[] = $b;
+		while($a = strtok("\n"))
+			$s[] = $a;
+		return implode("\n", $s);
+	}
+
+	function check_constrain($answer){
+		return true;
 	}
 		
 
