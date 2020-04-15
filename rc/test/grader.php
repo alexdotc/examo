@@ -48,23 +48,38 @@
 
 		$studentFunctionName = get_student_fname($answer);
 		$hasColon = check_missing_colon($answer);
+		$fitsConstraint = true;
 
 		if (! $hasColon)
 			$with_colon_answer = add_colon($with_colon_answer);
 
+		switch($constrain){
+			case 'For':
+				$fitsConstraint = check_for_constraint($answer);
+				break;
+			case 'While':
+				$fitsConstraint = check_while_constraint($answer);
+				break;
+			case 'Print':
+				$fitsConstraint = check_print_constraint($answer);
+				break;
+			default:
+				break;
+		}
 
 		$functionName = substr($testcaseStr, 0, strpos($testcaseStr, $ARGS_START_DELIMITER));
 		$testcases = explode($CASE_DELIMITER, $testcaseStr);
 		$testInputs = array();
 		$expectedReturns = array();
 
-		$NAME_DEDUCTION = 5; // should this be scaled?
+		$NAME_DEDUCTION = 3; // should this be scaled?
 		$NO_RUN_DEDUCTION = 0;
-		$COLON_DEDUCTION = 3;
-		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION)/count($testcases));
+		$COLON_DEDUCTION = 2;
+		$CONSTRAIN_DEDUCTION = 5;
+		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $CONSTRAIN_DEDUCTION)/count($testcases));
 
 		//adjust for all deductions to add to the max score
-		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $CONSTRAIN_DEDUCTION - $TC_DEDUCTION * count($testcases);
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
@@ -74,8 +89,12 @@
 
 		file_put_contents($TEST_FILE, $with_colon_answer);
 
-		foreach($testInputs as $inp)
-			file_put_contents($TEST_FILE, "\nprint($studentFunctionName$inp)", FILE_APPEND);
+		foreach($testInputs as $inp){
+			if($constrain != 'Print' || ! $fitsConstraint)
+				file_put_contents($TEST_FILE, "\nprint($studentFunctionName$inp)", FILE_APPEND);
+			else
+				file_put_contents($TEST_FILE, "\n$studentFunctionName$inp", FILE_APPEND);
+		}
 
 		$python_stdout = array();
 
@@ -98,8 +117,9 @@
 
 		$deductions_tc[$i] = $deducted_each;
 
-		$deductions_constrain[$i] = 0;
 		$deductions_def[$i] = 0;
+
+		$fitsConstraint ? $deductions_constrain[$i] = 0 : $deductions_constrain[$i] = $CONSTRAIN_DEDUCTION;
 
 		check_name($functionName, $answer) ? $deductions_name[$i] = 0 : $deductions_name[$i] = $NAME_DEDUCTION;
 
@@ -110,6 +130,9 @@
 		$scores[$i] = $maxScores[$i] - $deductions_name[$i] - $deductions_colon[$i] - $deductions_constrain[$i];
 		foreach($deducted_each as $tcd)
 			$scores[$i] -= $tcd;
+
+		if ($scores[$i] == 1) //lazy round
+			$scores[$i] = 0;
 
 		$comments[$i] = "";
 		$expecteds[$i] = $expectedReturns;
@@ -155,6 +178,8 @@
 		while(ctype_space($a))
 			$a = strtok("\n");
 		$r = preg_match('/def[ \t]+([a-zA-z0-9_]+)/', $a, $m);
+		if(! $r)
+			return 0;
 		return $m[1];
 	}
 
@@ -166,11 +191,11 @@
 		return $r;
 	}
 
-	function add_colon(&$answer){
+	function add_colon($answer){
 		$s = array();
 		$a = strtok($answer, "\n");
 		while(ctype_space($a)){
-			$s[] = a;
+			$s[] = $a;
 			$a = strtok("\n");
 		}
 		$a .= ":";
@@ -180,10 +205,26 @@
 		return implode("\n", $s);
 	}
 
-	function check_constrain($answer){
-		return true;
+	function check_for_constraint($answer){
+		$r = preg_match('/for([ \t]+|[ \t]*\([ \t]*)[A-Za-z_](([ \t]*,)?[ \t]*[A-Za-z0-9_][ \t]*)*\)?[ \t]+in/', $answer);
+		return $r;
 	}
-		
+
+	function check_while_constraint($answer){
+		$a = strtok($answer, "\n");
+		while($a = strtok("\n")){
+			$r = preg_match('/while([ \t]+|\()*[^\t ]+.*:[ \t]*/', $a);
+			if($r)
+				return $r;
+		}
+		return $r;
+	}
+
+	function check_print_constraint($answer){
+		$r = preg_match('/print([ \t]+|\().+/', $answer);
+		$s = preg_match('/return[ \t]+|\()/', $answer);
+		return $r && ! $s;
+	}
 
         function str_flatten($delim, &$arr){
 		foreach($arr as &$a)
