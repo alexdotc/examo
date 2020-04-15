@@ -173,9 +173,8 @@
 			$s[] = a;
 			$a = strtok("\n");
 		}
-		$b = strtok("\n");
-		$b .= ":";
-		$s[] = $b;
+		$a .= ":";
+		$s[] = $a;
 		while($a = strtok("\n"))
 			$s[] = $a;
 		return implode("\n", $s);
