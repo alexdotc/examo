@@ -179,11 +179,16 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 foreach($testcases as $k){
                         $expectedReturns[$p] = substr($k, strpos($k,
                         $RETURN_DELIMITER) + 1);
+                        $expectedReturns[$p] =
+                        str_replace("LITERALPLUSCHARACTER","+",$expectedReturns[$p]);
 
                         $inputs[$p] = substr($k, strpos($k,
                         $ARGS_START_DELIMITER), strpos($k,
                         $ARGS_END_DELIMITER) - strpos($k,
                         $ARGS_START_DELIMITER) + 1);
+                        $inputs[$p] = str_replace("LITERALPLUSCHARACTER","+",
+                        $inputs[$p]);
+
                         $p = 1 + $p;
                 }
 
