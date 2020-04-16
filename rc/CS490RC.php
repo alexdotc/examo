@@ -395,7 +395,7 @@ function for_check($answer){
 //The \t checks for any potential spaces that could occur within range or in
 //the string so it will continue to verify them anyway
         $r = preg_match('/for([ \t]+|[ \t]*\([ \t]*)[A-Za-z_](([ \t]*,)?[
-        \t]*[A-Za-z0-9_][ \t]*)*\)?[ \t]+in:/', $answer);
+        \t]*[A-Za-z0-9_][ \t]*)*\)?[ \t]+in/', $answer);
         return $r;
 }
 
