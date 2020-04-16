@@ -133,7 +133,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         curl_setopt($chr, CURLOPT_POSTFIELDS, $datas);
 
         $resultEn = curl_exec($chr);
-        //echo "$result";
         curl_close($chr);
 
         $result = json_decode($resultEn, true);
@@ -148,7 +147,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $deductDef = array();
         $deductColon = array();
         $deductCons = array();
-        //$deductNoRun = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
 
@@ -160,7 +158,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $constrain = $result[$i]['constrain'];
                 //One max score for each question for total points compared to
                 //total missed
-                //echo $testcasesS;
                 $functionName = substr($testcasesS, 0, strpos($testcasesS,
                 $ARGS_START_DELIMITER));
                 $fname = substr($answer, 0, strpos($answer, $ARGS_START_DELIMITER));
@@ -168,7 +165,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
-                //echo $testcases[0];
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
@@ -176,10 +172,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $DEFD = 3;
                 $COLOND = 2;
                 $CONSD = 3;
-                $TESTD = (int)(($S - $NAMED /*-
-                $NORUND*/)/count($testcases));
+                $TESTD = (int)(($S - $NAMED)/count($testcases));
 
-                //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
                 foreach($testcases as $k){
@@ -199,19 +193,13 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $deductColon[$i] = 0;
                 $hasColon = colon_check($answer);
-                //if(strpos($answer, "):") === false){
-                if(!$hasColon){
-                        $deductColon[$i] = 0;
+
+                if(! $hasColon){
+                        $deductColon[$i] = $COLOND;
                         $tempAnswer = add_colon($tempAnswer);
                 }
 
-                if(strpos($answer,"def $fname") === false && $tempAnswer ==
-                $answer){
-                        $deductDef[$i] = $DEFD;
-                        $tempAnswer = "def $answer";
-                }
-                elseif(strpos($answer,"def $fname") === false && $tempAnswer !=
-                $answer){
+                if(strpos($answer,"def $fname") === false){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $tempAnswer";
                 }
@@ -219,8 +207,9 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $deductDef[$i] = 0;
                 }
 
+                file_put_contents($testFile, $tempAnswer);
+
                 clearstatcache();
-     //Originally was thinking about doing another check during this so if while does show up in for then it deducts points as well
                 if($constrain == 'For'){
                         $fitsConstraint = for_check($answer);
                 }
@@ -234,23 +223,23 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $fitsConstraint = true;
                 }
 
-                if(!$fitsConstraint){
+                if(! $fitsConstraint){
                         $deductCons[$i] = $CONSD;
                 }
                 else{
                         $deductCons[$i] = 0;
                 }
-
-                if($constrain == 'Print'){
-                        foreach($inputs as $l)
+                foreach($inputs as $l){
+                        if($constrain == 'Print'){
                                 file_put_contents($testFile, "\n$fname$l",
                                 FILE_APPEND);
-                }
-                else{
-                        foreach($inputs as $l)
+                        }
+                        else{
                                 file_put_contents($testFile,
                                 "\nprint($fname$l)", FILE_APPEND);
+                        }
                 }
+
                 $returnSet = array();
 
                 exec("python test.py", $returnSet, $exec_return_code);
@@ -412,10 +401,7 @@ function for_check($answer){
 }
 
 function while_check($answer){
-        $a = strtok($anwer, "\n");
-        while($a = strtok("\n")){
-                $r = preg_match('/while[ \t]+|\()*[^\t ]+.*:[ \t]*\/', $a);
-        }
+        $r = preg_match('/while([ \t]+|\()*[^\t ]+.*:[ \t]*/', $answer);
         return $r;
 }
 
