@@ -168,12 +168,12 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
-                $NAMED = 1;
-                $testDed = $S - 5;
-                $TESTD = (int)($testDed / count($testcases));
-                $DEFD = (int)($NAMED / 3);
-                $COLOND = (int)(($S - $NAMED - $testDed) / 2);
-                $CONSD = (int)(($S - $NAMED - $testDed) / 2);
+                $NAMED = 3;
+                $DEFD = 3; //Doesn't really matter right now
+                $COLOND = 2;
+                $CONSD = 5;
+                $TESTD = (int)(($S - $NAMED - $COLOND - $CONSD)/count($testcases));
+
 
                 $totDed = array();
                 $p = 0;
@@ -278,9 +278,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
-                $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
-                $deductName[$i] - $deductDef[$i] - $deductColon[$i] -
-                $deductCons[$i];
+                $scores[$i] = $maxScores[$i] - $deductName[$i]
+                - $deductColon[$i] - $deductCons[$i];
 
                 foreach($totDed as $test)
                         $scores[$i] -= $test;
