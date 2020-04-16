@@ -133,7 +133,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         curl_setopt($chr, CURLOPT_POSTFIELDS, $datas);
 
         $resultEn = curl_exec($chr);
-        //echo "$result";
         curl_close($chr);
 
         $result = json_decode($resultEn, true);
@@ -148,7 +147,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
         $deductDef = array();
         $deductColon = array();
         $deductCons = array();
-        //$deductNoRun = array();
 
         for($i = 0; $i < count($questionIDs); ++$i){
 
@@ -160,7 +158,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $constrain = $result[$i]['constrain'];
                 //One max score for each question for total points compared to
                 //total missed
-                //echo $testcasesS;
                 $functionName = substr($testcasesS, 0, strpos($testcasesS,
                 $ARGS_START_DELIMITER));
                 $fname = substr($answer, 0, strpos($answer, $ARGS_START_DELIMITER));
@@ -168,18 +165,15 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $testcases = explode($CASE_DELIMITER, $testcasesS);
                 $inputs = array();
                 $expectedReturns = array();
-                //echo $testcases[0];
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
                 $NAMED = 5;
-                $DEFD = (int)($S * 0.2);
-                $COLOND = (int)(($S - $NAMED - $DEFD) * 0.2);
-                $CONSD = (int)(($S - $NAMED - $DEFD - $CONSD) * 0.2);
-                $TESTD = (int)(($S - $NAMED /*-
-                $NORUND*/)/count($testcases));
+                $DEFD = 3;
+                $COLOND = 2;
+                $CONSD = 3;
+                $TESTD = (int)(($S - $NAMED)/count($testcases));
 
-                //$NORUND += $S - $NORUND - $NAMED - $TESTD * count($testcases);
                 $totDed = array();
                 $p = 0;
                 foreach($testcases as $k){
@@ -192,34 +186,20 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $ARGS_START_DELIMITER) + 1);
                         $p = 1 + $p;
                 }
-                $endUse = substr($answer, strpos($answer,
-                $ARGS_START_DELIMITER), strpos($answer, $ARGS_END_DELIMITER) -
-                strpos($answer,$ARGS_START_DELIMITER) + 1);
 
-                $finalChar = substr($endUse, -1);
+                //This grabs the user made inputs to allow their program to run
 
-                $tempAnswer = "";
+                $tempAnswer = $answer;
 
-                //if(strpos($answer, "):") === false){
-                //finalChar is the final character that the user input into their answer so no matter what they input
-                //so no matter what they input, it will always check vs if there is a colon after the name.
-                //Which brings the question, should we deduct points for forgetting colon after the for loop and while loop?
-                if(strpos($answer, "$finalChar): ") === true){
+                $deductColon[$i] = 0;
+                $hasColon = colon_check($answer);
+
+                if(! $hasColon){
                         $deductColon[$i] = $COLOND;
-                        //This ensures that it is the parenthesis after
-                        //any empty parenthesis that will add the colon
-                        $tempAnswer = str_replace("$finalChar) ", "$finalChar): ", $answer);
+                        $tempAnswer = add_colon($tempAnswer);
                 }
-                else
-                        $deductColon[$i] = 0;
-                
-                //Ensures the program only checks the beginning for def and not if def appears elsewhere within the code.
-                //I just used the fname that's input instead of the check since we had an input to print whatever the user input
-                if(strpos($answer,"def $fname") === false && $tempAnswer == ""){
-                        $deductDef[$i] = $DEFD;
-                        $tempAnswer = "def $answer";
-                }
-                elseif(strpos($answer,"def $fname") === false && $tempAnswer != ""){
+
+                if(strpos($answer,"def $fname") === false){
                         $deductDef[$i] = $DEFD;
                         $tempAnswer = "def $tempAnswer";
                 }
@@ -227,63 +207,39 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $deductDef[$i] = 0;
                 }
 
+                file_put_contents($testFile, $tempAnswer);
+
                 clearstatcache();
-
-                //Ensures their answer is the same but the necessary changes
-                //are made to get an output.
-                if($tempAnswer == "")
-                        file_put_contents($testFile, $answer);
-                else
-                        file_put_contents($testFile, $tempAnswer);
-
-                if($constrain == 'Print'){
-                        //I'm checking if print is there, then if return is
-                        //there since if it is there, then they will be
-                        //breaking the constraint
-                        if(strpos($answer, "print(") === true)
-                                $deductCons[$i] = 0;
-                        if(strpos($answer, "return") === true)
-                                $deductCons[$i] = $CONSD;
-        //If it doesn't have either, their code won't work and will lose points
-        //for this
-                        if(strpos($answer, "print(") === false ||
-                        strpos($answer, "return") === false)
-                                $deductCons[$i] = $CONSD;
-
-                        foreach($inputs as $l)
-                                file_put_contents($testFile, "\n$fname$l", FILE_APPEND);
-                }
-                elseif($constrain == 'For'){
-//All this is doing is checking if for is there, if the rest of the code fails
-//then they should lose any constrain points since they obviously did it wrong.
-//we are unable to fix their code here to try to give them any further points
-//on if their code works or not since that would be giving them points
-                        if(strpos($answer, "for") === true)
-                                $deductCons[$i] = 0;
-                        if(strpos($answer, "while") === true)
-                                $deductCons[$i] = $CONSD;
-                        if(strpos($answer, "for") === false || strpos($answer,
-                        "while") === false)
-                                $deductCons[$i] = $CONSD;
+                if($constrain == 'For'){
+                        $fitsConstraint = for_check($answer);
                 }
                 elseif($constrain == 'While'){
-                        if(strpos($answer, "while") === true)
-                                $deductCons[$i] = 0;
-                        if(strpos($answer, "for") === true)
-                                $deductCons[$i] = $CONSD;
-                        if(strpos($answer, "for") === false || strpos($answer,
-                        "while") === false)
-                                $deductCons[$i] = $CONSD;
+                        $fitsConstraint = while_check($answer);
                 }
-                //If no constraint then just print the answer of the function
-                elseif($constrain == 'None'){
-                        //Since there's no constraint, if the program works
-                        // then full points, else they will lose points if
-                        // there is an error.
+                elseif($constrain == 'Print'){
+                        $fitsConstraint = print_check($answer);
+                }
+                else{
+                        $fitsConstraint = true;
+                }
+
+                if(! $fitsConstraint){
+                        $deductCons[$i] = $CONSD;
+                }
+                else{
                         $deductCons[$i] = 0;
-                        foreach($inputs as $l)
-                                file_put_contents($testFile, "\nprint($fname$l)", FILE_APPEND);
                 }
+                foreach($inputs as $l){
+                        if($constrain == 'Print'){
+                                file_put_contents($testFile, "\n$fname$l",
+                                FILE_APPEND);
+                        }
+                        else{
+                                file_put_contents($testFile,
+                                "\nprint($fname$l)", FILE_APPEND);
+                        }
+                }
+
                 $returnSet = array();
 
                 exec("python test.py", $returnSet, $exec_return_code);
@@ -295,7 +251,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
                         }
-                        //$deductNoRun[$i] = 0;
                 }
 
                 else if($exec_return_code){
@@ -306,8 +261,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                                 $returnSet[$j] != $expectedReturns[$j] ?
                                 $totDed[$j] = $TESTD : $totDed[$j] = 0;
                         }
-                        //If run fails, then cons deducts.
-                        $deductCons[$i] = $CONSD;
                 }
 
                 $deductTest[$i] = $totDed;
@@ -319,8 +272,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
-                //$exec_return_code ? $deductNoRun[$i] = $NORUND :
-                //$deductNoRun[$i] = 0;
                 $scores[$i] = $maxScores[$i] - $deductNoRun[$i] -
                 $deductName[$i] - $deductDef[$i] - $deductColon[$i] -
                 $deductCons[$i];
@@ -429,6 +380,49 @@ function str_flatten($delim, &$arr){
         foreach($arr as &$a)
                 $a = implode($delim, $a);
 }
-                                
+ 
+function colon_check($answer){
+        $a = strtok($answer, "\n");
+        while(ctype_space($a))
+                $a = strtok("\n");
+        $r = preg_match('/def[ \t]+[A-Za-z0-9_]+[ \t]*\(.*\)[ \t]*:/', $a);
+        return $r;
+}
+
+function for_check($answer){
+//Checks for loop with the key to search with and the three occurrences of for
+//loops. The variable that's looping with, the range of a number, and a string.
+//The \t checks for any potential spaces that could occur within range or in
+//the string so it will continue to verify them anyway
+        $r = preg_match('/for[ \t]+[A-Za-z]+[ \t]+in[
+        \t]+([A-Za-z0-9]+|range\([ \t]*[0-9]+[ \t]*\)|range\([ \t]*[0-9][
+        \t]*+,[ \t]*[0-9]+[ \t]*\)|\"[A-Za-z0-9[ \t]]*\"):/', $a);
+        return $r;
+}
+
+function while_check($answer){
+        $r = preg_match('/while([ \t]+|\()*[^\t ]+.*:[ \t]*/', $answer);
+        return $r;
+}
+
+function print_check($answer){
+        //No return check needed here
+        $r = preg_match('/print([ \t]+|\().+/', $answer);
+        return $r
+}
+
+function add_colon(&$answer){
+        $s = array();
+        $a = strtok($answer, "\n");
+        while(ctype_space($a)){
+                $s[] = a;
+                $a = strtok("\n");
+        }
+        $a .= ":";
+        $s[] = $a;
+        while($a = strtok("\n"))
+                $s[] = $a;
+        return implode("\n", $s);
+}
 
 ?>
