@@ -248,17 +248,21 @@ function ajaxSubmit(e){
 	let tcin = document.getElementsByName("TestIn");
 	let tcout = document.getElementsByName("TestOut");
 
+	const TC_DELIMITER = "BORDERLINEN";
+	const TC_RDELIMITER = "DRAGONLORD";
+	const PLUS_CHARACTER = "LITERALPLUSCHARACTER";
+
 	let tcs = "";
 
 	for (let tc = 0; tc < tcin.length; ++tc){
 
 		if (tc != 0)
-			tcs += "BORDERLINEN";
+			tcs += TC_DELIMITER;
 
 		i = tcin[tc].value;
 		o = tcout[tc].value;
 
-		tcf = fname + "(" + i.replace(/\+/g, "LITERALPLUSCHARACTER") + ")DRAGONLORD" + o;
+		tcf = fname + "(" + i.replace(/\+/g, PLUS_CHARACTER) + ")" + TC_RDELIMITER + o;
 
 		tcs += tcf;
 	}
