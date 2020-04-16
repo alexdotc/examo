@@ -83,8 +83,8 @@
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
-			$expectedReturns[] = substr($testcase, strpos($testcase, $RETURN_DELIMITER) + 1);
-			$testInputs[] = substr($testcase, strpos($testcase, $ARGS_START_DELIMITER), strpos($testcase, $ARGS_END_DELIMITER) - strpos($testcase, $ARGS_START_DELIMITER) + 1);
+			$expectedReturns[] = str_replace("LITERALPLUSCHARACTER","+",substr($testcase, strpos($testcase, $RETURN_DELIMITER) + 1));
+			$testInputs[] = str_replace("LITERALPLUSCHARACTER","+",substr($testcase, strpos($testcase, $ARGS_START_DELIMITER), strpos($testcase, $ARGS_END_DELIMITER) - strpos($testcase, $ARGS_START_DELIMITER) + 1));
 		}
 
 		file_put_contents($TEST_FILE, $with_colon_answer);

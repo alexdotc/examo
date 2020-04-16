@@ -236,7 +236,7 @@ function listQuestions(questions){
 		li.innerHTML += '<strong>Difficulty:</strong> ' + questions[question]['difficulty'] + '<br /><br />';
 		li.innerHTML += '<p>' + questions[question]['questiontext'] + '</p><br />';
 		li.innerHTML += '<strong>Constraint:</strong> ' + questions[question]['constrain'] + '<br /><br />';
-		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(TC_REGEX, "<br />") + '<br /><br />';
+		li.innerHTML += '<strong>Test Cases:</strong><br />' + questions[question]['testcases'].replace(/LITERALPLUSCHARACTER/g, "+").replace(TC_REGEX, "<br />") + '<br /><br />';
 
 		hr.setAttribute('id', 'hr' + index);
 		hr.setAttribute('class', "ExamItems ExamHR");
