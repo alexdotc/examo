@@ -79,7 +79,7 @@
 		$TC_DEDUCTION = (int)(($maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $CONSTRAIN_DEDUCTION)/count($testcases));
 
 		//adjust for all deductions to add to the max score
-		$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $CONSTRAIN_DEDUCTION - $TC_DEDUCTION * count($testcases);
+		//$NO_RUN_DEDUCTION += $maxScores[$i] - $NO_RUN_DEDUCTION - $NAME_DEDUCTION - $COLON_DEDUCTION - $CONSTRAIN_DEDUCTION - $TC_DEDUCTION * count($testcases);
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
@@ -115,10 +115,6 @@
 			$deductions_no_run[$i] = $NO_RUN_DEDUCTION;
 		}
 
-		$deductions_tc[$i] = $deducted_each;
-
-		$deductions_def[$i] = 0;
-
 		$fitsConstraint ? $deductions_constrain[$i] = 0 : $deductions_constrain[$i] = $CONSTRAIN_DEDUCTION;
 
 		check_name($functionName, $answer) ? $deductions_name[$i] = 0 : $deductions_name[$i] = $NAME_DEDUCTION;
@@ -127,12 +123,23 @@
 
 		$exec_return_code ? $deductions_no_run[$i] = $NO_RUN_DEDUCTION : $deductions_no_run[$i] = 0;
 
+		$ALL_DEDUCTION = ($TC_DEDUCTION * count($testcases)) + $COLON_DEDUCTION + $NAME_DEDUCTION + $CONSTRAIN_DEDUCTION;
+
+		$TOTAL_DEDUCTION = $deductions_name[$i] + $deductions_colon[$i] + $deductions_constrain[$i];
+		foreach($deducted_each as $tcd)
+			$TOTAL_DEDUCTION += $tcd;
+
+		if (($maxScores[$i] - $ALL_DEDUCTION) && ($TOTAL_DEDUCTION == $ALL_DEDUCTION))
+			$deducted_each[count($testcases)-1] += $maxScores[$i] - $ALL_DEDUCTION;
+		
+		$deductions_tc[$i] = $deducted_each;
+
+		$deductions_def[$i] = 0;
+		
 		$scores[$i] = $maxScores[$i] - $deductions_name[$i] - $deductions_colon[$i] - $deductions_constrain[$i];
+		
 		foreach($deducted_each as $tcd)
 			$scores[$i] -= $tcd;
-
-		if ($scores[$i] == 1) //lazy round
-			$scores[$i] = 0;
 
 		$comments[$i] = "";
 		$expecteds[$i] = $expectedReturns;
@@ -222,7 +229,7 @@
 
 	function check_print_constraint($answer){
 		$r = preg_match('/print([ \t]+|\().+/', $answer);
-		$s = preg_match('/return[ \t]+|\()/', $answer);
+		$s = preg_match('/return([ \t]+|\().+/', $answer);
 		return $r && ! $s;
 	}
 
