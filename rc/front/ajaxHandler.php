@@ -3,7 +3,7 @@
 	define('MAGICNUMBER', true);
 	include 'restrict.php';
 
-        $URL = 'https://web.njit.edu/~np595/CS490Work/CS490RC.php';
+	$URL = 'https://web.njit.edu/~np595/CS490Work/CS490RC.php';
 
 	$reqtype = $_POST['RequestType'];
 
@@ -13,8 +13,8 @@
 		case 'CreateQuestion':
 			$topic = $_POST['topic'];
 			$difficulty = $_POST['difficulty'];
-			$questiontext = $_POST['questiontext'];
-			$testcases = $_POST['testcases'];
+			$questiontext = addslashes($_POST['questiontext']);
+			$testcases = addslashes($_POST['testcases']);
 			$constraint = $_POST['constraint'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('topic' => $topic, 'difficulty' => $difficulty, 'questiontext' => $questiontext, 'testcases' => $testcases, 'constrain' => $constraint)));
 			break;
@@ -35,7 +35,7 @@
 			$name = $_POST['examname'];
 			$ids = $_POST['ids'];
 			$points = $_POST['points'];
-			$answers = $_POST['answers'];
+			$answers = addslashes($_POST['answers']);
 			$user = $_SESSION['user'];
 			$post_params = http_build_query(array('RequestType' => $reqtype, 'data' => array('exaName' => $name, 'ucid' => $user, 'questionsid' => explode(",",$ids), 'answers' => explode("HACKMAGICK",$answers), 'points' => explode(",",$points))));
 			break;
@@ -55,7 +55,7 @@
 			$released = $_POST['released'];
 			$ids = $_POST['ids'];
 			$scores = $_POST['scores'];
-			$comments = $_POST['comments'];
+			$comments = addslashes($_POST['comments']);
 			$nameDs = $_POST['nameDs'];
 			$colonDs = $_POST['colonDs'];
 			$constraintDs = $_POST['constraintDs'];

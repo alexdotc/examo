@@ -43,7 +43,7 @@
 		$question = $result[$i]['questText'];
 		$testcaseStr = $result[$i]['questTest'];
 		$constrain = $result[$i]['constrain'];
-		$answer = $answers[$i];
+		$answer = stripslashes($answers[$i]);
 		$with_colon_answer = $answer;
 
 		$studentFunctionName = get_student_fname($answer);
