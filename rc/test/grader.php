@@ -8,8 +8,10 @@
 
 	$ARGS_START_DELIMITER = "(";
 	$ARGS_END_DELIMITER = ")";
-	$CASE_DELIMITER = "?";
-	$RETURN_DELIMITER = ":";
+	$CASE_DELIMITER = "BORDERLINEN";
+	$RETURN_DELIMITER = "DRAGONLORD";
+	$RD_LEN = strlen($RETURN_DELIMITER);
+	$CASE_LEN = strlen($CASE_DELIMITER);
 
 	$data = $_POST['data'];
 
@@ -83,7 +85,7 @@
 		$deducted_each = array();
 
 		foreach($testcases as $testcase){
-			$expectedReturns[] = str_replace("LITERALPLUSCHARACTER","+",substr($testcase, strpos($testcase, $RETURN_DELIMITER) + 1));
+			$expectedReturns[] = str_replace("LITERALPLUSCHARACTER","+",substr($testcase, strpos($testcase, $RETURN_DELIMITER) + $RD_LEN));
 			$testInputs[] = str_replace("LITERALPLUSCHARACTER","+",substr($testcase, strpos($testcase, $ARGS_START_DELIMITER), strpos($testcase, $ARGS_END_DELIMITER) - strpos($testcase, $ARGS_START_DELIMITER) + 1));
 		}
 
