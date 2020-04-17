@@ -113,8 +113,8 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
         $ARGS_START_DELIMITER = "(";
         $ARGS_END_DELIMITER = ")";
-        $CASE_DELIMITER = "?";//"BORDERLINEN";
-        $RETURN_DELIMITER = ":";//"HACKMAGICK";
+        $CASE_DELIMITER = "BORDERLINEN";
+        $RETURN_DELIMITER = "DRAGONLORD";
 
         $ucid = $data['ucid'];
         $examName = $data['exaName'];
@@ -154,7 +154,7 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $topic = $result[$i]['topic'];
                 $question = $result[$i]['questText'];
                 $testcasesS = $result[$i]['questTest'];
-                $answer = $answers[$i];
+                $answer = stripslashes($answers[$i]);
                 $constrain = $result[$i]['constrain'];
                 //One max score for each question for total points compared to
                 //total missed
@@ -168,12 +168,12 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                 $S = $maxScores[$i];
                 $testFile =
                 '/afs/cad.njit.edu/u/n/p/np595/public_html/CS490Work/test.py';
+
                 $NAMED = 3;
-                $DEFD = 3; //Doesn't really matter right now
+                $DEFD = 3;
                 $COLOND = 2;
                 $CONSD = 5;
                 $TESTD = (int)(($S - $NAMED - $COLOND - $CONSD)/count($testcases));
-
 
                 $totDed = array();
                 $p = 0;
@@ -199,7 +199,6 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $deductColon[$i] = 0;
                 $hasColon = colon_check($answer);
-
                 if(! $hasColon){
                         $deductColon[$i] = $COLOND;
                         $tempAnswer = add_colon($tempAnswer);
@@ -236,13 +235,13 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
                         $deductCons[$i] = 0;
                 }
                 foreach($inputs as $l){
-                        if($constrain == 'Print'){
-                                file_put_contents($testFile, "\n$fname$l",
-                                FILE_APPEND);
+                        if($constrain != 'Print' || ! $fitsConstraint){
+                                file_put_contents($testFile,
+                                "\nprint($fname$l)",FILE_APPEND);
                         }
                         else{
                                 file_put_contents($testFile,
-                                "\nprint($fname$l)", FILE_APPEND);
+                                "\n$fname$l", FILE_APPEND);
                         }
                 }
 
@@ -271,6 +270,9 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $deductTest[$i] = $totDed;
 
+                $fitsConstraint ? $deductCons[$i] = 0 :
+                $deductCons[$i] = $CONSD;
+
                 $a = strtok($answer, "\n");
                 while(ctype_space($a))
                         $a = strtok("\n");
@@ -278,8 +280,18 @@ elseif($requestID == 'submitExam'){ //Perform auto-grader here!
 
                 $r ? $deductName[$i] = 0 : $deductName[$i] = $NAMED;
 
-                $scores[$i] = $maxScores[$i] - $deductName[$i]
-                - $deductColon[$i] - $deductCons[$i];
+                $ALLD = ($TESTD*count($testcaseS)) + $COLOND + $NAMED + $CONSD;
+
+                $TOTALD = $deductName[$i] + $deductColon[$i] + $deductCons[$i];
+                foreach($totDed as $t)
+                        $TOTALD += $t;
+
+                if(($maxScores[$i] - $ALLD)&&($TOTALD == $ALLD))
+                        $totDed[count($testcases)-1] += $maxScores[$i] - $ALLD;
+
+                $deductDef[$i] = 0;
+
+                $scores[$i] = $maxScores[$i] - $deductName[$i] - $deductColon[$i] - $deductCons[$i];
 
                 foreach($totDed as $test)
                         $scores[$i] -= $test;
@@ -410,9 +422,9 @@ function while_check($answer){
 }
 
 function print_check($answer){
-        //No return check needed here
         $r = preg_match('/print([ \t]+|\().+/', $answer);
-        return $r
+        $s = preg_match('/return([ \t]+|\().+/', $answer);
+        return $r && ! $s;
 }
 
 function add_colon(&$answer){
