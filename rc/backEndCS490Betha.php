@@ -201,6 +201,7 @@ if ($request == 'showGradedExam'){//for student and instructor
 						"gradesID"=>$row['gradesID'],
 						"questID"=>$row['questID'],
 						"questions"=>$row['question'],
+						"questTest"=>$row['questTest'],
 						"constrain"=>$row['constrain'],
 						"answers"=>$row['answer'],
 						"scores"=>$row['score'],
