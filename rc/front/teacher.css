@@ -17,6 +17,11 @@ input {
 	margin: 3px;
 }
 
+.GradeChange {
+	margin: 0px;
+	padding: 3px;
+}
+
 select {
 	position: relative;
 	border: 2px solid black;
