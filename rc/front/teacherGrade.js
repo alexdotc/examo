@@ -57,6 +57,14 @@ function renderExam(ename, questions){
 	const divName = document.getElementById("examName");
 	const released = questions.pop();
 
+	const TC_DELIMITER = "BORDERLINEN";
+	const TC_RDELIMITER = "DRAGONLORD";
+	const PLUS_CHARACTER = "LITERALPLUSCHARACTER";
+	const TC_REGEX = new RegExp(TC_DELIMITER, "g");
+	const TCR_REGEX = new RegExp(TC_RDELIMITER, "g");
+	const PLUS_REGEX = new RegExp(PLUS_CHARACTER, "g");
+
+
 	divName.innerHTML = "Currently viewing grades for " + decodeURI(ename) + " taken by " + questions[0]['ucid'];
 
 	let friendlyctr = 1;
@@ -66,6 +74,7 @@ function renderExam(ename, questions){
 		let expected = (questions[question]['expectedAnswers']).split("HACKMAGICK");
 		let actual = (questions[question]['resultingAnswers']).split("HACKMAGICK");
 		let deductions = (questions[question]['deductedPointsPerEachTest']).split(",");
+		let tcreals = (questions[question]['questTest']).replace(PLUS_REGEX, "+").split(TC_REGEX);
 
                 for(let d in deductions)
                         deductions[d] = deductions[d].trim();
@@ -73,8 +82,8 @@ function renderExam(ename, questions){
 		li.setAttribute('class', 'GradeItems GradeQuestions');
 		li.setAttribute('id', 'examquestion' + questions[question]['gradesID'] + 'mscore' + questions[question]['maxScores']);
 
-		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br /><br />';
-		li.innerHTML += '<strong>' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
+		li.innerHTML += '<strong>Question ' + friendlyctr + '</strong><br />';
+		li.innerHTML += '<strong>Score: ' + questions[question]['scores'] + ' out of ' + questions[question]['maxScores'] + ' Points</strong><br /><br />';
 		li.innerHTML += questions[question]['questions'];
 		li.innerHTML += "<br /><br /><strong>Student's Answer:</strong><br /><br /><pre>" + questions[question]['answers'] + '</pre><br />';
 		li.innerHTML += '<strong>Results: </strong><br /><br />';
@@ -100,7 +109,7 @@ function renderExam(ename, questions){
 		let gtd2_fname = document.createElement("td");
 		gtd2_fname.setAttribute('id', 'gtd2fname');
 		gtd2_fname.setAttribute('class', 'GradeItems GradeTD');
-		gtd2_fname.innerHTML = "<em>(see question)</em>";
+		gtd2_fname.innerHTML = tcreals[0].substr(0,tcreals[0].indexOf("("));
 
 		let gtd3_fname = document.createElement("td");
 		gtd3_fname.setAttribute('id', 'gtd3fname');
@@ -233,7 +242,7 @@ function renderExam(ename, questions){
 			let gtdName = document.createElement("td");
 			gtdName.setAttribute('id', 'gtd' + String(tc + 1) + 'Name');
 			gtdName.setAttribute('class', 'GradeItems GradeTD');
-			gtdName.innerHTML = '<strong><em>Test Case ' + String(tc + 1) + '</em></strong>';
+			gtdName.innerHTML = '<strong><em>Test Case ' + tcreals[tc].substr(0,tcreals[tc].indexOf(TC_RDELIMITER)) + '</em></strong>';
 
 			let gtdExp = document.createElement("td");
 			gtdExp.setAttribute('id', 'gtd' + String(tc + 1) + 'Expected');

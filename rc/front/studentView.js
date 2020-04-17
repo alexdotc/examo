@@ -36,6 +36,13 @@ function renderExam(ename, questions){
 	const divName = document.getElementById('examName');
 	const released = questions.pop();
 
+        const TC_DELIMITER = "BORDERLINEN";
+        const TC_RDELIMITER = "DRAGONLORD";
+        const PLUS_CHARACTER = "LITERALPLUSCHARACTER";
+        const TC_REGEX = new RegExp(TC_DELIMITER, "g");
+        const TCR_REGEX = new RegExp(TC_RDELIMITER, "g");
+        const PLUS_REGEX = new RegExp(PLUS_CHARACTER, "g");
+
 	divName.innerHTML = "Currently viewing " + decodeURI(ename);
 
 	let friendlyctr = 1;
@@ -45,6 +52,7 @@ function renderExam(ename, questions){
 		let actual = (questions[question]['resultingAnswers']).split("HACKMAGICK");
 
 		let deductions = (questions[question]['deductedPointsPerEachTest']).split(",");
+		let tcreals = (questions[question]['questTest']).replace(PLUS_REGEX, "+").split(TC_REGEX);
 
 		li.setAttribute('class', 'ViewItems ViewQuestions');
 		li.setAttribute('id', 'examquestion');
@@ -76,7 +84,7 @@ function renderExam(ename, questions){
 		let gtd2_fname = document.createElement("td");
 		gtd2_fname.setAttribute('id', 'gtd2fname');
 		gtd2_fname.setAttribute('class', 'ViewItems ViewTD');
-		gtd2_fname.innerHTML = "<em>(see question)</em>";
+		gtd2_fname.innerHTML =  tcreals[0].substr(0,tcreals[0].indexOf("("));
 
 		let gtd3_fname = document.createElement("td");
 		gtd3_fname.setAttribute('id', 'gtd3fname');
@@ -165,7 +173,7 @@ function renderExam(ename, questions){
 			let gtdName = document.createElement("td");
 			gtdName.setAttribute('id', 'gtd' + String(tc + 1) + 'Name');
 			gtdName.setAttribute('class', 'ViewItems ViewTD');
-			gtdName.innerHTML = '<strong><em>Test Case ' + String(tc + 1) + '</em></strong>';
+			gtdName.innerHTML = '<strong><em>Test Case ' + tcreals[tc].substr(0,tcreals[tc].indexOf(TC_RDELIMITER)) + '</em></strong>';
 
 			let gtdExp = document.createElement("td");
 			gtdExp.setAttribute('id', 'gtd' + String(tc + 1) + 'Expected');
