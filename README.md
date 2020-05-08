@@ -1,7 +1,5 @@
 - Project Entry Page, Hosted At https://web.njit.edu/~alc26/front/login.php
 
-- PHP request/curl points:  
-
 - Credentials:  
 user:alc26 pass:777 (teacher account)  
 user:yav3 pass:777  (student account)  
