@@ -1,3 +1,5 @@
+School project. Vanilla js/css/php as per requirement.
+
 - Project Entry Page, Hosted At https://web.njit.edu/~alc26/front/login.php
 
 - Credentials:  
